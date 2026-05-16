@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OTT Platform – Complete Guide (Windows 10)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #0f1117; color: #e2e8f0; line-height: 1.6; }
+  .container { max-width: 960px; margin: 0 auto; padding: 24px 20px; }
+  h1 { font-size: 26px; color: #63b3ed; margin-bottom: 6px; }
+  .subtitle { color: #718096; font-size: 14px; margin-bottom: 32px; }
+  h2 { font-size: 18px; color: #90cdf4; margin: 32px 0 14px; display: flex; align-items: center; gap: 10px; }
+  h2 .num { background: #2b6cb0; color: white; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+  h3 { font-size: 14px; color: #e2e8f0; margin: 18px 0 8px; font-weight: 600; }
+  p, li { font-size: 13px; color: #a0aec0; line-height: 1.7; }
+  ul { padding-left: 20px; margin: 6px 0; }
+  li { margin-bottom: 4px; }
+
+  .card { background: #1a1f2e; border: 1px solid #2d3748; border-radius: 10px; padding: 18px 20px; margin-bottom: 16px; }
+  .card.green { border-left: 4px solid #48bb78; }
+  .card.blue { border-left: 4px solid #4299e1; }
+  .card.orange { border-left: 4px solid #ed8936; }
+  .card.purple { border-left: 4px solid #9f7aea; }
+  .card.red { border-left: 4px solid #fc8181; }
+
+  pre, code { font-family: 'Consolas', 'Courier New', monospace; }
+  pre { background: #0d1117; border: 1px solid #2d3748; border-radius: 8px; padding: 14px 16px; overflow-x: auto; font-size: 12px; color: #e2e8f0; margin: 10px 0; }
+  code { background: #2d3748; padding: 2px 6px; border-radius: 4px; font-size: 12px; color: #63b3ed; }
+
+  .step-box { background: #1a1f2e; border: 1px solid #2d3748; border-radius: 10px; margin-bottom: 12px; overflow: hidden; }
+  .step-header { background: #2d3748; padding: 10px 16px; display: flex; align-items: center; gap: 10px; }
+  .step-num { background: #4299e1; color: white; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .step-title { font-size: 13px; font-weight: 600; color: #e2e8f0; }
+  .step-body { padding: 14px 16px; }
+
+  .mock-screen { background: #0d1117; border: 1px solid #4a5568; border-radius: 8px; padding: 16px; margin: 12px 0; font-size: 12px; }
+  .mock-titlebar { background: #2d3748; border-radius: 6px 6px 0 0; padding: 8px 14px; display: flex; align-items: center; gap: 8px; margin: -16px -16px 14px; }
+  .mock-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .mock-title { font-size: 11px; color: #718096; margin-left: 6px; }
+  .mock-btn { background: #2b6cb0; color: white; border-radius: 4px; padding: 5px 14px; font-size: 11px; font-weight: 600; display: inline-block; margin: 4px 2px; }
+  .mock-btn.green { background: #276749; }
+  .mock-btn.orange { background: #7b341e; }
+  .mock-btn.gray { background: #4a5568; }
+  .mock-input { background: #1a1f2e; border: 1px solid #4a5568; border-radius: 4px; padding: 6px 10px; font-size: 11px; color: #a0aec0; margin: 4px 0; display: block; width: 100%; }
+  .mock-label { font-size: 10px; color: #718096; margin-top: 8px; margin-bottom: 2px; display: block; }
+  .mock-tab { display: inline-block; padding: 5px 12px; font-size: 11px; border-radius: 4px 4px 0 0; margin-right: 2px; }
+  .mock-tab.active { background: #2b6cb0; color: white; }
+  .mock-tab.inactive { background: #2d3748; color: #718096; }
+  .mock-method { background: #276749; color: #9ae6b4; border-radius: 4px; padding: 4px 10px; font-size: 11px; font-weight: 700; display: inline-block; }
+  .mock-method.post { background: #744210; color: #fbd38d; }
+  .mock-method.put { background: #553c9a; color: #d6bcfa; }
+  .mock-method.delete { background: #742a2a; color: #feb2b2; }
+  .mock-url-bar { display: flex; align-items: center; gap: 8px; background: #0d1117; border: 1px solid #4a5568; border-radius: 6px; padding: 8px 12px; margin: 8px 0; }
+  .mock-url { font-size: 12px; color: #63b3ed; flex: 1; }
+  .mock-send { background: #2b6cb0; color: white; border-radius: 4px; padding: 4px 12px; font-size: 11px; font-weight: 600; }
+  .response-box { background: #0d1117; border: 1px solid #276749; border-radius: 6px; padding: 12px; margin-top: 10px; }
+  .response-label { font-size: 10px; color: #48bb78; margin-bottom: 6px; font-weight: 600; }
+
+  .api-row { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #2d3748; }
+  .api-row:last-child { border-bottom: none; }
+  .api-method { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 4px; min-width: 54px; text-align: center; }
+  .get { background: #1c4532; color: #9ae6b4; }
+  .post { background: #744210; color: #fbd38d; }
+  .put { background: #322659; color: #d6bcfa; }
+  .del { background: #742a2a; color: #feb2b2; }
+  .api-url { font-size: 12px; color: #63b3ed; font-family: monospace; flex: 1; }
+  .api-desc { font-size: 11px; color: #718096; }
+
+  .warning { background: #2d1f00; border: 1px solid #d69e2e; border-radius: 8px; padding: 12px 16px; margin: 12px 0; font-size: 12px; color: #fbd38d; }
+  .success { background: #1c3829; border: 1px solid #48bb78; border-radius: 8px; padding: 12px 16px; margin: 12px 0; font-size: 12px; color: #9ae6b4; }
+  .info { background: #1a2744; border: 1px solid #4299e1; border-radius: 8px; padding: 12px 16px; margin: 12px 0; font-size: 12px; color: #90cdf4; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+  .tag { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
+  .tag.port81 { background: #1c4532; color: #9ae6b4; }
+  .tag.port82 { background: #322659; color: #d6bcfa; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 10px 0; }
+  th { background: #2d3748; color: #e2e8f0; padding: 8px 12px; text-align: left; font-size: 11px; }
+  td { padding: 8px 12px; border-bottom: 1px solid #2d3748; color: #a0aec0; }
+  tr:last-child td { border-bottom: none; }
+
+  @media (max-width: 600px) { .grid2 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>🎬 OTT Platform — Complete Developer Guide</h1>
+  <p class="subtitle">Windows 10 · Spring Tool Suite · MySQL · Postman — Day 1 Reference</p>
+
+  <!-- ===================== PART 1: STRUCTURE ===================== -->
+  <h2><span class="num">1</span> Project Structure (what you've built)</h2>
+
+  <div class="grid2">
+    <div class="card green">
+      <h3>catalog-service <span class="tag port81">port 8081</span></h3>
+      <pre>src/main/java/com/ott/catalog/
+├── CatalogServiceApplication.java
+├── controller/
+│   └── CatalogController.java
+├── model/
+│   └── OttPlan.java
+├── repository/
+│   └── OttPlanRepository.java
+├── service/
+│   └── CatalogService.java
+└── exception/
+    ├── PlanNotFoundException.java
+    ├── ErrorResponse.java
+    └── GlobalExceptionHandler.java</pre>
+    </div>
+    <div class="card purple">
+      <h3>subscription-service <span class="tag port82">port 8082</span></h3>
+      <pre>src/main/java/com/ott/subscription/
+├── SubscriptionServiceApplication.java
+├── controller/
+│   ├── SubscriptionController.java
+│   └── UserController.java
+├── model/
+│   ├── User.java
+│   └── Subscription.java
+├── dto/
+│   ├── SubscriptionRequestDTO.java
+│   └── SubscriptionResponseDTO.java
+├── repository/
+│   ├── UserRepository.java
+│   └── SubscriptionRepository.java
+├── service/
+│   └── SubscriptionService.java
+├── client/
+│   └── CatalogClient.java
+├── config/
+│   └── AppConfig.java
+└── exception/
+    ├── UserNotFoundException.java
+    ├── SubscriptionNotFoundException.java
+    ├── PlanServiceException.java
+    ├── ErrorResponse.java
+    └── GlobalExceptionHandler.java</pre>
+    </div>
+  </div>
+
+  <!-- ===================== PART 2: MYSQL SETUP ===================== -->
+  <h2><span class="num">2</span> MySQL Database Setup (Windows 10)</h2>
+
+  <div class="step-box">
+    <div class="step-header"><span class="step-num">1</span><span class="step-title">Open MySQL Workbench</span></div>
+    <div class="step-body">
+      <p>Press <code>Windows key</code> → type <code>MySQL Workbench</code> → open it → click on your Local instance (usually shows as <strong>Local instance 3306</strong>)</p>
+      <div class="mock-screen">
+        <div class="mock-titlebar">
+          <div class="mock-dot" style="background:#fc8181"></div>
+          <div class="mock-dot" style="background:#f6e05e"></div>
+          <div class="mock-dot" style="background:#68d391"></div>
+          <span class="mock-title">MySQL Workbench</span>
+        </div>
+        <div style="color:#a0aec0;font-size:12px;margin-bottom:10px">MySQL Connections</div>
+        <div style="background:#2d3748;border-radius:6px;padding:12px;display:inline-block;cursor:pointer;border:1px solid #4299e1">
+          <div style="font-size:13px;color:#63b3ed;font-weight:600">⊕ Local instance MySQL80</div>
+          <div style="font-size:11px;color:#718096">root — localhost:3306</div>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:#718096">← Double-click this to connect</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-header"><span class="step-num">2</span><span class="step-title">Run the SQL Schema Script</span></div>
+    <div class="step-body">
+      <p>In Workbench: <code>File</code> → <code>Open SQL Script</code> → select <strong>database_schema.sql</strong> → click the ⚡ <strong>Execute</strong> button (or press <code>Ctrl + Shift + Enter</code>)</p>
+      <div class="mock-screen">
+        <div class="mock-titlebar">
+          <div class="mock-dot" style="background:#fc8181"></div>
+          <div class="mock-dot" style="background:#f6e05e"></div>
+          <div class="mock-dot" style="background:#68d391"></div>
+          <span class="mock-title">MySQL Workbench — Query Editor</span>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:10px">
+          <span style="font-size:11px;background:#2d3748;padding:3px 8px;border-radius:4px;color:#e2e8f0">File</span>
+          <span style="font-size:11px;background:#2d3748;padding:3px 8px;border-radius:4px;color:#e2e8f0">Edit</span>
+          <span style="font-size:11px;background:#2d3748;padding:3px 8px;border-radius:4px;color:#e2e8f0">Query</span>
+        </div>
+        <pre style="margin:0">CREATE DATABASE IF NOT EXISTS catalog_db;
+CREATE DATABASE IF NOT EXISTS subscription_db;
+-- ... (rest of schema)</pre>
+        <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+          <div style="background:#276749;color:#9ae6b4;border-radius:4px;padding:5px 14px;font-size:12px;font-weight:600">⚡ Execute All</div>
+          <span style="font-size:11px;color:#718096">← Click this button (or Ctrl+Shift+Enter)</span>
+        </div>
+        <div style="margin-top:10px;background:#1c3829;border-radius:4px;padding:8px;font-size:11px;color:#9ae6b4">
+          ✅ catalog_db created<br>
+          ✅ subscription_db created<br>
+          ✅ ott_plans table created with 5 seed plans<br>
+          ✅ users table created with 3 seed users
+        </div>
+      </div>
+      <div class="warning">⚠️ If you get "Access Denied" error, it means your MySQL root password is different from "root". Update <code>spring.datasource.password</code> in both <code>application.properties</code> files to match your actual MySQL password.</div>
+    </div>
+  </div>
+
+  <!-- ===================== PART 3: UPDATE POM.XML ===================== -->
+  <h2><span class="num">3</span> Update pom.xml in Both Services</h2>
+  <p style="margin-bottom:12px">Your current pom.xml only has Spring Web and DevTools. We need to add MySQL and JPA. Do this for BOTH services.</p>
+
+  <div class="step-box">
+    <div class="step-header"><span class="step-num">1</span><span class="step-title">Open pom.xml → add these 3 dependencies inside &lt;dependencies&gt;</span></div>
+    <div class="step-body">
+      <p>In STS, expand your project → double-click <strong>pom.xml</strong> → click the <strong>pom.xml</strong> tab at the bottom → add these inside the <code>&lt;dependencies&gt;</code> section:</p>
+      <pre>&lt;!-- Spring Data JPA - database operations --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;
+&lt;/dependency&gt;
+
+&lt;!-- MySQL Driver --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.mysql&lt;/groupId&gt;
+    &lt;artifactId&gt;mysql-connector-j&lt;/artifactId&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;
+
+&lt;!-- Validation (@NotNull, @NotBlank etc) --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-validation&lt;/artifactId&gt;
+&lt;/dependency&gt;</pre>
+      <div class="success">✅ After saving pom.xml, right-click project → Maven → Update Project → OK. STS will download the new dependencies automatically.</div>
+    </div>
+  </div>
+
+  <!-- ===================== PART 4: RUN SERVICES ===================== -->
+  <h2><span class="num">4</span> Run Both Services in STS (Windows 10)</h2>
+
+  <div class="info">ℹ️ Run catalog-service FIRST. Subscription-service calls catalog-service, so catalog must be running before subscription starts.</div>
+
+  <div class="step-box">
+    <div class="step-header"><span class="step-num">1</span><span class="step-title">Run catalog-service (port 8081)</span></div>
+    <div class="step-body">
+      <p>In Package Explorer: expand <strong>catalog-service</strong> → expand <code>src/main/java</code> → expand <code>com.ott.catalog</code> → right-click <strong>CatalogServiceApplication.java</strong> → <strong>Run As</strong> → <strong>Spring Boot App</strong></p>
+      <div class="mock-screen">
+        <div class="mock-titlebar">
+          <div class="mock-dot" style="background:#fc8181"></div>
+          <div class="mock-dot" style="background:#f6e05e"></div>
+          <div class="mock-dot" style="background:#68d391"></div>
+          <span class="mock-title">Spring Tool Suite — Package Explorer</span>
+        </div>
+        <div style="font-size:12px;color:#a0aec0">
+          <div>📁 catalog-service</div>
+          <div style="padding-left:16px">📁 src/main/java</div>
+          <div style="padding-left:32px">📁 com.ott.catalog</div>
+          <div style="padding-left:48px;color:#63b3ed;font-weight:600">☕ CatalogServiceApplication.java  ← RIGHT-CLICK THIS</div>
+        </div>
+        <div style="margin-top:10px;background:#2d3748;border-radius:6px;padding:10px;font-size:11px">
+          <div style="color:#e2e8f0;margin-bottom:4px">Context Menu:</div>
+          <div style="color:#a0aec0">Run As ▶</div>
+          <div style="color:#63b3ed;padding-left:16px;font-weight:600">→ Spring Boot App  ← CLICK THIS</div>
+        </div>
+      </div>
+      <h3>✅ What you should see in the Console tab:</h3>
+      <pre style="color:#9ae6b4">  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+
+Started CatalogServiceApplication in 3.421 seconds
+Tomcat started on port 8081 (http)</pre>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-header"><span class="step-num">2</span><span class="step-title">Run subscription-service (port 8082)</span></div>
+    <div class="step-body">
+      <p>Same steps: right-click <strong>SubscriptionServiceApplication.java</strong> → Run As → Spring Boot App</p>
+      <div class="success">✅ You should see: <strong>Tomcat started on port 8082</strong> in the Console</div>
+      <div class="warning">⚠️ If you see <strong>"Connection refused"</strong> error — it means MySQL is not running. Open Windows Services: press <code>Windows + R</code> → type <code>services.msc</code> → find <strong>MySQL80</strong> → right-click → Start.</div>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-header"><span class="step-num">3</span><span class="step-title">Verify both are running — open Windows browser</span></div>
+    <div class="step-body">
+      <p>Open <strong>Microsoft Edge or Chrome</strong> and go to:</p>
+      <pre>http://localhost:8081/catalog/plans</pre>
+      <p>You should see JSON response with 5 OTT plans. If yes — catalog-service is working! ✅</p>
+    </div>
+  </div>
+
+  <!-- ===================== PART 5: POSTMAN ===================== -->
+  <h2><span class="num">5</span> Download & Setup Postman (Windows 10)</h2>
+
+  <div class="step-box">
+    <div class="step-header"><span class="step-num">1</span><span class="step-title">Download Postman</span></div>
+    <div class="step-body">
+      <p>Go to <strong>https://www.postman.com/downloads/</strong> → click <strong>Download for Windows (64-bit)</strong> → install with all defaults → open Postman → skip account creation (click "Skip and go to app")</p>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-header"><span class="step-num">2</span><span class="step-title">Create a Collection for OTT Platform</span></div>
+    <div class="step-body">
+      <p>In Postman left sidebar: click <strong>Collections</strong> → click <strong>+</strong> button → name it <strong>"OTT Platform"</strong> → press Enter</p>
+      <div class="mock-screen">
+        <div class="mock-titlebar">
+          <div class="mock-dot" style="background:#fc8181"></div>
+          <div class="mock-dot" style="background:#f6e05e"></div>
+          <div class="mock-dot" style="background:#68d391"></div>
+          <span class="mock-title">Postman</span>
+        </div>
+        <div style="display:flex;gap:0;height:180px">
+          <div style="width:180px;background:#1a1f2e;border-right:1px solid #2d3748;padding:10px;font-size:11px">
+            <div style="color:#718096;margin-bottom:8px;font-size:10px">COLLECTIONS</div>
+            <div style="color:#63b3ed;background:#2d3748;border-radius:4px;padding:6px 8px;display:flex;align-items:center;gap:6px">
+              <span>📁</span> OTT Platform
+            </div>
+            <div style="margin-top:4px;color:#718096;font-size:10px;padding-left:8px">+ Add a request</div>
+          </div>
+          <div style="flex:1;padding:10px;font-size:11px;color:#a0aec0">
+            <div style="margin-bottom:8px">Select a request from the collection or create a new one using the + button</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== PART 6: CATALOG APIs ===================== -->
+  <h2><span class="num">6</span> Test Catalog Service APIs (port 8081)</h2>
+
+  <div class="card blue">
+    <h3>All Catalog APIs at a glance</h3>
+    <div class="api-row"><span class="api-method get">GET</span><span class="api-url">http://localhost:8081/catalog/plans</span><span class="api-desc">Get all active plans</span></div>
+    <div class="api-row"><span class="api-method get">GET</span><span class="api-url">http://localhost:8081/catalog/plans/PLAN001</span><span class="api-desc">Get plan by ID</span></div>
+    <div class="api-row"><span class="api-method get">GET</span><span class="api-url">http://localhost:8081/catalog/plans/duration/MONTHLY</span><span class="api-desc">Get monthly plans</span></div>
+    <div class="api-row"><span class="api-method post">POST</span><span class="api-url">http://localhost:8081/catalog/plans</span><span class="api-desc">Create new plan (with JSON body)</span></div>
+    <div class="api-row"><span class="api-method put">PUT</span><span class="api-url">http://localhost:8081/catalog/plans/PLAN001</span><span class="api-desc">Update a plan</span></div>
+    <div class="api-row"><span class="api-method del">DEL</span><span class="api-url">http://localhost:8081/catalog/plans/PLAN001</span><span class="api-desc">Deactivate a plan</span></div>
+  </div>
+
+  <!-- API 1: GET all plans -->
+  <div class="step-box">
+    <div class="step-header"><span class="step-num">A</span><span class="step-title">GET all plans — http://localhost:8081/catalog/plans</span></div>
+    <div class="step-body">
+      <p>In Postman: click <strong>+</strong> to open new tab → set method to <strong>GET</strong> → paste URL → click <strong>Send</strong></p>
+      <div class="mock-screen">
+        <div class="mock-titlebar">
+          <div class="mock-dot" style="background:#fc8181"></div><div class="mock-dot" style="background:#f6e05e"></div><div class="mock-dot" style="background:#68d391"></div>
+          <span class="mock-title">Postman — GET All Plans</span>
+        </div>
+        <div class="mock-url-bar">
+          <span class="mock-method">GET</span>
+          <span class="mock-url">http://localhost:8081/catalog/plans</span>
+          <span class="mock-send">Send</span>
+        </div>
+        <div style="display:flex;gap:4px;margin-bottom:10px">
+          <span class="mock-tab inactive">Params</span><span class="mock-tab inactive">Headers</span><span class="mock-tab inactive">Body</span>
+        </div>
+        <div style="font-size:11px;color:#718096;margin-bottom:6px">← No body needed for GET requests</div>
+        <div class="response-box">
+          <div class="response-label">✅ 200 OK — Response Body</div>
+          <pre style="margin:0;font-size:11px">[
+  {
+    "planId": "PLAN001",
+    "planName": "Disney+ Basic",
+    "price": 199.00,
+    "duration": "MONTHLY",
+    "description": "Access to Disney+ content in HD",
+    "isActive": true
+  },
+  {
+    "planId": "PLAN002",
+    "planName": "Disney+ Premium",
+    "price": 299.00,
+    "duration": "MONTHLY",
+    ...
+  }
+]</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- API 2: POST create plan -->
+  <div class="step-box">
+    <div class="step-header"><span class="step-num">B</span><span class="step-title">POST create plan — http://localhost:8081/catalog/plans</span></div>
+    <div class="step-body">
+      <p>Click <strong>+</strong> → set method to <strong>POST</strong> → paste URL → click <strong>Body</strong> tab → select <strong>raw</strong> → select <strong>JSON</strong> from dropdown → paste JSON below → click <strong>Send</strong></p>
+      <div class="mock-screen">
+        <div class="mock-titlebar">
+          <div class="mock-dot" style="background:#fc8181"></div><div class="mock-dot" style="background:#f6e05e"></div><div class="mock-dot" style="background:#68d391"></div>
+          <span class="mock-title">Postman — POST Create Plan</span>
+        </div>
+        <div class="mock-url-bar">
+          <span class="mock-method post">POST</span>
+          <span class="mock-url">http://localhost:8081/catalog/plans</span>
+          <span class="mock-send">Send</span>
+        </div>
+        <div style="display:flex;gap:4px;margin-bottom:10px">
+          <span class="mock-tab inactive">Params</span>
+          <span class="mock-tab inactive">Headers</span>
+          <span class="mock-tab active">Body</span>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:8px;align-items:center">
+          <span style="font-size:11px;color:#718096">○ none  ○ form-data  ○ x-www-form-urlencoded</span>
+          <span style="font-size:11px;background:#2b6cb0;color:white;padding:2px 8px;border-radius:4px">● raw</span>
+          <span style="font-size:11px;background:#2d3748;color:#f6e05e;padding:2px 8px;border-radius:4px">JSON ▼</span>
+        </div>
+        <pre style="margin:0;font-size:11px">{
+  "planId": "PLAN006",
+  "planName": "Hotstar Premium",
+  "price": 349.00,
+  "duration": "MONTHLY",
+  "description": "Hotstar premium content access",
+  "isActive": true
+}</pre>
+        <div class="response-box" style="margin-top:10px">
+          <div class="response-label">✅ 201 Created — Response Body</div>
+          <pre style="margin:0;font-size:11px">{
+  "planId": "PLAN006",
+  "planName": "Hotstar Premium",
+  "price": 349.00,
+  "duration": "MONTHLY",
+  "isActive": true,
+  "createdAt": "2026-05-16T17:45:00"
+}</pre>
+        </div>
+      </div>
+      <div class="warning">⚠️ Important: The <strong>Content-Type</strong> header must be set to <strong>application/json</strong>. When you select "raw + JSON" in Postman, it sets this automatically.</div>
+    </div>
+  </div>
+
+  <!-- ===================== PART 7: SUBSCRIPTION APIs ===================== -->
+  <h2><span class="num">7</span> Test Subscription Service APIs (port 8082)</h2>
+
+  <div class="card purple">
+    <h3>All Subscription APIs at a glance</h3>
+    <div class="api-row"><span class="api-method post">POST</span><span class="api-url">http://localhost:8082/users/register</span><span class="api-desc">Register new user</span></div>
+    <div class="api-row"><span class="api-method get">GET</span><span class="api-url">http://localhost:8082/users/1</span><span class="api-desc">Get user by ID</span></div>
+    <div class="api-row"><span class="api-method post">POST</span><span class="api-url">http://localhost:8082/subscriptions</span><span class="api-desc">Subscribe user to a plan</span></div>
+    <div class="api-row"><span class="api-method get">GET</span><span class="api-url">http://localhost:8082/subscriptions/user/1</span><span class="api-desc">Get all subscriptions for user</span></div>
+    <div class="api-row"><span class="api-method get">GET</span><span class="api-url">http://localhost:8082/subscriptions/1</span><span class="api-desc">Get subscription by ID</span></div>
+    <div class="api-row"><span class="api-method put">PUT</span><span class="api-url">http://localhost:8082/subscriptions/1/cancel</span><span class="api-desc">Cancel subscription</span></div>
+  </div>
+
+  <div class="info">ℹ️ Follow this ORDER when testing: Register User first → then Subscribe. You can't subscribe without a valid userId.</div>
+
+  <!-- Register User -->
+  <div class="step-box">
+    <div class="step-header"><span class="step-num">A</span><span class="step-title">POST Register User — http://localhost:8082/users/register</span></div>
+    <div class="step-body">
+      <p>Method: <strong>POST</strong> → Body → raw → JSON → paste below → Send</p>
+      <div class="mock-screen">
+        <div class="mock-titlebar">
+          <div class="mock-dot" style="background:#fc8181"></div><div class="mock-dot" style="background:#f6e05e"></div><div class="mock-dot" style="background:#68d391"></div>
+          <span class="mock-title">Postman — POST Register User</span>
+        </div>
+        <div class="mock-url-bar">
+          <span class="mock-method post">POST</span>
+          <span class="mock-url">http://localhost:8082/users/register</span>
+          <span class="mock-send">Send</span>
+        </div>
+        <pre style="font-size:11px">{
+  "username": "skyri",
+  "email": "skyri@gmail.com",
+  "fullName": "Skyri Kumar",
+  "phone": "9876543210"
+}</pre>
+        <div class="response-box">
+          <div class="response-label">✅ 201 Created</div>
+          <pre style="margin:0;font-size:11px">{
+  "userId": 4,
+  "username": "skyri",
+  "email": "skyri@gmail.com",
+  "fullName": "Skyri Kumar",
+  "isActive": true,
+  "createdAt": "2026-05-16T17:50:00"
+}</pre>
+        </div>
+      </div>
+      <div class="success">✅ Note the <strong>userId</strong> from the response (e.g. 4). You'll use it in the next step.</div>
+    </div>
+  </div>
+
+  <!-- Subscribe -->
+  <div class="step-box">
+    <div class="step-header"><span class="step-num">B</span><span class="step-title">POST Subscribe — http://localhost:8082/subscriptions</span></div>
+    <div class="step-body">
+      <p>This is the most important API — it calls catalog-service internally to validate the plan and get the price. Method: <strong>POST</strong> → Body → raw → JSON</p>
+      <div class="mock-screen">
+        <div class="mock-titlebar">
+          <div class="mock-dot" style="background:#fc8181"></div><div class="mock-dot" style="background:#f6e05e"></div><div class="mock-dot" style="background:#68d391"></div>
+          <span class="mock-title">Postman — POST Subscribe to Plan</span>
+        </div>
+        <div class="mock-url-bar">
+          <span class="mock-method post">POST</span>
+          <span class="mock-url">http://localhost:8082/subscriptions</span>
+          <span class="mock-send">Send</span>
+        </div>
+        <pre style="font-size:11px">{
+  "userId": 1,
+  "planId": "PLAN001",
+  "autoRenewal": true
+}</pre>
+        <div class="response-box">
+          <div class="response-label">✅ 201 Created — Subscription Service called Catalog Service internally!</div>
+          <pre style="margin:0;font-size:11px">{
+  "subscriptionId": 1,
+  "userId": 1,
+  "username": "john.doe",
+  "planId": "PLAN001",
+  "planName": "Disney+ Basic",
+  "amountPaid": 199.00,
+  "status": "ACTIVE",
+  "startDate": "2026-05-16",
+  "endDate": "2026-06-16",
+  "autoRenewal": true,
+  "createdAt": "2026-05-16T17:55:00"
+}</pre>
+        </div>
+      </div>
+      <div class="info">ℹ️ Notice <strong>planName: "Disney+ Basic"</strong> in the response — that data came from catalog-service (port 8081) via internal REST call. This is microservices communication in action! Exactly like your Disney project.</div>
+    </div>
+  </div>
+
+  <!-- Cancel Subscription -->
+  <div class="step-box">
+    <div class="step-header"><span class="step-num">C</span><span class="step-title">PUT Cancel Subscription — http://localhost:8082/subscriptions/1/cancel</span></div>
+    <div class="step-body">
+      <p>Method: <strong>PUT</strong> → No body needed → Send</p>
+      <div class="mock-screen">
+        <div class="mock-titlebar">
+          <div class="mock-dot" style="background:#fc8181"></div><div class="mock-dot" style="background:#f6e05e"></div><div class="mock-dot" style="background:#68d391"></div>
+          <span class="mock-title">Postman — PUT Cancel Subscription</span>
+        </div>
+        <div class="mock-url-bar">
+          <span class="mock-method put">PUT</span>
+          <span class="mock-url">http://localhost:8082/subscriptions/1/cancel</span>
+          <span class="mock-send">Send</span>
+        </div>
+        <div class="response-box">
+          <div class="response-label">✅ 200 OK</div>
+          <pre style="margin:0;font-size:11px">{
+  "subscriptionId": 1,
+  "status": "CANCELLED",
+  ...
+}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== PART 8: ERROR TESTING ===================== -->
+  <h2><span class="num">8</span> Test Error Handling (GlobalExceptionHandler)</h2>
+  <p style="margin-bottom:12px">This shows the interviewer you understand centralized exception handling.</p>
+
+  <div class="card red">
+    <h3>Test these error scenarios in Postman</h3>
+    <table>
+      <tr><th>Test</th><th>Request</th><th>Expected Response</th></tr>
+      <tr><td>Plan not found</td><td>GET /catalog/plans/<strong>PLAN999</strong></td><td>404 — "OTT Plan not found with id: PLAN999"</td></tr>
+      <tr><td>User not found</td><td>POST /subscriptions with userId: <strong>9999</strong></td><td>404 — "User not found with id: 9999"</td></tr>
+      <tr><td>Invalid plan in subscribe</td><td>POST /subscriptions with planId: <strong>"INVALID"</strong></td><td>502 — "Could not fetch plan from Catalog Service"</td></tr>
+      <tr><td>Missing required field</td><td>POST /users/register with no email</td><td>400 — {"email": "Email is required"}</td></tr>
+    </table>
+  </div>
+
+  <!-- ===================== PART 9: NO TOKEN NEEDED ===================== -->
+  <h2><span class="num">9</span> About JWT Tokens — Do You Need One?</h2>
+
+  <div class="success">
+    ✅ <strong>No JWT token needed for Day 1.</strong> Both services are completely open — no authentication required. Just call the APIs directly from Postman as shown above.
+    <br><br>
+    JWT token validation will be added in <strong>Day 2 when we build the API Gateway</strong>. The Gateway will sit in front of both services and validate tokens before requests reach your services. Your services themselves stay clean — they don't handle auth at all.
+  </div>
+
+  <!-- ===================== PART 10: INTERVIEW NOTES ===================== -->
+  <h2><span class="num">10</span> Interview Talking Points — What You've Built</h2>
+
+  <div class="card green">
+    <h3>When interviewer asks: "Tell me about your microservices project"</h3>
+    <p style="margin-top:8px;color:#9ae6b4">Say this:</p>
+    <p style="margin-top:6px">"I built an OTT subscription platform similar to Disney+/ESPN. It has two microservices — a Catalog Service on port 8081 that manages OTT plans stored in MySQL, and a Subscription Service on port 8082 that handles user subscriptions. When a user subscribes, the Subscription Service calls the Catalog Service via REST to validate the plan and fetch the price. Each service has its own database — catalog_db and subscription_db — following the database-per-service pattern. I used Spring Boot 3.5 with Spring Data JPA, centralized exception handling using @RestControllerAdvice, and DTOs to keep the API contract clean."</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card blue">
+      <h3>Key patterns used (interview terms)</h3>
+      <ul>
+        <li>Database per service pattern</li>
+        <li>REST-based synchronous communication</li>
+        <li>Centralized exception handling (@RestControllerAdvice)</li>
+        <li>DTO pattern (Request/Response separation)</li>
+        <li>Repository pattern (Spring Data JPA)</li>
+        <li>Soft delete (deactivate, not hard delete)</li>
+        <li>Separation of concerns (Controller → Service → Repository)</li>
+      </ul>
+    </div>
+    <div class="card orange">
+      <h3>Common interview questions</h3>
+      <ul>
+        <li>What is the difference between @RestController and @Controller?</li>
+        <li>Why use DTO instead of Entity directly?</li>
+        <li>What is @RestControllerAdvice?</li>
+        <li>How do microservices communicate?</li>
+        <li>Why give each service its own database?</li>
+        <li>What is soft delete and why use it?</li>
+        <li>What is @Transactional and when to use it?</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:24px;color:#4a5568;font-size:12px;margin-top:20px">
+    Day 1 Complete ✅ — Next: Day 2 — API Gateway + JWT Auth + Payment Service
+  </div>
+
+</div>
+</body>
+</html>

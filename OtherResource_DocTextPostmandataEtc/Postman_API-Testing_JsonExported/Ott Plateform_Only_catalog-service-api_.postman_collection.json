@@ -1,0 +1,179 @@
+{
+  "info": {
+    "_postman_id": "90c524ef-1b7c-483a-85e7-33b0885ff30f",
+    "name": "Ott Plateform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "25529162"
+  },
+  "item": [
+    {
+      "name": "catalogservice",
+      "item": [
+        {
+          "name": "AllPlan-GET",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "GET-PlansByPlanId",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "GET-PlansByPlanIdByduration[MONTHLY/YEARLY]",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/catalog/plans/duration/YEARLY",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "catalog",
+                "plans",
+                "duration",
+                "YEARLY"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET-PlansByPlanId",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/catalog/plans/PLAN005",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "catalog",
+                "plans",
+                "PLAN005"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "addingNewPlans",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"planId\": \"PLAN006\",\r\n  \"planName\": \"Hotstar Premium\",\r\n  \"price\": 349.00,\r\n  \"duration\": \"MONTHLY\",\r\n  \"description\": \"Hotstar premium content access\",\r\n  \"isActive\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8081/catalog/plans",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "catalog",
+                "plans"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "deleteORBasicallyDeactivating-Plans",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"planId\": \"PLAN006\",\r\n  \"planName\": \"Hotstar Premium\",\r\n  \"price\": 349.00,\r\n  \"duration\": \"MONTHLY\",\r\n  \"description\": \"Hotstar premium content access\",\r\n  \"isActive\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8081/catalog/plans",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "catalog",
+                "plans"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "activating-Plans",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"planId\": \"PLAN006\",\r\n  \"planName\": \"Hotstar Premium\",\r\n  \"price\": 349.00,\r\n  \"duration\": \"MONTHLY\",\r\n  \"description\": \"Hotstar premium content access\",\r\n  \"isActive\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8081/catalog/plans",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "catalog",
+                "plans"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "updateExistingPlan",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "subscriptionservice",
+      "item": []
+    }
+  ]
+}
