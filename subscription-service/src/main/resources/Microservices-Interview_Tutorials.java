@@ -132,3 +132,185 @@ Transaction boundary should be in service layer
 
 This project follows correct architecture:
 // omsairam 17-May2026-topic-1 ////////////////////////////////////
+	
+// omsairam 18-May2026-topic-2 ////////////////////////////////////	
+/*
+ * 
+ *
+ * so @Transactional should be apply at Repositotory or at Service?
+
+@Transactional should generally be applied at the Service layer, not the Repository layer.
+
+Your project already follows the correct enterprise pattern.
+Example from your code:
+
+@Transactional
+public SubscriptionResponseDTO subscribe(SubscriptionRequestDTO request)
+
+and:
+
+@Transactional
+public User registerUser(User user)
+
+This is the correct place.
+
+Why Service Layer?
+
+Because transaction should cover the entire business operation.
+
+A business operation may involve:
+
+multiple repositories
+validations
+external API calls
+calculations
+entity updates
+
+Example from your subscribe() method:
+
+Flow is:
+
+1. Find User
+2. Call Catalog Service
+3. Create Subscription
+4. Save Subscription
+5. Return DTO
+
+This whole operation should behave as ONE transaction.
+
+That is why transaction boundary belongs to service layer.
+
+Why NOT Repository Layer?
+
+Repository should only do:
+
+CRUD operations
+
+Example:
+
+userRepository.save(user);
+subscriptionRepository.findById(id);
+
+Repositories are low-level data access components.
+
+If you put @Transactional only at repository level:
+
+Each repository call becomes isolated
+
+That breaks business consistency.
+
+Real Example
+
+Suppose:
+*/
+public void placeOrder() {
+
+    userRepository.updateWallet();
+
+    orderRepository.save();
+
+    paymentRepository.save();
+}
+/*
+If transaction is only on repository methods:
+
+wallet updated ✅
+order saved ✅
+payment failed ❌
+
+Now system is inconsistent.
+
+Correct Way */
+@Transactional
+public void placeOrder() {
+   ...
+}
+/*
+Now entire method becomes atomic.
+
+If anything fails:
+
+ROLLBACK EVERYTHING
+Spring Data JPA Already Handles Repository Transactions
+
+Actually repository methods already have internal transactional behavior.
+
+For example:
+
+save()
+delete()
+
+are internally transactional.
+
+But those are only individual DB operations.
+
+Enterprise applications need transaction across BUSINESS FLOW, not single SQL statements.
+
+Standard Architecture
+
+Correct layering:
+
+Controller
+   ↓
+Service (@Transactional)
+   ↓
+Repository
+   ↓
+Database
+
+This is the most commonly expected interview answer too.
+
+Best Practice
+Read-only methods
+
+Sometimes you will see:
+*/
+@Transactional(readOnly = true)
+
+//Example:
+
+@Transactional(readOnly = true)
+public User getUser(Long id)
+/*
+Benefits:
+
+optimization
+prevents accidental updates
+better Hibernate performance
+Important Spring Interview Point
+
+Transaction works properly only when:
+
+method is called through Spring proxy
+
+Meaning:
+
+Service bean managed by Spring
+external method call
+
+If one method inside same class calls another transactional method directly:
+
+this.someTransactionalMethod()
+
+then transaction proxy may NOT work.
+
+This is called:
+
+Self Invocation Problem
+
+Advanced but important concept.
+*/
+//short Interview Answer
+
+//You can say:
+/*
+@Transactional should generally be applied at the Service layer because transactions should manage 
+the complete business operation involving multiple repository/database actions.
+ Repository layer should mainly focus on CRUD operations.
+ *
+ */
+//EOF- omsairam 18-May2026-topic-2 ////////////////////////////////////
+	
+	
+
+	
