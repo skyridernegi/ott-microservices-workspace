@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>API Gateway Complete Guide — Windows 10</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#0f1117;color:#e2e8f0;line-height:1.6}
+.container{max-width:980px;margin:0 auto;padding:24px 20px}
+h1{font-size:24px;color:#63b3ed;margin-bottom:4px}
+.subtitle{color:#718096;font-size:13px;margin-bottom:28px}
+h2{font-size:16px;color:#90cdf4;margin:28px 0 12px;display:flex;align-items:center;gap:10px}
+h2 .num{background:#2b6cb0;color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+h3{font-size:13px;color:#e2e8f0;margin:14px 0 6px;font-weight:600}
+p,li{font-size:12px;color:#a0aec0;line-height:1.7}
+ul{padding-left:18px;margin:6px 0}
+li{margin-bottom:3px}
+pre,code{font-family:'Consolas','Courier New',monospace}
+pre{background:#0d1117;border:1px solid #2d3748;border-radius:8px;padding:12px 14px;overflow-x:auto;font-size:11px;color:#e2e8f0;margin:8px 0}
+code{background:#2d3748;padding:2px 6px;border-radius:4px;font-size:11px;color:#63b3ed}
+.card{background:#1a1f2e;border:1px solid #2d3748;border-radius:10px;padding:14px 16px;margin-bottom:12px}
+.card.green{border-left:4px solid #48bb78}
+.card.blue{border-left:4px solid #4299e1}
+.card.orange{border-left:4px solid #ed8936}
+.card.purple{border-left:4px solid #9f7aea}
+.card.red{border-left:4px solid #fc8181}
+.step-box{background:#1a1f2e;border:1px solid #2d3748;border-radius:10px;margin-bottom:10px;overflow:hidden}
+.step-hdr{background:#2d3748;padding:9px 14px;display:flex;align-items:center;gap:10px}
+.step-num{background:#4299e1;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.step-title{font-size:13px;font-weight:600;color:#e2e8f0}
+.step-body{padding:12px 14px}
+.mock{background:#0d1117;border:1px solid #4a5568;border-radius:8px;padding:14px;margin:10px 0;font-size:12px}
+.mock-bar{background:#2d3748;border-radius:6px 6px 0 0;padding:7px 12px;display:flex;align-items:center;gap:8px;margin:-14px -14px 12px}
+.dot{width:9px;height:9px;border-radius:50%}
+.mtitle{font-size:11px;color:#718096;margin-left:6px}
+.url-bar{display:flex;align-items:center;gap:8px;background:#0d1117;border:1px solid #4a5568;border-radius:6px;padding:7px 12px;margin:8px 0}
+.method{font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px}
+.GET{background:#1c4532;color:#9ae6b4}
+.POST{background:#744210;color:#fbd38d}
+.PUT{background:#322659;color:#d6bcfa}
+.url{font-size:12px;color:#63b3ed;flex:1;font-family:monospace}
+.send{background:#2b6cb0;color:#fff;border-radius:4px;padding:3px 12px;font-size:11px;font-weight:600}
+.resp{background:#0d1117;border:1px solid #276749;border-radius:6px;padding:10px;margin-top:8px}
+.resp-label{font-size:10px;color:#48bb78;margin-bottom:5px;font-weight:600}
+.warn{background:#2d1f00;border:1px solid #d69e2e;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#fbd38d}
+.success{background:#1c3829;border:1px solid #48bb78;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#9ae6b4}
+.info{background:#1a2744;border:1px solid #4299e1;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#90cdf4}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}
+th{background:#2d3748;color:#e2e8f0;padding:7px 10px;text-align:left;font-size:11px}
+td{padding:7px 10px;border-bottom:1px solid #2d3748;color:#a0aec0}
+tr:last-child td{border-bottom:none}
+.flow-box{display:flex;align-items:center;gap:0;flex-wrap:wrap;margin:10px 0}
+.flow-item{background:#1a2744;border:1px solid #4299e1;border-radius:8px;padding:8px 12px;font-size:11px;text-align:center;min-width:110px}
+.flow-item .fi-title{color:#63b3ed;font-weight:600;font-size:12px}
+.flow-item .fi-sub{color:#718096;font-size:10px}
+.flow-arrow{color:#4299e1;font-size:18px;padding:0 6px}
+.arch-row{display:flex;gap:10px;margin:10px 0;flex-wrap:wrap}
+.arch-box{flex:1;min-width:140px;border-radius:8px;padding:10px 12px;font-size:12px}
+@media(max-width:600px){.grid2{grid-template-columns:1fr}.flow-box{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>🚪 API Gateway — Complete Guide</h1>
+<p class="subtitle">Spring Cloud Gateway · JWT Auth · Rate Limiter · Windows 10 · STS</p>
+
+<!-- CONCEPT -->
+<h2><span class="num">1</span> What is API Gateway? (Interview Answer)</h2>
+<div class="card blue">
+  <p style="margin-bottom:10px">API Gateway is the <strong style="color:#e2e8f0">single entry point</strong> for all client requests. Instead of the ESPN website calling catalog-service:8081 and subscription-service:8082 directly, everything goes through the Gateway on port <strong style="color:#63b3ed">8080</strong>.</p>
+  <div class="flow-box">
+    <div class="flow-item"><div class="fi-title">ESPN Website</div><div class="fi-sub">Client</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-item" style="background:#1c3829;border-color:#48bb78"><div class="fi-title" style="color:#48bb78">API Gateway</div><div class="fi-sub">:8080 — JWT + Rate Limit</div></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-item"><div class="fi-title">catalog-service</div><div class="fi-sub">:8081</div></div>
+    <div class="flow-arrow">+</div>
+    <div class="flow-item"><div class="fi-title">subscription-service</div><div class="fi-sub">:8082</div></div>
+  </div>
+</div>
+
+<div class="grid2">
+  <div class="card green">
+    <h3>What Gateway does</h3>
+    <ul>
+      <li><strong style="color:#e2e8f0">Routing</strong> — /catalog → 8081, /subscriptions → 8082</li>
+      <li><strong style="color:#e2e8f0">JWT Auth</strong> — validates token before forwarding</li>
+      <li><strong style="color:#e2e8f0">Rate Limiting</strong> — max 10 req/sec per user</li>
+      <li><strong style="color:#e2e8f0">Logging</strong> — logs every request centrally</li>
+    </ul>
+  </div>
+  <div class="card orange">
+    <h3>What JWT is (interview answer)</h3>
+    <p>JSON Web Token — 3 parts separated by dots:</p>
+    <pre style="margin-top:6px">Header.Payload.Signature
+eyJhbG..  eyJ1c2..  SflKx..
+↑ algo    ↑ data    ↑ proof not tampered</pre>
+    <p style="margin-top:6px">Stateless — user data is IN the token. No server session needed.</p>
+  </div>
+</div>
+
+<!-- PROJECT STRUCTURE -->
+<h2><span class="num">2</span> Project Structure</h2>
+<div class="card">
+<pre>api-gateway/
+└── src/main/java/com/ott/gateway/
+    ├── ApiGatewayApplication.java      ← main class
+    ├── controller/
+    │   └── AuthController.java         ← POST /auth/token (generate JWT)
+    ├── filter/
+    │   ├── JwtAuthFilter.java          ← validates JWT on every request
+    │   └── LoggingFilter.java          ← logs every request/response
+    ├── config/
+    │   └── RateLimiterConfig.java      ← Redis rate limiter key resolver
+    └── util/
+        └── JwtUtil.java                ← generate + validate JWT tokens
+└── src/main/resources/
+    └── application.yml                 ← routing rules + Redis + JWT config</pre>
+</div>
+
+<!-- STEP 1: CREATE PROJECT -->
+<h2><span class="num">3</span> Create Project in STS (Windows 10)</h2>
+
+<div class="step-box">
+  <div class="step-hdr"><span class="step-num">1</span><span class="step-title">File → New → Spring Starter Project</span></div>
+  <div class="step-body">
+    <pre>Name:        api-gateway
+Type:        Maven
+Packaging:   Jar
+Java:        21
+Group:       com.ott
+Artifact:    api-gateway
+Package:     com.ott.gateway</pre>
+    <p style="margin-top:8px">Click <strong>Next</strong> — on dependencies screen, search and select:</p>
+    <ul style="margin-top:6px">
+      <li>✅ <strong>Gateway</strong> (under Spring Cloud Routing)</li>
+      <li>✅ <strong>Spring Data Redis (Reactive)</strong></li>
+      <li>✅ <strong>DevTools</strong></li>
+    </ul>
+    <div class="warn">⚠️ Do NOT select Spring Web. Gateway uses reactive WebFlux stack. Adding Web causes startup failure.</div>
+    <p>Spring Boot Version: <strong>3.5.14</strong> → Click <strong>Finish</strong></p>
+  </div>
+</div>
+
+<div class="step-box">
+  <div class="step-hdr"><span class="step-num">2</span><span class="step-title">Replace pom.xml with provided file</span></div>
+  <div class="step-body">
+    <p>Open <strong>pom.xml</strong> → click pom.xml tab → replace entire content with the <strong>pom.xml</strong> file provided. It adds Spring Cloud BOM + JWT library (jjwt) which STS can't select from the wizard.</p>
+    <p style="margin-top:8px">After saving: right-click project → <strong>Maven → Update Project → OK</strong></p>
+  </div>
+</div>
+
+<div class="step-box">
+  <div class="step-hdr"><span class="step-num">3</span><span class="step-title">Delete application.properties → Create application.yml</span></div>
+  <div class="step-body">
+    <p>In STS: expand <code>src/main/resources</code> → right-click <strong>application.properties</strong> → Delete → OK</p>
+    <p style="margin-top:6px">Right-click <code>src/main/resources</code> → New → File → name it <strong>application.yml</strong> → paste content from provided file</p>
+    <div class="info">ℹ️ We use .yml instead of .properties because Gateway routing config has nested structure that's much cleaner in YML format.</div>
+  </div>
+</div>
+
+<!-- STEP 2: REDIS INSTALL -->
+<h2><span class="num">4</span> Install Redis on Windows 10 (for Rate Limiter)</h2>
+
+<div class="info">ℹ️ Redis is an in-memory data store. Rate limiter uses Redis to count how many requests each user has made. Without Redis, the Gateway will fail to start.</div>
+
+<div class="step-box">
+  <div class="step-hdr"><span class="step-num">1</span><span class="step-title">Download Redis for Windows</span></div>
+  <div class="step-body">
+    <p>Go to: <strong>https://github.com/microsoftarchive/redis/releases</strong></p>
+    <p style="margin-top:6px">Download: <strong>Redis-x64-3.0.504.msi</strong> (the .msi installer file)</p>
+    <p style="margin-top:6px">Run the installer → accept all defaults → check <strong>"Add Redis to PATH"</strong> → Install</p>
+  </div>
+</div>
+
+<div class="step-box">
+  <div class="step-hdr"><span class="step-num">2</span><span class="step-title">Verify Redis is running</span></div>
+  <div class="step-body">
+    <p>Open <strong>Command Prompt</strong> (Windows key → type cmd → Enter) and type:</p>
+    <pre>redis-cli ping</pre>
+    <div class="success">✅ If you see PONG — Redis is running. You're ready.</div>
+    <div class="warn">⚠️ If you see error — open Command Prompt as Administrator → type: <code>redis-server</code> → keep that window open → open a new cmd → type redis-cli ping</div>
+  </div>
+</div>
+
+<!-- STEP 3: CREATE FILES -->
+<h2><span class="num">5</span> Create All Java Files in STS</h2>
+
+<div class="card">
+  <h3>Create these packages first (right-click com.ott.gateway → New → Package)</h3>
+  <pre>com.ott.gateway.controller
+com.ott.gateway.filter
+com.ott.gateway.config
+com.ott.gateway.util</pre>
+  <h3 style="margin-top:12px">Then create these files in each package:</h3>
+  <table>
+    <tr><th>Package</th><th>File</th><th>What it does</th></tr>
+    <tr><td>com.ott.gateway</td><td>ApiGatewayApplication.java</td><td>Replace existing main class</td></tr>
+    <tr><td>com.ott.gateway.util</td><td>JwtUtil.java</td><td>Generate + validate JWT tokens</td></tr>
+    <tr><td>com.ott.gateway.filter</td><td>JwtAuthFilter.java</td><td>Validate JWT on every request</td></tr>
+    <tr><td>com.ott.gateway.filter</td><td>LoggingFilter.java</td><td>Log every request/response</td></tr>
+    <tr><td>com.ott.gateway.config</td><td>RateLimiterConfig.java</td><td>Rate limit per username</td></tr>
+    <tr><td>com.ott.gateway.controller</td><td>AuthController.java</td><td>POST /auth/token endpoint</td></tr>
+  </table>
+</div>
+
+<!-- STEP 4: RUN ORDER -->
+<h2><span class="num">6</span> Start All 3 Services (Correct Order)</h2>
+
+<div class="card green">
+  <h3>Always start in this order:</h3>
+  <pre>1. catalog-service      → right-click CatalogServiceApplication.java → Run As → Spring Boot App
+   Wait for: "Started CatalogServiceApplication on port 8081"
+
+2. subscription-service → right-click SubscriptionServiceApplication.java → Run As → Spring Boot App
+   Wait for: "Started SubscriptionServiceApplication on port 8082"
+
+3. api-gateway          → right-click ApiGatewayApplication.java → Run As → Spring Boot App
+   Wait for: "Started ApiGatewayApplication on port 8080"</pre>
+  <div class="warn" style="margin-top:10px">⚠️ If Gateway fails with "Unable to connect to Redis" — start Redis first. Open cmd as Administrator → type: redis-server → keep window open → then start Gateway.</div>
+</div>
+
+<!-- STEP 5: POSTMAN TESTING -->
+<h2><span class="num">7</span> Testing with Postman — Step by Step</h2>
+
+<div class="info">ℹ️ From now on ALL requests go to port 8080 (Gateway) only. Never call 8081 or 8082 directly in real usage. Gateway routes them for you.</div>
+
+<!-- Step A: Get Token -->
+<div class="step-box">
+  <div class="step-hdr"><span class="step-num">A</span><span class="step-title">FIRST: Get JWT Token — POST http://localhost:8080/auth/token</span></div>
+  <div class="step-body">
+    <p>This is a PUBLIC endpoint — no token needed to call it.</p>
+    <div class="mock">
+      <div class="mock-bar"><div class="dot" style="background:#fc8181"></div><div class="dot" style="background:#f6e05e"></div><div class="dot" style="background:#68d391"></div><span class="mtitle">Postman — Generate Token</span></div>
+      <div class="url-bar"><span class="method POST">POST</span><span class="url">http://localhost:8080/auth/token</span><span class="send">Send</span></div>
+      <p style="margin:6px 0 4px;font-size:11px;color:#718096">Body → raw → JSON:</p>
+      <pre style="margin:0">{
+  "username": "john.doe",
+  "role": "USER"
+}</pre>
+      <div class="resp">
+        <div class="resp-label">✅ 200 OK — Copy the token value!</div>
+        <pre style="margin:0">{
+  "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huLmRvZSIsInJvbGUiOiJVU0VSIn0.abc123...",
+  "username": "john.doe",
+  "role": "USER",
+  "expiresIn": "1 hour",
+  "usage": "Add to header: Authorization: Bearer eyJhbG..."
+}</pre>
+      </div>
+    </div>
+    <div class="success">✅ Copy the entire token value (eyJhbG...). You need it for every other request.</div>
+  </div>
+</div>
+
+<!-- Step B: How to add token -->
+<div class="step-box">
+  <div class="step-hdr"><span class="step-num">B</span><span class="step-title">HOW TO ADD TOKEN in every Postman request</span></div>
+  <div class="step-body">
+    <p>In Postman, for every request that needs auth:</p>
+    <div class="mock">
+      <div class="mock-bar"><div class="dot" style="background:#fc8181"></div><div class="dot" style="background:#f6e05e"></div><div class="dot" style="background:#68d391"></div><span class="mtitle">Postman — Authorization Tab</span></div>
+      <div style="display:flex;gap:4px;margin-bottom:10px">
+        <span style="font-size:11px;background:#2d3748;padding:4px 10px;border-radius:4px 4px 0 0;color:#718096">Params</span>
+        <span style="font-size:11px;background:#2b6cb0;padding:4px 10px;border-radius:4px 4px 0 0;color:#fff">Authorization</span>
+        <span style="font-size:11px;background:#2d3748;padding:4px 10px;border-radius:4px 4px 0 0;color:#718096">Headers</span>
+        <span style="font-size:11px;background:#2d3748;padding:4px 10px;border-radius:4px 4px 0 0;color:#718096">Body</span>
+      </div>
+      <p style="font-size:11px;color:#718096;margin-bottom:6px">Auth Type:</p>
+      <div style="background:#1a1f2e;border:1px solid #4299e1;border-radius:4px;padding:6px 10px;font-size:12px;color:#63b3ed;margin-bottom:8px">Bearer Token ▼</div>
+      <p style="font-size:11px;color:#718096;margin-bottom:4px">Token:</p>
+      <div style="background:#1a1f2e;border:1px solid #4a5568;border-radius:4px;padding:6px 10px;font-size:11px;color:#a0aec0">eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huLmRvZSIs...</div>
+      <p style="font-size:11px;color:#718096;margin-top:8px">← Paste token here. Postman automatically adds "Authorization: Bearer " prefix.</p>
+    </div>
+    <div class="info">ℹ️ Alternative: Click <strong>Headers</strong> tab → Add header: Key = <code>Authorization</code>, Value = <code>Bearer eyJhbG...</code></div>
+  </div>
+</div>
+
+<!-- Step C: Call Catalog via Gateway -->
+<div class="step-box">
+  <div class="step-hdr"><span class="step-num">C</span><span class="step-title">GET catalog plans THROUGH Gateway — http://localhost:8080/catalog/plans</span></div>
+  <div class="step-body">
+    <p>Notice: port <strong>8080</strong> (Gateway), not 8081 (catalog-service directly)</p>
+    <div class="mock">
+      <div class="mock-bar"><div class="dot" style="background:#fc8181"></div><div class="dot" style="background:#f6e05e"></div><div class="dot" style="background:#68d391"></div><span class="mtitle">Postman — Get Plans via Gateway</span></div>
+      <div class="url-bar"><span class="method GET">GET</span><span class="url">http://localhost:8080/catalog/plans</span><span class="send">Send</span></div>
+      <p style="font-size:11px;color:#718096;margin:6px 0 3px">Authorization tab → Bearer Token → paste token</p>
+      <div class="resp">
+        <div class="resp-label">✅ 200 OK — Same response as before but now going through Gateway</div>
+        <pre style="margin:0">[
+  {"planId": "PLAN001", "planName": "Disney+ Basic", "price": 199.0, ...},
+  {"planId": "PLAN002", "planName": "Disney+ Premium", "price": 299.0, ...}
+]</pre>
+      </div>
+    </div>
+    <p style="margin-top:8px">In STS Gateway console you will see:</p>
+    <pre>──► GATEWAY REQUEST  | GET /catalog/plans | from: /127.0.0.1
+◄── GATEWAY RESPONSE | GET /catalog/plans | status: 200 OK | time: 45ms</pre>
+  </div>
+</div>
+
+<!-- Step D: Test without token -->
+<div class="step-box">
+  <div class="step-hdr"><span class="step-num">D</span><span class="step-title">TEST: Call without token — should get 401</span></div>
+  <div class="step-body">
+    <p>Remove the Authorization header → Send the same request:</p>
+    <div class="mock">
+      <div class="mock-bar"><div class="dot" style="background:#fc8181"></div><div class="dot" style="background:#f6e05e"></div><div class="dot" style="background:#68d391"></div><span class="mtitle">Postman — No Token Test</span></div>
+      <div class="url-bar"><span class="method GET">GET</span><span class="url">http://localhost:8080/catalog/plans</span><span class="send">Send</span></div>
+      <p style="font-size:11px;color:#718096;margin:6px 0 3px">Authorization → No Auth (remove token)</p>
+      <div class="resp" style="border-color:#fc8181">
+        <div class="resp-label" style="color:#fc8181">✅ Expected: 401 Unauthorized — Gateway blocked it!</div>
+        <pre style="margin:0">401 Unauthorized
+(empty body — request never reached catalog-service)</pre>
+      </div>
+    </div>
+    <div class="success">✅ This proves JWT filter is working. Request was stopped at Gateway — catalog-service never received it.</div>
+  </div>
+</div>
+
+<!-- Step E: Subscribe via Gateway -->
+<div class="step-box">
+  <div class="step-hdr"><span class="step-num">E</span><span class="step-title">POST subscribe THROUGH Gateway — http://localhost:8080/subscriptions</span></div>
+  <div class="step-body">
+    <div class="mock">
+      <div class="mock-bar"><div class="dot" style="background:#fc8181"></div><div class="dot" style="background:#f6e05e"></div><div class="dot" style="background:#68d391"></div><span class="mtitle">Postman — Subscribe via Gateway</span></div>
+      <div class="url-bar"><span class="method POST">POST</span><span class="url">http://localhost:8080/subscriptions</span><span class="send">Send</span></div>
+      <p style="font-size:11px;color:#718096;margin:6px 0 3px">Authorization → Bearer Token → paste token</p>
+      <p style="font-size:11px;color:#718096;margin:6px 0 3px">Body → raw → JSON:</p>
+      <pre style="margin:0">{
+  "userId": 1,
+  "planId": "PLAN001",
+  "autoRenewal": true
+}</pre>
+      <div class="resp">
+        <div class="resp-label">✅ 201 Created</div>
+        <pre style="margin:0">{
+  "subscriptionId": 1,
+  "username": "john.doe",
+  "planName": "Disney+ Basic",
+  "status": "ACTIVE",
+  "startDate": "2026-05-18",
+  "endDate": "2026-06-18"
+}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Step F: Test Rate Limiter -->
+<div class="step-box">
+  <div class="step-hdr"><span class="step-num">F</span><span class="step-title">TEST Rate Limiter — fire rapid requests to see 429</span></div>
+  <div class="step-body">
+    <p>In Postman, to test rate limiter:</p>
+    <p style="margin-top:6px">Open the GET /catalog/plans request → click the 3 dots (…) next to the request → click <strong>Run</strong> → set iterations to <strong>25</strong> → click <strong>Run</strong></p>
+    <div class="mock">
+      <div class="mock-bar"><div class="dot" style="background:#fc8181"></div><div class="dot" style="background:#f6e05e"></div><div class="dot" style="background:#68d391"></div><span class="mtitle">Collection Runner Results</span></div>
+      <pre style="margin:0;font-size:11px">Request 1  → 200 OK ✅
+Request 2  → 200 OK ✅
+Request 3  → 200 OK ✅
+...
+Request 11 → 429 Too Many Requests ❌  ← Rate limiter kicked in!
+Request 12 → 429 Too Many Requests ❌
+...</pre>
+    </div>
+    <div class="success">✅ 429 = Rate limiter is working. Redis is counting your requests per second.</div>
+  </div>
+</div>
+
+<!-- Complete API list -->
+<h2><span class="num">8</span> Complete API List — All via Gateway (port 8080)</h2>
+<div class="card">
+  <table>
+    <tr><th>Method</th><th>URL (all port 8080)</th><th>Token?</th><th>What it does</th></tr>
+    <tr><td><span class="method POST" style="font-size:10px;padding:2px 6px">POST</span></td><td><code>/auth/token</code></td><td>❌ No</td><td>Generate JWT token</td></tr>
+    <tr><td><span class="method POST" style="font-size:10px;padding:2px 6px">POST</span></td><td><code>/auth/validate</code></td><td>❌ No</td><td>Check if token is valid</td></tr>
+    <tr><td><span class="method GET" style="font-size:10px;padding:2px 6px">GET</span></td><td><code>/catalog/plans</code></td><td>✅ Yes</td><td>Get all OTT plans</td></tr>
+    <tr><td><span class="method GET" style="font-size:10px;padding:2px 6px">GET</span></td><td><code>/catalog/plans/PLAN001</code></td><td>✅ Yes</td><td>Get plan by ID</td></tr>
+    <tr><td><span class="method POST" style="font-size:10px;padding:2px 6px">POST</span></td><td><code>/catalog/plans</code></td><td>✅ Yes</td><td>Create new plan</td></tr>
+    <tr><td><span class="method POST" style="font-size:10px;padding:2px 6px">POST</span></td><td><code>/users/register</code></td><td>✅ Yes</td><td>Register new user</td></tr>
+    <tr><td><span class="method GET" style="font-size:10px;padding:2px 6px">GET</span></td><td><code>/users/1</code></td><td>✅ Yes</td><td>Get user by ID</td></tr>
+    <tr><td><span class="method POST" style="font-size:10px;padding:2px 6px">POST</span></td><td><code>/subscriptions</code></td><td>✅ Yes</td><td>Subscribe to plan</td></tr>
+    <tr><td><span class="method GET" style="font-size:10px;padding:2px 6px">GET</span></td><td><code>/subscriptions/user/1</code></td><td>✅ Yes</td><td>Get user subscriptions</td></tr>
+    <tr><td><span class="method PUT" style="font-size:10px;padding:2px 6px">PUT</span></td><td><code>/subscriptions/1/cancel</code></td><td>✅ Yes</td><td>Cancel subscription</td></tr>
+  </table>
+</div>
+
+<!-- INTERVIEW Q&A -->
+<h2><span class="num">9</span> Top Interview Questions — Answers Ready</h2>
+<div class="card green">
+  <h3>Q: What is API Gateway and why do we need it?</h3>
+  <p style="margin-top:4px;color:#9ae6b4">API Gateway is a single entry point for all client requests. Without it, the client must know addresses of all microservices. Gateway handles cross-cutting concerns like authentication, rate limiting, and logging in one place instead of duplicating in every service.</p>
+</div>
+<div class="card blue">
+  <h3>Q: How does JWT authentication work in your gateway?</h3>
+  <p style="margin-top:4px">Every request hits JwtAuthFilter first. It checks the Authorization header for "Bearer token". It validates the token using HMAC-SHA256 signature. If valid, it extracts the username and forwards it as X-Username header to the downstream service. If invalid, it returns 401 immediately — request never reaches the microservice.</p>
+</div>
+<div class="card purple">
+  <h3>Q: What is rate limiting and how did you implement it?</h3>
+  <p style="margin-top:4px">Rate limiting controls how many requests a user can make per second to prevent abuse. I used Spring Cloud Gateway's RequestRateLimiter filter with Redis backend. It uses the Token Bucket algorithm — each user gets 10 tokens per second in Redis. Each request consumes one token. When tokens run out, Gateway returns 429 Too Many Requests.</p>
+</div>
+<div class="card orange">
+  <h3>Q: What is the difference between GlobalFilter and GatewayFilter?</h3>
+  <p style="margin-top:4px">GlobalFilter applies to ALL routes automatically — used for JWT auth and logging that every request needs. GatewayFilter applies to specific routes only — used for rate limiter which has different limits per route. In our project, JWT uses GlobalFilter, rate limiter uses GatewayFilter defined per route in application.yml.</p>
+</div>
+<div class="card red">
+  <h3>Q: Why does Gateway use WebFlux instead of regular Spring MVC?</h3>
+  <p style="margin-top:4px">Gateway handles thousands of simultaneous requests. Traditional Spring MVC is blocking — one thread per request. WebFlux is non-blocking — one thread handles many requests asynchronously. This makes Gateway extremely performant without using too many server threads.</p>
+</div>
+
+<div style="text-align:center;padding:20px;color:#4a5568;font-size:12px;margin-top:16px">
+  API Gateway Complete ✅ — You now have a production-grade 3-service microservices system
+</div>
+
+</div>
+</body>
+</html>
