@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>API Gateway — Java Code Flow Reference</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#0f1117;color:#e2e8f0;line-height:1.6;font-size:13px}
+.container{max-width:1000px;margin:0 auto;padding:24px 20px}
+
+h1{font-size:22px;color:#63b3ed;margin-bottom:4px}
+h2{font-size:15px;color:#90cdf4;margin:24px 0 10px;font-weight:500}
+h3{font-size:13px;color:#e2e8f0;margin:10px 0 6px;font-weight:600}
+p,li{font-size:12px;color:#a0aec0;line-height:1.8}
+ul{padding-left:18px;margin:6px 0}
+
+/* Navigation tabs */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;border-bottom:1px solid #2d3748;padding-bottom:12px}
+.tab{background:#1a1f2e;border:1px solid #2d3748;border-radius:6px;padding:7px 14px;font-size:12px;color:#a0aec0;cursor:pointer;transition:all 0.15s}
+.tab:hover{border-color:#4299e1;color:#63b3ed}
+.tab.active{background:#2b6cb0;border-color:#4299e1;color:#fff}
+
+.section{display:none}.section.active{display:block}
+
+/* File cards */
+.file-card{background:#1a1f2e;border:1px solid #2d3748;border-radius:10px;margin-bottom:14px;overflow:hidden}
+.file-header{background:#2d3748;padding:10px 16px;display:flex;align-items:center;gap:10px;cursor:pointer}
+.file-header:hover{background:#374151}
+.file-icon{font-size:16px}
+.file-name{font-size:13px;font-weight:600;color:#e2e8f0;flex:1}
+.file-path{font-size:11px;color:#718096;font-family:monospace}
+.file-body{padding:14px 16px;border-top:1px solid #2d3748}
+
+/* Code blocks */
+pre{background:#0d1117;border:1px solid #2d3748;border-radius:6px;padding:12px 14px;overflow-x:auto;font-size:11px;line-height:1.7;margin:8px 0;position:relative}
+.copy-btn{position:absolute;top:8px;right:8px;background:#2d3748;color:#a0aec0;border:none;border-radius:4px;padding:3px 10px;font-size:10px;cursor:pointer}
+.copy-btn:hover{background:#4a5568;color:#e2e8f0}
+code{background:#2d3748;padding:2px 6px;border-radius:4px;font-size:11px;color:#63b3ed;font-family:monospace}
+
+/* Syntax highlight classes */
+.kw{color:#c792ea}
+.an{color:#ffcb6b}
+.cm{color:#546e7a;font-style:italic}
+.st{color:#c3e88d}
+.cl{color:#82aaff}
+.mt{color:#89ddff}
+.nm{color:#f78c6c}
+
+/* Callout boxes */
+.warn{background:#2d1f00;border:1px solid #d69e2e;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#fbd38d}
+.info{background:#1a2744;border:1px solid #4299e1;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#90cdf4}
+.success{background:#1c3829;border:1px solid #48bb78;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#9ae6b4}
+.danger{background:#2d1515;border:1px solid #742a2a;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#feb2b2}
+
+/* Flow arrows between files */
+.flow-step{display:flex;align-items:flex-start;gap:12px;margin-bottom:6px}
+.flow-num{background:#2b6cb0;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px}
+.flow-text{font-size:12px;color:#a0aec0;line-height:1.7}
+.flow-arrow{text-align:center;color:#4299e1;font-size:18px;padding:2px 0 2px 34px}
+
+/* Answer boxes */
+.qa{background:#1a1f2e;border:1px solid #2d3748;border-radius:8px;margin-bottom:10px;overflow:hidden}
+.qa-q{background:#263244;padding:10px 14px;font-size:13px;font-weight:600;color:#e2e8f0;cursor:pointer;display:flex;justify-content:space-between}
+.qa-q:hover{background:#2d3a52}
+.qa-a{padding:12px 14px;font-size:12px;color:#a0aec0;line-height:1.7;display:none}
+.qa-a.open{display:block}
+
+/* badges */
+.badge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;display:inline-block;margin:2px}
+.b-green{background:#1c4532;color:#9ae6b4}
+.b-red{background:#742a2a;color:#feb2b2}
+.b-blue{background:#1a365d;color:#90cdf4}
+.b-yellow{background:#744210;color:#fbd38d}
+.b-purple{background:#322659;color:#d6bcfa}
+
+table{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0}
+th{background:#2d3748;color:#e2e8f0;padding:8px 12px;text-align:left;font-size:11px}
+td{padding:8px 12px;border-bottom:1px solid #2d3748;color:#a0aec0;vertical-align:top}
+tr:last-child td{border-bottom:none}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>API Gateway — Java Code Flow Reference</h1>
+<p style="color:#718096;margin-bottom:20px">How every Java file connects · What each file does · Why public URLs work without token</p>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('overview')">Overview</button>
+  <button class="tab" onclick="show('startup')">App Startup</button>
+  <button class="tab" onclick="show('request-flow')">Request Flow</button>
+  <button class="tab" onclick="show('jwt-filter')">JwtAuthFilter</button>
+  <button class="tab" onclick="show('public-why')">Why /auth is Public</button>
+  <button class="tab" onclick="show('yml-role')">What yml Actually Does</button>
+  <button class="tab" onclick="show('all-files')">All Files Reference</button>
+</div>
+
+<!-- ===================== OVERVIEW ===================== -->
+<div id="overview" class="section active">
+  <h2>Every Java file and what it does</h2>
+
+  <div class="file-card">
+    <div class="file-header">
+      <span class="file-icon">☕</span>
+      <span class="file-name">ApiGatewayApplication.java</span>
+      <span class="file-path">com.ott.gateway</span>
+    </div>
+    <div class="file-body">
+      <p>The entry point. Spring Boot starts here. The single important annotation is <code>@SpringBootApplication</code> which triggers a component scan — Spring goes through every class in <code>com.ott.gateway</code> and registers anything annotated with <code>@Component</code>, <code>@Service</code>, <code>@RestController</code> etc.</p>
+      <p style="margin-top:6px">This is how <code>JwtAuthFilter</code> and <code>LoggingFilter</code> get registered automatically — they have <code>@Component</code>, so Spring finds them during startup.</p>
+      <pre><span class="an">@SpringBootApplication</span>
+<span class="kw">public class</span> <span class="cl">ApiGatewayApplication</span> {
+    <span class="kw">public static void</span> main(String[] args) {
+        SpringApplication.run(ApiGatewayApplication.class, args);
+    }
+}</pre>
+    </div>
+  </div>
+
+  <div class="file-card">
+    <div class="file-header">
+      <span class="file-icon">☕</span>
+      <span class="file-name">JwtAuthFilter.java</span>
+      <span class="file-path">com.ott.gateway.filter</span>
+    </div>
+    <div class="file-body">
+      <p>The security guard. Runs on <strong style="color:#e2e8f0">every single request</strong> automatically because it implements <code>GlobalFilter</code>. It either lets the request pass or returns 401. It does NOT need to be mentioned in <code>application.yml</code> — Spring Cloud Gateway picks it up automatically via <code>@Component</code>.</p>
+      <p style="margin-top:6px">Contains the <code>PUBLIC_PATHS</code> list — the only place where you say which URLs skip JWT checking.</p>
+    </div>
+  </div>
+
+  <div class="file-card">
+    <div class="file-header">
+      <span class="file-icon">☕</span>
+      <span class="file-name">LoggingFilter.java</span>
+      <span class="file-path">com.ott.gateway.filter</span>
+    </div>
+    <div class="file-body">
+      <p>The logger. Also a <code>GlobalFilter</code>, also runs on every request automatically. Logs the method, path, and response status to the STS console. Runs at <code>@Order(2)</code> — after JwtAuthFilter.</p>
+    </div>
+  </div>
+
+  <div class="file-card">
+    <div class="file-header">
+      <span class="file-icon">☕</span>
+      <span class="file-name">JwtUtil.java</span>
+      <span class="file-path">com.ott.gateway.util</span>
+    </div>
+    <div class="file-body">
+      <p>The JWT toolkit. Called by <code>JwtAuthFilter</code> to validate tokens, and by <code>AuthController</code> to generate tokens. Contains three key methods: <code>generateToken()</code>, <code>isTokenValid()</code>, <code>extractUsername()</code>.</p>
+    </div>
+  </div>
+
+  <div class="file-card">
+    <div class="file-header">
+      <span class="file-icon">☕</span>
+      <span class="file-name">AuthController.java</span>
+      <span class="file-path">com.ott.gateway.controller</span>
+    </div>
+    <div class="file-body">
+      <p>Exposes <code>POST /auth/token</code> and <code>POST /auth/validate</code>. Uses <code>JwtUtil</code> to generate a token and return it. This is the only REST controller inside the Gateway itself — all other URLs are proxied to downstream services.</p>
+    </div>
+  </div>
+
+  <div class="file-card">
+    <div class="file-header">
+      <span class="file-icon">☕</span>
+      <span class="file-name">RateLimiterConfig.java</span>
+      <span class="file-path">com.ott.gateway.config</span>
+    </div>
+    <div class="file-body">
+      <p>Defines the <code>userKeyResolver</code> bean — tells the rate limiter to count requests per <strong style="color:#e2e8f0">username</strong> (read from X-Username header). Referenced in <code>application.yml</code> as <code>key-resolver: "#{@userKeyResolver}"</code>.</p>
+    </div>
+  </div>
+
+  <div class="file-card">
+    <div class="file-header">
+      <span class="file-icon">⚙️</span>
+      <span class="file-name">application.yml</span>
+      <span class="file-path">src/main/resources</span>
+    </div>
+    <div class="file-body">
+      <p>Defines routing rules only — which URL path goes to which service port. Also configures the <code>RequestRateLimiter</code> per route. Does <strong style="color:#e2e8f0">NOT</strong> control JWT protection — that is handled entirely by <code>JwtAuthFilter</code> in Java code.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== STARTUP ===================== -->
+<div id="startup" class="section">
+  <h2>What happens when Gateway starts up</h2>
+  <p style="margin-bottom:14px">Understanding startup tells you exactly why each file gets activated automatically.</p>
+
+  <div class="flow-step">
+    <div class="flow-num">1</div>
+    <div class="flow-text"><code>ApiGatewayApplication.main()</code> runs → calls <code>SpringApplication.run()</code></div>
+  </div>
+  <div class="flow-arrow">↓</div>
+  <div class="flow-step">
+    <div class="flow-num">2</div>
+    <div class="flow-text">Spring Boot scans entire <code>com.ott.gateway</code> package for annotated classes</div>
+  </div>
+  <div class="flow-arrow">↓</div>
+  <div class="flow-step">
+    <div class="flow-num">3</div>
+    <div class="flow-text">Finds <code>JwtAuthFilter</code> — has <code>@Component</code> + implements <code>GlobalFilter</code> → registers it as a bean that runs on every request</div>
+  </div>
+  <div class="flow-arrow">↓</div>
+  <div class="flow-step">
+    <div class="flow-num">4</div>
+    <div class="flow-text">Finds <code>LoggingFilter</code> — same, registers as GlobalFilter bean</div>
+  </div>
+  <div class="flow-arrow">↓</div>
+  <div class="flow-step">
+    <div class="flow-num">5</div>
+    <div class="flow-text">Finds <code>JwtUtil</code> — has <code>@Component</code> → registers as bean, reads <code>jwt.secret</code> and <code>jwt.expiration</code> from <code>application.yml</code></div>
+  </div>
+  <div class="flow-arrow">↓</div>
+  <div class="flow-step">
+    <div class="flow-num">6</div>
+    <div class="flow-text">Finds <code>AuthController</code> — has <code>@RestController</code> → registers <code>POST /auth/token</code> and <code>POST /auth/validate</code> endpoints</div>
+  </div>
+  <div class="flow-arrow">↓</div>
+  <div class="flow-step">
+    <div class="flow-num">7</div>
+    <div class="flow-text">Finds <code>RateLimiterConfig</code> — has <code>@Configuration</code> → registers <code>userKeyResolver</code> bean used by rate limiter</div>
+  </div>
+  <div class="flow-arrow">↓</div>
+  <div class="flow-step">
+    <div class="flow-num">8</div>
+    <div class="flow-text">Reads <code>application.yml</code> → loads routing rules → builds <code>RoutePredicateHandlerMapping</code> with 4 routes</div>
+  </div>
+  <div class="flow-arrow">↓</div>
+  <div class="flow-step">
+    <div class="flow-num">9</div>
+    <div class="flow-text">Connects to Redis on <code>localhost:6379</code> → rate limiter is ready</div>
+  </div>
+  <div class="flow-arrow">↓</div>
+  <div class="flow-step">
+    <div class="flow-num">10</div>
+    <div class="flow-text">Gateway starts on port 8080 → ready to accept requests</div>
+  </div>
+
+  <div class="info" style="margin-top:16px">Key insight: <code>JwtAuthFilter</code> and <code>LoggingFilter</code> are registered in step 3 and 4 purely because they implement <code>GlobalFilter</code> and have <code>@Component</code>. No yml entry needed. Spring Cloud Gateway automatically picks up every <code>GlobalFilter</code> bean and runs it on every request.</div>
+</div>
+
+<!-- ===================== REQUEST FLOW ===================== -->
+<div id="request-flow" class="section">
+  <h2>Complete request flow — which Java file runs in which order</h2>
+
+  <div class="info" style="margin-bottom:16px">Every request to port 8080 goes through this exact sequence of Java files regardless of which URL is called.</div>
+
+  <div class="file-card">
+    <div class="file-header" style="background:#1a2744">
+      <span class="file-icon">1</span>
+      <span class="file-name" style="color:#90cdf4">Spring's DispatcherHandler</span>
+      <span class="file-path">Spring framework internal class</span>
+    </div>
+    <div class="file-body">
+      <p>The reactive HTTP server receives the request. Hands it to <code>FilteringWebHandler</code> which assembles the filter chain. You don't write this — it's Spring internals.</p>
+    </div>
+  </div>
+
+  <div class="flow-arrow" style="padding-left:0">↓</div>
+
+  <div class="file-card" style="border-color:#0F6E56">
+    <div class="file-header" style="background:#04342C">
+      <span class="file-icon">2</span>
+      <span class="file-name" style="color:#5DCAA5">LoggingFilter.java — YOUR FILE</span>
+      <span class="file-path">com.ott.gateway.filter · @Order(2) · GlobalFilter</span>
+    </div>
+    <div class="file-body">
+      <p>Runs first in terms of wrapping (it wraps the entire chain). Logs the incoming request method and path. Then calls <code>chain.filter(exchange)</code> to pass control to the next filter. When the response comes back, logs the status code and time taken.</p>
+      <pre><span class="cm">// LoggingFilter wraps the whole chain</span>
+<span class="kw">return</span> chain.filter(exchange).then(Mono.fromRunnable(() -> {
+    <span class="cm">// This runs AFTER the response comes back</span>
+    log.info(<span class="st">"◄── RESPONSE | status: {} | time: {}ms"</span>, status, duration);
+}));</pre>
+    </div>
+  </div>
+
+  <div class="flow-arrow" style="padding-left:0">↓</div>
+
+  <div class="file-card" style="border-color:#534AB7">
+    <div class="file-header" style="background:#26215C">
+      <span class="file-icon">3</span>
+      <span class="file-name" style="color:#AFA9EC">JwtAuthFilter.java — YOUR FILE</span>
+      <span class="file-path">com.ott.gateway.filter · @Order(1) · GlobalFilter</span>
+    </div>
+    <div class="file-body">
+      <p>The most important filter. Runs on every request. Makes the allow/block decision. Calls <code>JwtUtil</code> to validate the token.</p>
+      <p style="margin-top:8px;color:#e2e8f0;font-weight:500">Decision logic inside this file:</p>
+      <pre><span class="cm">// Step 1: Is this a public path?</span>
+<span class="kw">if</span> (isPublicPath(path)) {
+    <span class="kw">return</span> chain.filter(exchange); <span class="cm">// pass through — no token needed</span>
+}
+
+<span class="cm">// Step 2: Is Authorization header present?</span>
+String authHeader = request.getHeaders().getFirst(<span class="st">"Authorization"</span>);
+<span class="kw">if</span> (authHeader == <span class="kw">null</span> || !authHeader.startsWith(<span class="st">"Bearer "</span>)) {
+    exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+    <span class="kw">return</span> exchange.getResponse().setComplete(); <span class="cm">// STOP — 401</span>
+}
+
+<span class="cm">// Step 3: Is the token valid?</span>
+String token = authHeader.substring(<span class="nm">7</span>);
+<span class="kw">if</span> (!jwtUtil.isTokenValid(token)) {
+    exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+    <span class="kw">return</span> exchange.getResponse().setComplete(); <span class="cm">// STOP — 401</span>
+}
+
+<span class="cm">// Step 4: Token valid — add username to headers and continue</span>
+<span class="kw">return</span> chain.filter(modifiedExchange);</pre>
+      <p style="margin-top:8px">Calls <code>JwtUtil.isTokenValid()</code> in Step 3 — that's the only connection between these two files.</p>
+    </div>
+  </div>
+
+  <div class="flow-arrow" style="padding-left:0">↓ (only reaches here if token was valid or path is public)</div>
+
+  <div class="file-card" style="border-color:#854F0B">
+    <div class="file-header" style="background:#412402">
+      <span class="file-icon">4</span>
+      <span class="file-name" style="color:#EF9F27">RequestRateLimiter — Spring's built-in filter</span>
+      <span class="file-path">application.yml configures this · GatewayFilter · only on /catalog and /subscriptions routes</span>
+    </div>
+    <div class="file-body">
+      <p>Checks Redis to see how many requests this user has made. Uses <code>userKeyResolver</code> bean from <code>RateLimiterConfig.java</code> to identify the user by their X-Username header. If over limit → 429. If within limit → continue.</p>
+    </div>
+  </div>
+
+  <div class="flow-arrow" style="padding-left:0">↓ (only reaches here if within rate limit)</div>
+
+  <div class="file-card" style="border-color:#276749">
+    <div class="file-header" style="background:#1c3829">
+      <span class="file-icon">5</span>
+      <span class="file-name" style="color:#68d391">Spring's NettyRoutingFilter</span>
+      <span class="file-path">Spring framework internal — last filter in chain</span>
+    </div>
+    <div class="file-body">
+      <p>The actual HTTP proxy. Makes the real call to <code>catalog-service:8081</code> or <code>subscription-service:8082</code> based on the routing rules in <code>application.yml</code>. Returns the response back through the filter chain.</p>
+    </div>
+  </div>
+
+  <div class="success" style="margin-top:14px">Only YOUR files are JwtAuthFilter, LoggingFilter, RateLimiterConfig, JwtUtil, AuthController. Everything else is Spring framework internals that run automatically.</div>
+</div>
+
+<!-- ===================== JWT FILTER DEEP DIVE ===================== -->
+<div id="jwt-filter" class="section">
+  <h2>JwtAuthFilter.java — complete line by line</h2>
+
+  <div class="file-card">
+    <div class="file-header">
+      <span class="file-name">Full annotated code</span>
+      <span class="file-path">com.ott.gateway.filter.JwtAuthFilter</span>
+    </div>
+    <div class="file-body">
+<pre id="jwtCode"><span class="an">@Component</span>   <span class="cm">// Spring registers this as a bean automatically</span>
+<span class="an">@Order(1)</span>    <span class="cm">// Run before LoggingFilter (@Order 2)</span>
+<span class="kw">public class</span> <span class="cl">JwtAuthFilter</span> <span class="kw">implements</span> <span class="cl">GlobalFilter</span>, <span class="cl">Ordered</span> {
+
+    <span class="cm">// ─────────────────────────────────────────────────
+    // PUBLIC_PATHS — THE ONLY PLACE IN THE ENTIRE
+    // CODEBASE WHERE YOU DEFINE WHICH URLS ARE PUBLIC
+    // ─────────────────────────────────────────────────
+    // Any URL that STARTS WITH these strings will skip
+    // JWT validation. All other URLs require a valid token.
+    // To make a new URL public: just add it to this list.</span>
+    <span class="kw">private static final</span> List&lt;String&gt; PUBLIC_PATHS = List.of(
+        <span class="st">"/auth/token"</span>,    <span class="cm">// POST — generate token</span>
+        <span class="st">"/auth/refresh"</span>   <span class="cm">// POST — refresh token</span>
+    );
+
+    <span class="kw">private final</span> <span class="cl">JwtUtil</span> jwtUtil; <span class="cm">// injected — validates tokens</span>
+
+    <span class="an">@Override</span>
+    <span class="kw">public</span> Mono&lt;Void&gt; filter(<span class="cl">ServerWebExchange</span> exchange,
+                              <span class="cl">GatewayFilterChain</span> chain) {
+
+        String path = exchange.getRequest().getPath().toString();
+
+        <span class="cm">// GATE 1: Is this path in PUBLIC_PATHS?
+        // YES → skip all JWT logic, forward immediately</span>
+        <span class="kw">if</span> (isPublicPath(path)) {
+            <span class="kw">return</span> chain.filter(exchange);
+        }
+
+        <span class="cm">// GATE 2: Does Authorization header exist?
+        // Format must be: "Bearer eyJhbG..."</span>
+        String authHeader = exchange.getRequest()
+            .getHeaders().getFirst(<span class="st">"Authorization"</span>);
+
+        <span class="kw">if</span> (authHeader == <span class="kw">null</span> ||
+            !authHeader.startsWith(<span class="st">"Bearer "</span>)) {
+            exchange.getResponse()
+                .setStatusCode(HttpStatus.UNAUTHORIZED);
+            <span class="kw">return</span> exchange.getResponse().setComplete();
+            <span class="cm">// REQUEST STOPS HERE — 401 returned</span>
+        }
+
+        <span class="cm">// GATE 3: Is the token cryptographically valid?
+        // Calls JwtUtil — checks signature + expiry</span>
+        String token = authHeader.substring(<span class="nm">7</span>); <span class="cm">// removes "Bearer "</span>
+        <span class="kw">if</span> (!jwtUtil.isTokenValid(token)) {
+            exchange.getResponse()
+                .setStatusCode(HttpStatus.UNAUTHORIZED);
+            <span class="kw">return</span> exchange.getResponse().setComplete();
+            <span class="cm">// REQUEST STOPS HERE — 401 returned</span>
+        }
+
+        <span class="cm">// ALL GATES PASSED — extract user info
+        // Add X-Username and X-Role headers so downstream
+        // microservices know who is calling them</span>
+        String username = jwtUtil.extractUsername(token);
+        String role = jwtUtil.extractRole(token);
+
+        <span class="cl">ServerHttpRequest</span> modifiedRequest = exchange.getRequest()
+            .mutate()
+            .header(<span class="st">"X-Username"</span>, username)
+            .header(<span class="st">"X-Role"</span>, role)
+            .build();
+
+        <span class="kw">return</span> chain.filter(
+            exchange.mutate().request(modifiedRequest).build()
+        );
+        <span class="cm">// REQUEST FORWARDED TO NEXT FILTER / MICROSERVICE</span>
+    }
+
+    <span class="kw">private boolean</span> isPublicPath(String path) {
+        <span class="kw">return</span> PUBLIC_PATHS.stream()
+            .anyMatch(path::startsWith);
+    }
+}</pre>
+      <button class="copy-btn" onclick="copyById('jwtCode')">Copy</button>
+    </div>
+  </div>
+
+  <h2>How JwtUtil.java connects to JwtAuthFilter</h2>
+  <div class="file-card">
+    <div class="file-header">
+      <span class="file-name">JwtUtil.java — methods called by JwtAuthFilter</span>
+      <span class="file-path">com.ott.gateway.util.JwtUtil</span>
+    </div>
+    <div class="file-body">
+      <pre><span class="cm">// Called from JwtAuthFilter Gate 3</span>
+<span class="kw">public boolean</span> isTokenValid(String token) {
+    <span class="kw">try</span> {
+        Jwts.parserBuilder()
+            .setSigningKey(getSigningKey()) <span class="cm">// uses jwt.secret from yml</span>
+            .build()
+            .parseClaimsJws(token);         <span class="cm">// throws if expired or tampered</span>
+        <span class="kw">return true</span>;
+    } <span class="kw">catch</span> (Exception e) {
+        <span class="kw">return false</span>; <span class="cm">// any error = invalid token</span>
+    }
+}
+
+<span class="cm">// Called from JwtAuthFilter after token is valid</span>
+<span class="kw">public</span> String extractUsername(String token) {
+    <span class="kw">return</span> extractClaims(token).getSubject();
+}
+
+<span class="cm">// Called from AuthController to create a new token</span>
+<span class="kw">public</span> String generateToken(String username, String role) {
+    <span class="kw">return</span> Jwts.builder()
+        .setSubject(username)
+        .claim(<span class="st">"role"</span>, role)
+        .setExpiration(<span class="kw">new</span> Date(System.currentTimeMillis() + expiration))
+        .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+        .compact();
+}</pre>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== WHY AUTH IS PUBLIC ===================== -->
+<div id="public-why" class="section">
+  <h2>Your exact question — why is /auth/** accessible without a token?</h2>
+
+  <div class="danger" style="margin-bottom:16px">
+    You asked: "JwtAuthFilter runs on /auth/** — so why is /auth/token still accessible without a token?"<br><br>
+    This is a really important question. Here is the complete honest answer.
+  </div>
+
+  <div class="file-card">
+    <div class="file-header" style="background:#263244">
+      <span class="file-name">The answer: JwtAuthFilter runs on /auth/token BUT it checks PUBLIC_PATHS first and exits early</span>
+    </div>
+    <div class="file-body">
+      <p style="margin-bottom:10px">Yes, <code>JwtAuthFilter</code> DOES run on every request including <code>/auth/token</code>. There is no way to stop a <code>GlobalFilter</code> from running on a route — it always runs. But running does not mean blocking. The filter looks at the path, sees it is in <code>PUBLIC_PATHS</code>, and immediately calls <code>chain.filter(exchange)</code> to pass through without checking the token.</p>
+
+      <p style="color:#e2e8f0;font-weight:600;margin-bottom:8px">Step by step for POST /auth/token:</p>
+
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div class="flow-text">Request arrives: <code>POST /auth/token</code> — no Authorization header</div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div class="flow-text"><code>JwtAuthFilter.filter()</code> is called — it ALWAYS runs</div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <div class="flow-text"><code>isPublicPath("/auth/token")</code> is called</div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-num">4</div>
+        <div class="flow-text">PUBLIC_PATHS contains <code>"/auth/token"</code> → method returns <code>true</code></div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-num">5</div>
+        <div class="flow-text"><code>return chain.filter(exchange)</code> — skips all JWT checks, passes through</div>
+      </div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step">
+        <div class="flow-num">6</div>
+        <div class="flow-text">Request reaches <code>AuthController.generateToken()</code> → token generated → 200 OK</div>
+      </div>
+
+      <div class="warn" style="margin-top:14px">So the filter DOES run — it just exits at Gate 1 without doing anything. Think of it like a security guard who checks your badge but has a list of VIP guests who can walk in without a badge. The guard still stands at the door for everyone — he just waves through the VIPs.</div>
+
+      <pre style="margin-top:12px"><span class="kw">public</span> Mono&lt;Void&gt; filter(...) {
+    String path = exchange.getRequest().getPath().toString();
+    <span class="cm">// path = "/auth/token"</span>
+
+    <span class="kw">if</span> (isPublicPath(path)) {        <span class="cm">// TRUE for /auth/token</span>
+        <span class="kw">return</span> chain.filter(exchange); <span class="cm">// exits HERE — no token check at all</span>
+    }
+    <span class="cm">// ↑ The code below this line never runs for /auth/token</span>
+
+    String authHeader = ...         <span class="cm">// NEVER reached for /auth/token</span>
+    jwtUtil.isTokenValid(token);    <span class="cm">// NEVER reached for /auth/token</span>
+}</pre>
+    </div>
+  </div>
+
+  <h2>What should have been explained to you from the start</h2>
+  <div class="file-card">
+    <div class="file-header"><span class="file-name">The complete mental model</span></div>
+    <div class="file-body">
+      <table>
+        <tr><th>URL</th><th>JwtAuthFilter runs?</th><th>Token checked?</th><th>Why</th></tr>
+        <tr>
+          <td><code>POST /auth/token</code></td>
+          <td><span class="badge b-yellow">YES runs</span></td>
+          <td><span class="badge b-green">NO check</span></td>
+          <td>In PUBLIC_PATHS → exits at Gate 1</td>
+        </tr>
+        <tr>
+          <td><code>POST /auth/validate</code></td>
+          <td><span class="badge b-yellow">YES runs</span></td>
+          <td><span class="badge b-green">NO check</span></td>
+          <td>In PUBLIC_PATHS → exits at Gate 1</td>
+        </tr>
+        <tr>
+          <td><code>GET /catalog/plans</code></td>
+          <td><span class="badge b-yellow">YES runs</span></td>
+          <td><span class="badge b-red">YES checked</span></td>
+          <td>NOT in PUBLIC_PATHS → reaches Gate 2 + Gate 3</td>
+        </tr>
+        <tr>
+          <td><code>POST /subscriptions</code></td>
+          <td><span class="badge b-yellow">YES runs</span></td>
+          <td><span class="badge b-red">YES checked</span></td>
+          <td>NOT in PUBLIC_PATHS → reaches Gate 2 + Gate 3</td>
+        </tr>
+        <tr>
+          <td><code>GET /users/1</code></td>
+          <td><span class="badge b-yellow">YES runs</span></td>
+          <td><span class="badge b-red">YES checked</span></td>
+          <td>NOT in PUBLIC_PATHS → reaches Gate 2 + Gate 3</td>
+        </tr>
+      </table>
+      <div class="info" style="margin-top:10px">Rule: JwtAuthFilter runs on 100% of requests. Whether it checks the token depends entirely on whether the path is in PUBLIC_PATHS.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== WHAT YML DOES ===================== -->
+<div id="yml-role" class="section">
+  <h2>What application.yml actually does — and what it does NOT do</h2>
+
+  <div class="file-card">
+    <div class="file-header"><span class="file-name">application.yml responsibilities</span></div>
+    <div class="file-body">
+      <table>
+        <tr><th>Responsibility</th><th>Who handles it</th><th>Where in code</th></tr>
+        <tr><td>Which URL routes to which service port</td><td><span class="badge b-blue">application.yml</span></td><td><code>predicates: Path=/catalog/**</code> + <code>uri: http://localhost:8081</code></td></tr>
+        <tr><td>Rate limiting per route</td><td><span class="badge b-blue">application.yml</span></td><td><code>filters: RequestRateLimiter</code> under each route</td></tr>
+        <tr><td>Redis connection details</td><td><span class="badge b-blue">application.yml</span></td><td><code>spring.data.redis.host</code></td></tr>
+        <tr><td>JWT secret and expiry</td><td><span class="badge b-blue">application.yml</span></td><td><code>jwt.secret</code> and <code>jwt.expiration</code></td></tr>
+        <tr><td>JWT token validation</td><td><span class="badge b-purple">JwtAuthFilter.java</span></td><td><code>isTokenValid()</code> + <code>PUBLIC_PATHS</code></td></tr>
+        <tr><td>Which URLs are public</td><td><span class="badge b-purple">JwtAuthFilter.java</span></td><td><code>PUBLIC_PATHS</code> list</td></tr>
+        <tr><td>Which URLs are protected</td><td><span class="badge b-purple">JwtAuthFilter.java</span></td><td>Everything NOT in <code>PUBLIC_PATHS</code></td></tr>
+        <tr><td>Logging requests/responses</td><td><span class="badge b-purple">LoggingFilter.java</span></td><td><code>filter()</code> method</td></tr>
+      </table>
+
+      <div class="warn" style="margin-top:14px">Common mistake: thinking you add a filter in application.yml to protect a route with JWT. You do NOT. JWT protection comes from JwtAuthFilter being a GlobalFilter. The yml only needs entries for GatewayFilters like rate limiter.</div>
+    </div>
+  </div>
+
+  <h2>The annotated yml — what each line means</h2>
+  <div class="file-card">
+    <div class="file-header"><span class="file-name">application.yml with comments</span></div>
+    <div class="file-body">
+      <pre><span class="cm"># This route handles /auth/token and /auth/validate
+# NO filters here — no rate limiter on auth endpoints
+# JWT is still attempted by JwtAuthFilter but exits early
+# via PUBLIC_PATHS — NOT because this route has no filters</span>
+- id: auth-route
+  uri: http://localhost:8080   <span class="cm"># AuthController is IN the gateway itself</span>
+  predicates:
+    - Path=/auth/**
+
+<span class="cm"># This route forwards /catalog/** to catalog-service
+# Rate limiter IS applied here (listed under filters)
+# JWT is enforced by JwtAuthFilter because /catalog
+# is NOT in PUBLIC_PATHS — yml has nothing to do with it</span>
+- id: catalog-service
+  uri: http://localhost:8081
+  predicates:
+    - Path=/catalog/**
+  filters:
+    - name: RequestRateLimiter    <span class="cm"># ← ONLY rate limiter here</span>
+      args:                       <span class="cm"># NO jwt filter — handled by GlobalFilter</span>
+        redis-rate-limiter.replenishRate: 10
+        redis-rate-limiter.burstCapacity: 20
+        key-resolver: <span class="st">"#{@userKeyResolver}"</span>  <span class="cm"># bean from RateLimiterConfig.java</span></pre>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== ALL FILES REFERENCE ===================== -->
+<div id="all-files" class="section">
+  <h2>Complete file reference — open this when coding</h2>
+
+  <table>
+    <tr><th>File</th><th>Package</th><th>Type</th><th>Calls</th><th>Called by</th></tr>
+    <tr>
+      <td><code>ApiGatewayApplication</code></td>
+      <td>com.ott.gateway</td>
+      <td><span class="badge b-blue">Main class</span></td>
+      <td>Nothing</td>
+      <td>JVM on startup</td>
+    </tr>
+    <tr>
+      <td><code>JwtAuthFilter</code></td>
+      <td>com.ott.gateway.filter</td>
+      <td><span class="badge b-purple">GlobalFilter</span></td>
+      <td>JwtUtil</td>
+      <td>Spring on every request</td>
+    </tr>
+    <tr>
+      <td><code>LoggingFilter</code></td>
+      <td>com.ott.gateway.filter</td>
+      <td><span class="badge b-purple">GlobalFilter</span></td>
+      <td>Nothing</td>
+      <td>Spring on every request</td>
+    </tr>
+    <tr>
+      <td><code>JwtUtil</code></td>
+      <td>com.ott.gateway.util</td>
+      <td><span class="badge b-green">Component</span></td>
+      <td>jjwt library</td>
+      <td>JwtAuthFilter, AuthController</td>
+    </tr>
+    <tr>
+      <td><code>AuthController</code></td>
+      <td>com.ott.gateway.controller</td>
+      <td><span class="badge b-green">RestController</span></td>
+      <td>JwtUtil</td>
+      <td>POST /auth/token requests</td>
+    </tr>
+    <tr>
+      <td><code>RateLimiterConfig</code></td>
+      <td>com.ott.gateway.config</td>
+      <td><span class="badge b-green">Configuration</span></td>
+      <td>Nothing</td>
+      <td>application.yml (key-resolver bean)</td>
+    </tr>
+    <tr>
+      <td><code>application.yml</code></td>
+      <td>src/main/resources</td>
+      <td><span class="badge b-yellow">Config file</span></td>
+      <td>RateLimiterConfig bean</td>
+      <td>Spring Boot on startup</td>
+    </tr>
+  </table>
+
+  <h2>How to add a new public URL tomorrow</h2>
+  <div class="file-card">
+    <div class="file-header"><span class="file-name">Only one file to change — JwtAuthFilter.java</span></div>
+    <div class="file-body">
+      <pre><span class="cm">// Example: make /health and /actuator/health public</span>
+<span class="kw">private static final</span> List&lt;String&gt; PUBLIC_PATHS = List.of(
+    <span class="st">"/auth/token"</span>,
+    <span class="st">"/auth/refresh"</span>,
+    <span class="st">"/health"</span>,           <span class="cm">// ← add here</span>
+    <span class="st">"/actuator/health"</span>   <span class="cm">// ← add here</span>
+);</pre>
+      <p style="margin-top:8px">No change needed in application.yml. No Spring restart trick needed. Just add to the list and restart the Gateway.</p>
+    </div>
+  </div>
+
+  <h2>Interview answer — "how does your gateway know which URLs need JWT?"</h2>
+  <div class="file-card">
+    <div class="file-header"><span class="file-name">Say exactly this</span></div>
+    <div class="file-body">
+      <p style="color:#9ae6b4;line-height:1.9">"JWT validation is handled by a <code>GlobalFilter</code> called <code>JwtAuthFilter</code>. Because it implements <code>GlobalFilter</code> with <code>@Component</code>, Spring Cloud Gateway automatically runs it on every single request without any yml configuration. Inside the filter, I maintain a <code>PUBLIC_PATHS</code> list — any URL that starts with a path in that list exits the filter immediately without token checking. All other URLs go through three gates: check for Authorization header, check it starts with Bearer, and validate the token signature and expiry via <code>JwtUtil</code>. If any gate fails, the filter returns 401 and the request never reaches the downstream microservice."</p>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center;padding:20px;color:#4a5568;font-size:12px;margin-top:10px">
+  API Gateway Java Code Reference — bookmark this and open during coding
+</div>
+
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo(0,0);
+}
+function copyById(id) {
+  const text = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 1500);
+  });
+}
+function toggleQA(el) {
+  const a = el.nextElementSibling;
+  const arrow = el.querySelector('span');
+  a.classList.toggle('open');
+  arrow.textContent = a.classList.contains('open') ? '▲' : '▼';
+}
+</script>
+</body>
+</html>

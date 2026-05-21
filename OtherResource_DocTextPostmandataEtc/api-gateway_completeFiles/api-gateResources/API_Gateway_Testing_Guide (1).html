@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>API Gateway — Complete Testing Guide</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#0f1117;color:#e2e8f0;line-height:1.6;font-size:13px}
+.container{max-width:1000px;margin:0 auto;padding:24px 20px}
+
+/* Header */
+.hero{background:linear-gradient(135deg,#1a2744,#1a1f2e);border:1px solid #2d3748;border-radius:12px;padding:24px 28px;margin-bottom:24px}
+.hero h1{font-size:22px;color:#63b3ed;margin-bottom:6px}
+.hero p{color:#718096;font-size:13px}
+.hero-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.hbadge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500}
+
+/* Navigation */
+.nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px}
+.nav-btn{background:#1a1f2e;border:1px solid #2d3748;border-radius:8px;padding:7px 14px;font-size:12px;color:#a0aec0;cursor:pointer;transition:all 0.15s}
+.nav-btn:hover,.nav-btn.active{background:#2b6cb0;border-color:#4299e1;color:#fff}
+
+/* Sections */
+.section{display:none}
+.section.active{display:block}
+
+/* Cards */
+.card{background:#1a1f2e;border:1px solid #2d3748;border-radius:10px;padding:16px 18px;margin-bottom:12px}
+.card.green{border-left:4px solid #48bb78}
+.card.blue{border-left:4px solid #4299e1}
+.card.orange{border-left:4px solid #ed8936}
+.card.purple{border-left:4px solid #9f7aea}
+.card.red{border-left:4px solid #fc8181}
+.card.yellow{border-left:4px solid #f6e05e}
+
+/* Step boxes */
+.step-box{background:#1a1f2e;border:1px solid #2d3748;border-radius:10px;margin-bottom:10px;overflow:hidden}
+.step-hdr{background:#2d3748;padding:10px 16px;display:flex;align-items:center;gap:10px}
+.step-num{background:#4299e1;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.step-title{font-size:13px;font-weight:600;color:#e2e8f0;flex:1}
+.step-body{padding:14px 16px}
+
+/* Badges */
+.badge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600}
+.pub{background:#1c4532;color:#9ae6b4}
+.priv{background:#744210;color:#fbd38d}
+.cat{background:#322659;color:#d6bcfa}
+.sub{background:#1c3829;color:#68d391}
+
+/* URL bar */
+.url-bar{display:flex;align-items:center;gap:8px;background:#0d1117;border:1px solid #4a5568;border-radius:6px;padding:8px 12px;margin:8px 0}
+.method{font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px;white-space:nowrap}
+.GET{background:#1c4532;color:#9ae6b4}
+.POST{background:#744210;color:#fbd38d}
+.PUT{background:#322659;color:#d6bcfa}
+.DELETE{background:#742a2a;color:#feb2b2}
+.url-text{font-size:12px;color:#63b3ed;font-family:monospace;flex:1;word-break:break-all}
+.copy-btn{background:#2d3748;color:#a0aec0;border:none;border-radius:4px;padding:4px 10px;font-size:11px;cursor:pointer;white-space:nowrap}
+.copy-btn:hover{background:#4a5568;color:#e2e8f0}
+
+/* Code blocks */
+pre{background:#0d1117;border:1px solid #2d3748;border-radius:8px;padding:12px 14px;overflow-x:auto;font-size:11px;color:#e2e8f0;margin:8px 0;position:relative}
+code{background:#2d3748;padding:2px 6px;border-radius:4px;font-size:11px;color:#63b3ed;font-family:monospace}
+.copy-code{position:absolute;top:8px;right:8px;background:#2d3748;color:#a0aec0;border:none;border-radius:4px;padding:3px 10px;font-size:10px;cursor:pointer}
+.copy-code:hover{background:#4a5568;color:#e2e8f0}
+
+/* Response boxes */
+.resp-ok{background:#1c3829;border:1px solid #276749;border-radius:8px;padding:10px 14px;margin-top:8px;font-family:monospace;font-size:11px;color:#9ae6b4}
+.resp-err{background:#2d1515;border:1px solid #742a2a;border-radius:8px;padding:10px 14px;margin-top:8px;font-family:monospace;font-size:11px;color:#feb2b2}
+.resp-warn{background:#2d2000;border:1px solid #d69e2e;border-radius:8px;padding:10px 14px;margin-top:8px;font-size:12px;color:#fbd38d}
+.resp-info{background:#1a2744;border:1px solid #4299e1;border-radius:8px;padding:10px 14px;margin-top:8px;font-size:12px;color:#90cdf4}
+
+/* Alerts */
+.warn{background:#2d1f00;border:1px solid #d69e2e;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#fbd38d}
+.success{background:#1c3829;border:1px solid #48bb78;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#9ae6b4}
+.info{background:#1a2744;border:1px solid #4299e1;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#90cdf4}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0}
+th{background:#2d3748;color:#e2e8f0;padding:8px 12px;text-align:left;font-size:11px}
+td{padding:8px 12px;border-bottom:1px solid #2d3748;color:#a0aec0;vertical-align:top}
+tr:last-child td{border-bottom:none}
+
+/* Grid */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:10px 0}
+
+/* Flow diagram */
+.flow{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin:10px 0}
+.flow-box{background:#1a2744;border:1px solid #4299e1;border-radius:6px;padding:6px 12px;font-size:11px;text-align:center}
+.flow-box .fb-title{color:#63b3ed;font-weight:600}
+.flow-box .fb-port{color:#718096;font-size:10px}
+.flow-arrow{color:#4299e1;font-size:18px;padding:0 2px}
+
+/* Token display */
+.token-display{background:#0d1117;border:1px solid #276749;border-radius:8px;padding:12px 14px;margin:10px 0;word-break:break-all;font-family:monospace;font-size:11px;color:#9ae6b4;position:relative}
+
+/* PowerShell */
+.ps-box{background:#012456;border:1px solid #0078d4;border-radius:8px;padding:14px 16px;margin:10px 0;position:relative}
+.ps-title{color:#0078d4;font-size:11px;font-weight:700;margin-bottom:8px}
+.ps-code{font-family:'Consolas',monospace;font-size:11px;color:#cccccc;white-space:pre-wrap;line-height:1.6}
+
+/* Interview cards */
+.qa-card{background:#1a1f2e;border:1px solid #2d3748;border-radius:10px;margin-bottom:10px;overflow:hidden}
+.qa-q{background:#2d3748;padding:10px 16px;font-size:13px;font-weight:600;color:#e2e8f0;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.qa-q:hover{background:#3a4555}
+.qa-a{padding:12px 16px;font-size:12px;color:#a0aec0;line-height:1.7;display:none}
+.qa-a.open{display:block}
+
+/* Status check */
+.status-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid #2d3748}
+.status-row:last-child{border-bottom:none}
+.status-dot{width:10px;height:10px;border-radius:50%;background:#718096;flex-shrink:0}
+.status-dot.green{background:#48bb78}
+.status-dot.red{background:#fc8181}
+.status-name{font-size:13px;color:#e2e8f0;flex:1}
+.status-port{font-family:monospace;font-size:12px;color:#63b3ed}
+
+/* Architecture */
+.arch-layer{margin-bottom:6px}
+.arch-label{font-size:10px;color:#718096;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.05em}
+
+/* h2 h3 */
+h2{font-size:16px;color:#90cdf4;margin:20px 0 12px;display:flex;align-items:center;gap:8px}
+h2 .icon{font-size:18px}
+h3{font-size:13px;color:#e2e8f0;margin:12px 0 6px;font-weight:600}
+p{font-size:12px;color:#a0aec0;line-height:1.7;margin-bottom:6px}
+li{font-size:12px;color:#a0aec0;line-height:1.8;margin-left:16px}
+
+@media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr}.flow{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HERO -->
+<div class="hero">
+  <h1>🚪 OTT Platform — API Gateway Complete Testing Guide</h1>
+  <p>Spring Cloud Gateway · JWT Auth Filter · Rate Limiter · Windows 10 · STS · Postman</p>
+  <div class="hero-badges">
+    <span class="hbadge" style="background:#1c4532;color:#9ae6b4">api-gateway :8080</span>
+    <span class="hbadge" style="background:#322659;color:#d6bcfa">catalog-service :8081</span>
+    <span class="hbadge" style="background:#1a2744;color:#63b3ed">subscription-service :8082</span>
+    <span class="hbadge" style="background:#2d1f00;color:#fbd38d">Redis :6379</span>
+  </div>
+</div>
+
+<!-- NAVIGATION -->
+<div class="nav">
+  <button class="nav-btn active" onclick="showSection('overview')">Overview</button>
+  <button class="nav-btn" onclick="showSection('startup')">1. Start Services</button>
+  <button class="nav-btn" onclick="showSection('jwt')">2. JWT Token</button>
+  <button class="nav-btn" onclick="showSection('catalog')">3. Catalog APIs</button>
+  <button class="nav-btn" onclick="showSection('subscription')">4. Subscription APIs</button>
+  <button class="nav-btn" onclick="showSection('ratelimiter')">5. Rate Limiter</button>
+  <button class="nav-btn" onclick="showSection('errors')">6. Error Tests</button>
+  <button class="nav-btn" onclick="showSection('interview')">7. Interview Q&A</button>
+</div>
+
+<!-- ===================== OVERVIEW ===================== -->
+<div id="overview" class="section active">
+  <h2>🏗️ Architecture — How Everything Connects</h2>
+  <div class="card blue">
+    <div class="flow">
+      <div class="flow-box"><div class="fb-title">Postman / ESPN UI</div><div class="fb-port">Client</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="background:#1c3829;border-color:#48bb78"><div class="fb-title" style="color:#48bb78">API Gateway</div><div class="fb-port">:8080 — JWT + Rate Limit</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box"><div class="fb-title">catalog-service</div><div class="fb-port">:8081</div></div>
+      <div class="flow-arrow">+</div>
+      <div class="flow-box"><div class="fb-title">subscription-service</div><div class="fb-port">:8082</div></div>
+    </div>
+    <p style="margin-top:10px">All requests go to port <strong style="color:#63b3ed">8080 only</strong>. Gateway routes them to the correct service. Never call 8081 or 8082 directly from now on.</p>
+  </div>
+
+  <h2>📋 All APIs at a Glance</h2>
+  <table>
+    <tr><th>Method</th><th>URL (all via :8080)</th><th>Token?</th><th>Routes To</th><th>Description</th></tr>
+    <tr><td><span class="method POST">POST</span></td><td><code>/auth/token</code></td><td><span class="badge pub">NO</span></td><td>Gateway itself</td><td>Generate JWT token</td></tr>
+    <tr><td><span class="method POST">POST</span></td><td><code>/auth/validate</code></td><td><span class="badge pub">NO</span></td><td>Gateway itself</td><td>Validate a token</td></tr>
+    <tr><td><span class="method GET">GET</span></td><td><code>/catalog/plans</code></td><td><span class="badge priv">YES</span></td><td>:8081</td><td>Get all OTT plans</td></tr>
+    <tr><td><span class="method GET">GET</span></td><td><code>/catalog/plans/PLAN001</code></td><td><span class="badge priv">YES</span></td><td>:8081</td><td>Get plan by ID</td></tr>
+    <tr><td><span class="method GET">GET</span></td><td><code>/catalog/plans/duration/MONTHLY</code></td><td><span class="badge priv">YES</span></td><td>:8081</td><td>Plans by duration</td></tr>
+    <tr><td><span class="method POST">POST</span></td><td><code>/catalog/plans</code></td><td><span class="badge priv">YES</span></td><td>:8081</td><td>Create new plan</td></tr>
+    <tr><td><span class="method PUT">PUT</span></td><td><code>/catalog/plans/PLAN001</code></td><td><span class="badge priv">YES</span></td><td>:8081</td><td>Update plan</td></tr>
+    <tr><td><span class="method DELETE">DELETE</span></td><td><code>/catalog/plans/PLAN001</code></td><td><span class="badge priv">YES</span></td><td>:8081</td><td>Deactivate plan</td></tr>
+    <tr><td><span class="method POST">POST</span></td><td><code>/users/register</code></td><td><span class="badge priv">YES</span></td><td>:8082</td><td>Register new user</td></tr>
+    <tr><td><span class="method GET">GET</span></td><td><code>/users/1</code></td><td><span class="badge priv">YES</span></td><td>:8082</td><td>Get user by ID</td></tr>
+    <tr><td><span class="method POST">POST</span></td><td><code>/subscriptions</code></td><td><span class="badge priv">YES</span></td><td>:8082 → :8081</td><td>Subscribe to plan</td></tr>
+    <tr><td><span class="method GET">GET</span></td><td><code>/subscriptions/user/1</code></td><td><span class="badge priv">YES</span></td><td>:8082</td><td>Get user subscriptions</td></tr>
+    <tr><td><span class="method GET">GET</span></td><td><code>/subscriptions/1</code></td><td><span class="badge priv">YES</span></td><td>:8082</td><td>Get subscription by ID</td></tr>
+    <tr><td><span class="method PUT">PUT</span></td><td><code>/subscriptions/1/cancel</code></td><td><span class="badge priv">YES</span></td><td>:8082</td><td>Cancel subscription</td></tr>
+  </table>
+
+  <h2>🗂️ Gateway File Structure</h2>
+  <div class="card">
+<pre>api-gateway/src/main/java/com/ott/gateway/
+├── ApiGatewayApplication.java     ← main class (@SpringBootApplication)
+├── controller/
+│   └── AuthController.java        ← POST /auth/token and /auth/validate
+├── filter/
+│   ├── JwtAuthFilter.java         ← validates JWT on EVERY request (GlobalFilter)
+│   └── LoggingFilter.java         ← logs every request/response
+├── config/
+│   └── RateLimiterConfig.java     ← rate limit per username via Redis
+└── util/
+    └── JwtUtil.java               ← generate + validate JWT tokens
+
+src/main/resources/
+└── application.yml                ← routing rules, Redis, JWT config</pre>
+  </div>
+</div>
+
+<!-- ===================== STARTUP ===================== -->
+<div id="startup" class="section">
+  <h2>🚀 Start All Services — Correct Order</h2>
+
+  <div class="warn">⚠️ Always start in this exact order. Gateway depends on Redis. Subscription-service calls catalog-service internally.</div>
+
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">1</span><span class="step-title">Start Redis (must be running first)</span></div>
+    <div class="step-body">
+      <p>Open <strong>Command Prompt as Administrator</strong> (Windows key → type cmd → right-click → Run as Administrator)</p>
+      <pre>redis-cli ping</pre>
+      <div class="success">✅ If you see PONG — Redis is already running. Skip to step 2.</div>
+      <div class="warn">If you see error — type this command and keep the window open:</div>
+      <pre>redis-server</pre>
+      <p style="margin-top:6px">Open a new cmd window → type <code>redis-cli ping</code> → should see PONG now.</p>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">2</span><span class="step-title">Start catalog-service in STS</span></div>
+    <div class="step-body">
+      <p>In STS Package Explorer → expand <strong>catalog-service</strong> → right-click <strong>CatalogServiceApplication.java</strong> → Run As → Spring Boot App</p>
+      <div class="success">✅ Wait for console to show: <code>Started CatalogServiceApplication on port 8081</code></div>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">3</span><span class="step-title">Start subscription-service in STS</span></div>
+    <div class="step-body">
+      <p>Right-click <strong>SubscriptionServiceApplication.java</strong> → Run As → Spring Boot App</p>
+      <div class="success">✅ Wait for: <code>Started SubscriptionServiceApplication on port 8082</code></div>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">4</span><span class="step-title">Start api-gateway in STS</span></div>
+    <div class="step-body">
+      <p>Right-click <strong>ApiGatewayApplication.java</strong> → Run As → Spring Boot App</p>
+      <div class="success">✅ Wait for: <code>Started ApiGatewayApplication on port 8080</code></div>
+      <div class="warn">⚠️ If you see "Unable to connect to Redis" — Redis is not running. Go back to Step 1.</div>
+      <div class="warn">⚠️ If you see Spring Cloud compatibility error — open pom.xml → change Spring Boot version to 3.4.5 → Maven Update Project → restart.</div>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">5</span><span class="step-title">Verify all 3 are running</span></div>
+    <div class="step-body">
+      <p>In STS bottom panel → click <strong>Boot Dashboard</strong> tab → you should see:</p>
+      <div class="card" style="padding:0;margin-top:8px">
+        <div class="status-row"><div class="status-dot green"></div><div class="status-name">catalog-service</div><div class="status-port">:8081</div></div>
+        <div class="status-row"><div class="status-dot green"></div><div class="status-name">subscription-service</div><div class="status-port">:8082</div></div>
+        <div class="status-row"><div class="status-dot green"></div><div class="status-name">api-gateway</div><div class="status-port">:8080</div></div>
+      </div>
+      <p style="margin-top:8px">Open browser → go to <code>http://localhost:8080/catalog/plans</code> → should see 401 Unauthorized (good! means Gateway is blocking unauthenticated requests)</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== JWT TOKEN ===================== -->
+<div id="jwt" class="section">
+  <h2>🔑 JWT Token — Generate and Use</h2>
+
+  <div class="card blue">
+    <h3>What is JWT? (Interview answer)</h3>
+    <p>JWT = JSON Web Token. Three parts separated by dots:</p>
+    <pre>eyJhbGciOiJIUzI1NiJ9  .  eyJ1c2VybmFtZSI6ImFkbWluIn0  .  SflKxwRJSMeKKF2QT4fwpM
+     HEADER                      PAYLOAD                         SIGNATURE
+   (algorithm)              (username, role, expiry)          (tamper proof)</pre>
+    <p>Stateless — user data lives IN the token. No server session needed across microservices.</p>
+  </div>
+
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">A</span><span class="step-title">Generate JWT Token — POST /auth/token</span><span class="badge pub">PUBLIC — no token needed</span></div>
+    <div class="step-body">
+      <div class="url-bar">
+        <span class="method POST">POST</span>
+        <span class="url-text">http://localhost:8080/auth/token</span>
+        <button class="copy-btn" onclick="copyText('http://localhost:8080/auth/token')">Copy</button>
+      </div>
+      <p>In Postman → Body tab → raw → select JSON from dropdown → paste:</p>
+      <div style="position:relative">
+        <pre id="tokenBody">{
+  "username": "john.doe",
+  "role": "USER"
+}</pre>
+        <button class="copy-code" onclick="copyById('tokenBody')">Copy</button>
+      </div>
+      <div class="resp-ok">✅ 200 OK Response:
+{
+  "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huLmRvZSIsInJvbGUiOiJVU0VSIn0.abc123xyz...",
+  "username": "john.doe",
+  "role": "USER",
+  "expiresIn": "1 hour"
+}</div>
+      <div class="warn">⚠️ Copy the full token value (starts with eyJ...) — you need it for every protected API call.</div>
+      <p style="margin-top:8px">You can also generate an ADMIN token:</p>
+      <pre>{
+  "username": "admin.user",
+  "role": "ADMIN"
+}</pre>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">B</span><span class="step-title">How to add token in every Postman request</span></div>
+    <div class="step-body">
+      <div style="background:#1a1f2e;border:1px solid #2d3748;border-radius:8px;padding:14px;margin:8px 0">
+        <p style="color:#e2e8f0;font-weight:600;margin-bottom:10px">Method 1 — Authorization Tab (Recommended)</p>
+        <div style="font-size:12px;color:#a0aec0;line-height:2.2">
+          1. Open any request in Postman<br>
+          2. Click <strong style="color:#e2e8f0">Authorization</strong> tab (next to Params, Headers, Body)<br>
+          3. Auth Type dropdown → select <strong style="color:#63b3ed">Bearer Token</strong><br>
+          4. Paste your token in the Token field<br>
+          5. Postman automatically adds: <code>Authorization: Bearer eyJhbG...</code>
+        </div>
+      </div>
+      <div style="background:#1a1f2e;border:1px solid #2d3748;border-radius:8px;padding:14px;margin:8px 0">
+        <p style="color:#e2e8f0;font-weight:600;margin-bottom:10px">Method 2 — Headers Tab (Manual)</p>
+        <table style="margin:0">
+          <tr><th>Header Key</th><th>Header Value</th></tr>
+          <tr><td><code>Authorization</code></td><td><code>Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOi...</code></td></tr>
+        </table>
+        <p style="margin-top:8px">⚠️ Don't forget the word <strong>Bearer</strong> followed by a space before the token.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">C</span><span class="step-title">Validate Token — POST /auth/validate</span><span class="badge pub">PUBLIC</span></div>
+    <div class="step-body">
+      <div class="url-bar">
+        <span class="method POST">POST</span>
+        <span class="url-text">http://localhost:8080/auth/validate</span>
+        <button class="copy-btn" onclick="copyText('http://localhost:8080/auth/validate')">Copy</button>
+      </div>
+      <pre>{
+  "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huLmRvZSJ9..."
+}</pre>
+      <div class="resp-ok">✅ 200 OK — Valid token:
+{
+  "valid": true,
+  "username": "john.doe",
+  "role": "USER",
+  "message": "Token is valid"
+}</div>
+      <div class="resp-err" style="margin-top:8px">❌ Token expired or tampered:
+{
+  "valid": false,
+  "message": "Token is invalid or expired"
+}</div>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">D</span><span class="step-title">Test JWT blocking — call WITHOUT token</span></div>
+    <div class="step-body">
+      <p>Remove Authorization header from any protected request and send:</p>
+      <div class="url-bar"><span class="method GET">GET</span><span class="url-text">http://localhost:8080/catalog/plans</span></div>
+      <div class="resp-err">✅ Expected: 401 Unauthorized
+(empty body — JwtAuthFilter blocked it before reaching catalog-service)</div>
+      <div class="success">This proves JWT filter is working. Request was stopped at Gateway — microservice never saw it.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CATALOG APIs ===================== -->
+<div id="catalog" class="section">
+  <h2>📺 Catalog Service APIs — via Gateway port 8080</h2>
+  <div class="info">All requests go to port 8080 (Gateway). Gateway routes /catalog/** to catalog-service:8081 automatically.</div>
+
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">1</span><span class="step-title">Get All Active Plans</span><span class="badge priv">TOKEN REQUIRED</span></div>
+    <div class="step-body">
+      <div class="url-bar"><span class="method GET">GET</span><span class="url-text">http://localhost:8080/catalog/plans</span><button class="copy-btn" onclick="copyText('http://localhost:8080/catalog/plans')">Copy</button></div>
+      <p>No body needed. Add Bearer token in Authorization tab.</p>
+      <div class="resp-ok">✅ 200 OK
+[
+  {"planId":"PLAN001","planName":"Disney+ Basic","price":199.0,"duration":"MONTHLY","isActive":true},
+  {"planId":"PLAN002","planName":"Disney+ Premium","price":299.0,"duration":"MONTHLY","isActive":true},
+  {"planId":"PLAN003","planName":"ESPN+ Monthly","price":149.0,"duration":"MONTHLY","isActive":true},
+  {"planId":"PLAN004","planName":"ESPN+ Yearly","price":999.0,"duration":"YEARLY","isActive":true},
+  {"planId":"PLAN005","planName":"Combo Pack","price":399.0,"duration":"MONTHLY","isActive":true}
+]</div>
+      <div class="info" style="margin-top:8px">Check STS Gateway console — you'll see logging filter output:
+        <code style="display:block;margin-top:4px">──► GATEWAY REQUEST  | GET /catalog/plans | from: /127.0.0.1</code>
+        <code style="display:block">◄── GATEWAY RESPONSE | GET /catalog/plans | status: 200 | time: 45ms</code>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">2</span><span class="step-title">Get Plan by ID</span><span class="badge priv">TOKEN REQUIRED</span></div>
+    <div class="step-body">
+      <div class="url-bar"><span class="method GET">GET</span><span class="url-text">http://localhost:8080/catalog/plans/PLAN001</span><button class="copy-btn" onclick="copyText('http://localhost:8080/catalog/plans/PLAN001')">Copy</button></div>
+      <div class="resp-ok">✅ 200 OK
+{"planId":"PLAN001","planName":"Disney+ Basic","price":199.0,"duration":"MONTHLY","isActive":true}</div>
+      <div class="resp-err" style="margin-top:6px">❌ Plan not found (404):
+{"status":404,"error":"Not Found","message":"OTT Plan not found with id: PLAN999"}</div>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">3</span><span class="step-title">Get Plans by Duration</span><span class="badge priv">TOKEN REQUIRED</span></div>
+    <div class="step-body">
+      <div class="grid2">
+        <div>
+          <p>Monthly plans:</p>
+          <div class="url-bar"><span class="method GET">GET</span><span class="url-text">http://localhost:8080/catalog/plans/duration/MONTHLY</span></div>
+        </div>
+        <div>
+          <p>Yearly plans:</p>
+          <div class="url-bar"><span class="method GET">GET</span><span class="url-text">http://localhost:8080/catalog/plans/duration/YEARLY</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">4</span><span class="step-title">Create New Plan</span><span class="badge priv">TOKEN REQUIRED</span></div>
+    <div class="step-body">
+      <div class="url-bar"><span class="method POST">POST</span><span class="url-text">http://localhost:8080/catalog/plans</span><button class="copy-btn" onclick="copyText('http://localhost:8080/catalog/plans')">Copy</button></div>
+      <p>Body → raw → JSON:</p>
+      <div style="position:relative">
+        <pre id="createPlan">{
+  "planId": "PLAN006",
+  "planName": "Hotstar Premium",
+  "price": 349.00,
+  "duration": "MONTHLY",
+  "description": "Hotstar premium content access",
+  "isActive": true
+}</pre>
+        <button class="copy-code" onclick="copyById('createPlan')">Copy</button>
+      </div>
+      <div class="resp-ok">✅ 201 Created — new plan saved to catalog_db</div>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">5</span><span class="step-title">Update a Plan</span><span class="badge priv">TOKEN REQUIRED</span></div>
+    <div class="step-body">
+      <div class="url-bar"><span class="method PUT">PUT</span><span class="url-text">http://localhost:8080/catalog/plans/PLAN001</span><button class="copy-btn" onclick="copyText('http://localhost:8080/catalog/plans/PLAN001')">Copy</button></div>
+      <div style="position:relative">
+        <pre id="updatePlan">{
+  "planName": "Disney+ Basic Updated",
+  "price": 219.00,
+  "duration": "MONTHLY",
+  "description": "Updated description",
+  "isActive": true
+}</pre>
+        <button class="copy-code" onclick="copyById('updatePlan')">Copy</button>
+      </div>
+      <div class="resp-ok">✅ 200 OK — plan updated in catalog_db</div>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">6</span><span class="step-title">Deactivate a Plan (Soft Delete)</span><span class="badge priv">TOKEN REQUIRED</span></div>
+    <div class="step-body">
+      <div class="url-bar"><span class="method DELETE">DELETE</span><span class="url-text">http://localhost:8080/catalog/plans/PLAN001</span><button class="copy-btn" onclick="copyText('http://localhost:8080/catalog/plans/PLAN001')">Copy</button></div>
+      <p>No body needed.</p>
+      <div class="resp-ok">✅ 200 OK — "Plan PLAN001 deactivated successfully"
+Note: Plan is NOT deleted from DB — isActive is set to false (soft delete)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SUBSCRIPTION APIs ===================== -->
+<div id="subscription" class="section">
+  <h2>💳 Subscription Service APIs — via Gateway port 8080</h2>
+  <div class="info">Gateway routes /subscriptions/** and /users/** to subscription-service:8082. When subscribing, subscription-service internally calls catalog-service:8081 via Feign/RestTemplate.</div>
+
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">1</span><span class="step-title">Register a New User</span><span class="badge priv">TOKEN REQUIRED</span></div>
+    <div class="step-body">
+      <div class="url-bar"><span class="method POST">POST</span><span class="url-text">http://localhost:8080/users/register</span><button class="copy-btn" onclick="copyText('http://localhost:8080/users/register')">Copy</button></div>
+      <div style="position:relative">
+        <pre id="registerUser">{
+  "username": "skyri",
+  "email": "skyri@gmail.com",
+  "fullName": "Skyri Kumar",
+  "phone": "9876543210"
+}</pre>
+        <button class="copy-code" onclick="copyById('registerUser')">Copy</button>
+      </div>
+      <div class="resp-ok">✅ 201 Created
+{
+  "userId": 4,
+  "username": "skyri",
+  "email": "skyri@gmail.com",
+  "fullName": "Skyri Kumar",
+  "isActive": true,
+  "createdAt": "2026-05-21T10:00:00"
+}</div>
+      <div class="warn">⚠️ Note the userId (e.g. 4) — you'll need it when subscribing.</div>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">2</span><span class="step-title">Get User by ID</span><span class="badge priv">TOKEN REQUIRED</span></div>
+    <div class="step-body">
+      <div class="url-bar"><span class="method GET">GET</span><span class="url-text">http://localhost:8080/users/1</span><button class="copy-btn" onclick="copyText('http://localhost:8080/users/1')">Copy</button></div>
+      <div class="resp-ok">✅ 200 OK — returns user details</div>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">3</span><span class="step-title">Subscribe to a Plan</span><span class="badge priv">TOKEN REQUIRED</span></div>
+    <div class="step-body">
+      <div class="flow" style="margin-bottom:10px">
+        <div class="flow-box"><div class="fb-title">Postman</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box" style="background:#1c3829;border-color:#48bb78"><div class="fb-title" style="color:#48bb78">Gateway :8080</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box"><div class="fb-title">subscription :8082</div></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-box"><div class="fb-title">catalog :8081</div><div class="fb-port">validate plan</div></div>
+      </div>
+      <div class="url-bar"><span class="method POST">POST</span><span class="url-text">http://localhost:8080/subscriptions</span><button class="copy-btn" onclick="copyText('http://localhost:8080/subscriptions')">Copy</button></div>
+      <div style="position:relative">
+        <pre id="subscribe">{
+  "userId": 1,
+  "planId": "PLAN001",
+  "autoRenewal": true
+}</pre>
+        <button class="copy-code" onclick="copyById('subscribe')">Copy</button>
+      </div>
+      <div class="resp-ok">✅ 201 Created
+{
+  "subscriptionId": 1,
+  "userId": 1,
+  "username": "john.doe",
+  "planId": "PLAN001",
+  "planName": "Disney+ Basic",     ← fetched from catalog-service internally!
+  "amountPaid": 199.0,
+  "status": "ACTIVE",
+  "startDate": "2026-05-21",
+  "endDate": "2026-06-21",
+  "autoRenewal": true
+}</div>
+      <div class="info">planName came from catalog-service — this is microservices communication in action. Exactly like your Disney project!</div>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">4</span><span class="step-title">Get All Subscriptions for a User</span><span class="badge priv">TOKEN REQUIRED</span></div>
+    <div class="step-body">
+      <div class="url-bar"><span class="method GET">GET</span><span class="url-text">http://localhost:8080/subscriptions/user/1</span><button class="copy-btn" onclick="copyText('http://localhost:8080/subscriptions/user/1')">Copy</button></div>
+      <div class="resp-ok">✅ 200 OK — list of all subscriptions for userId 1</div>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">5</span><span class="step-title">Get Subscription by ID</span><span class="badge priv">TOKEN REQUIRED</span></div>
+    <div class="step-body">
+      <div class="url-bar"><span class="method GET">GET</span><span class="url-text">http://localhost:8080/subscriptions/1</span><button class="copy-btn" onclick="copyText('http://localhost:8080/subscriptions/1')">Copy</button></div>
+      <div class="resp-ok">✅ 200 OK — returns subscription details</div>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">6</span><span class="step-title">Cancel Subscription</span><span class="badge priv">TOKEN REQUIRED</span></div>
+    <div class="step-body">
+      <div class="url-bar"><span class="method PUT">PUT</span><span class="url-text">http://localhost:8080/subscriptions/1/cancel</span><button class="copy-btn" onclick="copyText('http://localhost:8080/subscriptions/1/cancel')">Copy</button></div>
+      <p>No body needed.</p>
+      <div class="resp-ok">✅ 200 OK — status changed to CANCELLED</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== RATE LIMITER ===================== -->
+<div id="ratelimiter" class="section">
+  <h2>⚡ Rate Limiter Testing — Windows 10</h2>
+
+  <div class="card blue">
+    <h3>How Rate Limiter Works (Interview Answer)</h3>
+    <p>Uses <strong style="color:#e2e8f0">Token Bucket algorithm</strong> with Redis:</p>
+    <ul style="margin-top:6px">
+      <li>Each user gets a bucket with <strong style="color:#e2e8f0">10 tokens per second</strong> stored in Redis</li>
+      <li>Each request consumes 1 token from the bucket</li>
+      <li>Bucket refills at 10 tokens/second continuously</li>
+      <li>When bucket is empty → Gateway returns <strong style="color:#fc8181">429 Too Many Requests</strong></li>
+      <li>Key = username from JWT token (each user has their own bucket)</li>
+    </ul>
+  </div>
+
+  <!-- Option 1: Postman -->
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">Option 1</span><span class="step-title">Postman Collection Runner (Easiest)</span></div>
+    <div class="step-body">
+      <div style="font-size:12px;color:#a0aec0;line-height:2.2">
+        1. In Postman left sidebar → click <strong style="color:#e2e8f0">Collections</strong><br>
+        2. Hover over <strong style="color:#e2e8f0">OTT Platform</strong> collection → click <strong style="color:#e2e8f0">▶ Run</strong> button<br>
+        3. Select only <strong style="color:#e2e8f0">GET /catalog/plans</strong> request<br>
+        4. Set <strong style="color:#e2e8f0">Iterations = 25</strong><br>
+        5. Set <strong style="color:#e2e8f0">Delay = 0 ms</strong> (important — 0 delay fires rapidly)<br>
+        6. Click <strong style="color:#63b3ed">Run OTT Platform</strong>
+      </div>
+      <div class="resp-ok" style="margin-top:10px">Expected results:
+Request 1  → 200 OK ✅
+Request 2  → 200 OK ✅
+...
+Request 11 → 429 Too Many Requests ❌  ← rate limiter kicked in!
+Request 12 → 429 Too Many Requests ❌
+...
+Request 25 → 429 Too Many Requests ❌</div>
+    </div>
+  </div>
+
+  <!-- Option 2: PowerShell -->
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">Option 2</span><span class="step-title">Windows PowerShell Script (No extra tools needed)</span></div>
+    <div class="step-body">
+      <p>Open <strong>PowerShell</strong> (Windows key → type powershell → Enter)</p>
+      <p style="margin-top:6px">Replace <strong>YOUR_TOKEN_HERE</strong> with your actual JWT token → paste entire script → press Enter:</p>
+      <div class="ps-box">
+        <div class="ps-title">Windows PowerShell — Rate Limiter Test</div>
+        <div class="ps-code" id="psScript">$token = "YOUR_TOKEN_HERE"
+
+$headers = @{
+    "Authorization" = "Bearer $token"
+    "Content-Type"  = "application/json"
+}
+
+Write-Host "Firing 25 rapid requests to test rate limiter..." -ForegroundColor Cyan
+Write-Host "============================================" -ForegroundColor Gray
+
+for ($i = 1; $i -le 25; $i++) {
+    try {
+        $response = Invoke-WebRequest `
+            -Uri "http://localhost:8080/catalog/plans" `
+            -Headers $headers `
+            -Method GET `
+            -ErrorAction Stop
+        Write-Host "Request $i  --> $($response.StatusCode) OK" -ForegroundColor Green
+    }
+    catch {
+        $statusCode = $_.Exception.Response.StatusCode.value__
+        if ($statusCode -eq 429) {
+            Write-Host "Request $i  --> 429 TOO MANY REQUESTS - Rate limiter hit!" -ForegroundColor Red
+        } else {
+            Write-Host "Request $i  --> $statusCode ERROR" -ForegroundColor Yellow
+        }
+    }
+}
+
+Write-Host "============================================" -ForegroundColor Gray
+Write-Host "Test complete!" -ForegroundColor Cyan</div>
+      </div>
+      <button class="copy-btn" style="margin-top:6px;padding:7px 16px" onclick="copyById('psScript')">📋 Copy PowerShell Script</button>
+      <div class="resp-ok" style="margin-top:10px">Expected PowerShell output:
+Firing 25 rapid requests to test rate limiter...
+============================================
+Request 1  --> 200 OK
+Request 2  --> 200 OK
+...
+Request 11 --> 429 TOO MANY REQUESTS - Rate limiter hit!
+...
+Request 25 --> 429 TOO MANY REQUESTS - Rate limiter hit!
+============================================
+Test complete!</div>
+      <div class="warn">⚠️ If PowerShell says "execution policy" error → first run this command:
+<code>Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser</code>
+Type Y → Enter → then run the script again.</div>
+    </div>
+  </div>
+
+  <!-- Option 3: Apache JMeter -->
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">Option 3</span><span class="step-title">Apache JMeter (Mention in interview — industry standard)</span></div>
+    <div class="step-body">
+      <p>JMeter is the industry standard for load testing. Mention it in interviews even if you use PowerShell for actual testing.</p>
+      <p style="margin-top:6px"><strong style="color:#e2e8f0">Download:</strong> https://jmeter.apache.org/download_jmeter.cgi → download .zip → extract → open bin folder → double-click <strong>jmeter.bat</strong></p>
+      <div class="card" style="margin-top:10px;padding:12px">
+        <h3>JMeter setup for rate limiter test:</h3>
+        <pre style="font-size:11px">Right-click Test Plan → Add → Threads → Thread Group
+  Number of Threads (users): 25
+  Ramp-up period:            1 second
+  Loop count:                1
+
+Right-click Thread Group → Add → Sampler → HTTP Request
+  Protocol: http
+  Server:   localhost
+  Port:     8080
+  Path:     /catalog/plans
+  Method:   GET
+
+Right-click Thread Group → Add → Config → HTTP Header Manager
+  Name:  Authorization
+  Value: Bearer eyJhbGciOiJIUzI1NiJ9...
+
+Right-click Thread Group → Add → Listener → View Results Tree
+Click ▶ Run → see 429 responses for requests beyond 10</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Verify in Redis -->
+  <div class="step-box">
+    <div class="step-hdr"><span class="step-num">Bonus</span><span class="step-title">Verify Rate Limit Keys in Redis (Windows cmd)</span></div>
+    <div class="step-body">
+      <p>Open Command Prompt → connect to Redis → see the rate limit buckets:</p>
+      <pre>redis-cli
+KEYS *</pre>
+      <div class="resp-ok">You'll see keys like:
+request_rate_limiter.{john.doe}.tokens
+request_rate_limiter.{john.doe}.timestamp
+
+These are the token buckets Spring Cloud Gateway creates per user in Redis.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== ERROR TESTS ===================== -->
+<div id="errors" class="section">
+  <h2>❌ Error Scenario Tests</h2>
+  <p>These tests prove your centralized exception handling (GlobalExceptionHandler) is working properly. Important for interviews.</p>
+
+  <table>
+    <tr><th>Test</th><th>Request</th><th>Expected</th><th>Which handler</th></tr>
+    <tr><td>No token</td><td>GET /catalog/plans (no auth header)</td><td>401 Unauthorized</td><td>JwtAuthFilter</td></tr>
+    <tr><td>Invalid token</td><td>Authorization: Bearer INVALID123</td><td>401 Unauthorized</td><td>JwtAuthFilter</td></tr>
+    <tr><td>Plan not found</td><td>GET /catalog/plans/PLAN999</td><td>404 Not Found</td><td>PlanNotFoundException</td></tr>
+    <tr><td>User not found</td><td>POST /subscriptions with userId: 9999</td><td>404 Not Found</td><td>UserNotFoundException</td></tr>
+    <tr><td>Invalid plan subscribe</td><td>POST /subscriptions with planId: "INVALID"</td><td>502 Bad Gateway</td><td>PlanServiceException</td></tr>
+    <tr><td>Missing required field</td><td>POST /users/register with no email</td><td>400 Bad Request</td><td>MethodArgumentNotValidException</td></tr>
+    <tr><td>Rate limit exceeded</td><td>Fire 25 rapid requests</td><td>429 Too Many Requests</td><td>RequestRateLimiter filter</td></tr>
+  </table>
+
+  <div class="card red" style="margin-top:14px">
+    <h3>Error response format (same across all services)</h3>
+    <pre>{
+  "status": 404,
+  "error": "Not Found",
+  "message": "OTT Plan not found with id: PLAN999",
+  "path": "/catalog/plans/PLAN999",
+  "timestamp": "2026-05-21T10:30:00"
+}</pre>
+    <p style="margin-top:8px">This consistent format is from your GlobalExceptionHandler using @RestControllerAdvice. Every error across the entire platform follows this structure.</p>
+  </div>
+</div>
+
+<!-- ===================== INTERVIEW ===================== -->
+<div id="interview" class="section">
+  <h2>🎯 Interview Q&A — Click to expand answers</h2>
+
+  <div class="qa-card">
+    <div class="qa-q" onclick="toggleQA(this)">Q1: What is API Gateway and why do we need it? <span>▼</span></div>
+    <div class="qa-a">API Gateway is the single entry point for all client requests in a microservices architecture. Without it, the client must know the address of every microservice and handle cross-cutting concerns like authentication separately for each one. Gateway centralizes routing, JWT authentication, rate limiting, and logging in one place. In our OTT platform, the ESPN website calls port 8080 only — Gateway routes to catalog-service or subscription-service based on the URL path.</div>
+  </div>
+
+  <div class="qa-card">
+    <div class="qa-q" onclick="toggleQA(this)">Q2: How does JWT authentication work in your gateway? <span>▼</span></div>
+    <div class="qa-a">Every request hits JwtAuthFilter first (it's a GlobalFilter with Order=1). It checks the Authorization header for "Bearer token". If missing or not starting with "Bearer" — returns 401 immediately. If present — extracts the token, validates it using HMAC-SHA256 signature via JwtUtil. If invalid or expired — returns 401. If valid — extracts username and role, adds them as X-Username and X-Role headers, and forwards the modified request to the downstream microservice. The microservice never handles authentication — Gateway does it all.</div>
+  </div>
+
+  <div class="qa-card">
+    <div class="qa-q" onclick="toggleQA(this)">Q3: What is rate limiting and how did you implement it? <span>▼</span></div>
+    <div class="qa-a">Rate limiting controls how many requests a user can make in a given time window to prevent abuse and protect downstream services. I used Spring Cloud Gateway's RequestRateLimiter filter with Redis as the backend store. It uses the Token Bucket algorithm — each user gets a bucket of 10 tokens per second stored in Redis. Each request consumes one token. When the bucket is empty, Gateway returns 429 Too Many Requests immediately without forwarding to the microservice. The key resolver uses the X-Username header (set by JwtAuthFilter) so each user has their own independent bucket.</div>
+  </div>
+
+  <div class="qa-card">
+    <div class="qa-q" onclick="toggleQA(this)">Q4: What is the difference between GlobalFilter and GatewayFilter? <span>▼</span></div>
+    <div class="qa-a">GlobalFilter applies to ALL routes automatically — used for JWT authentication and logging which every request needs regardless of which service it's going to. GatewayFilter applies to specific routes only and is configured per route in application.yml — used for rate limiting which can have different limits per route. In our project: JwtAuthFilter and LoggingFilter implement GlobalFilter, while RequestRateLimiter is a GatewayFilter defined in each route in application.yml.</div>
+  </div>
+
+  <div class="qa-card">
+    <div class="qa-q" onclick="toggleQA(this)">Q5: Why does Gateway use WebFlux instead of Spring MVC? <span>▼</span></div>
+    <div class="qa-a">Gateway handles thousands of simultaneous requests. Traditional Spring MVC is blocking — one thread per request, thread waits for the response before handling the next request. WebFlux is non-blocking and reactive — one thread can handle many requests concurrently using event-driven programming. This makes Gateway extremely efficient without consuming thousands of threads. This is also why we use Spring Data Redis Reactive — mixing blocking Redis with reactive Gateway causes startup errors.</div>
+  </div>
+
+  <div class="qa-card">
+    <div class="qa-q" onclick="toggleQA(this)">Q6: What is JWT and why is it better than session-based auth for microservices? <span>▼</span></div>
+    <div class="qa-a">JWT (JSON Web Token) is a stateless token containing user data (username, role, expiry) signed with a secret key. Traditional sessions store user data on the server — in a microservices architecture with 10+ services, there's no single server to store sessions, so session-based auth doesn't scale. JWT stores the data in the token itself — any service can validate it by checking the signature without calling a central server. This is called stateless authentication and is the industry standard for microservices.</div>
+  </div>
+
+  <div class="qa-card">
+    <div class="qa-q" onclick="toggleQA(this)">Q7: How do your microservices communicate with each other? <span>▼</span></div>
+    <div class="qa-a">Subscription-service calls catalog-service synchronously via REST using RestTemplate (or Feign Client). When a user subscribes, subscription-service calls GET /catalog/plans/{planId} on catalog-service to validate the plan and get the price. This is synchronous REST communication. In more complex scenarios like payment failures and subscription expiry, we would use asynchronous event-driven communication via Kafka or AWS Kinesis — the next phase of our architecture.</div>
+  </div>
+
+  <div class="qa-card">
+    <div class="qa-q" onclick="toggleQA(this)">Q8: What happens if catalog-service is down when subscription-service calls it? <span>▼</span></div>
+    <div class="qa-a">Currently, if catalog-service is down, our PlanServiceException is thrown and GlobalExceptionHandler returns a 502 Bad Gateway error to the client. In a production system, we would add a Circuit Breaker pattern using Resilience4j — it monitors failures and "opens the circuit" after a threshold, returning a fallback response instead of waiting for timeout. This prevents cascade failures where one service being down brings down the entire system. This is called the Circuit Breaker pattern and is a key microservices resilience pattern.</div>
+  </div>
+
+  <div class="card green" style="margin-top:14px">
+    <h3>How to introduce your project in interview</h3>
+    <p style="margin-top:6px;color:#9ae6b4">"I built an OTT subscription platform similar to Disney+/ESPN. It has three components — an API Gateway on port 8080 built with Spring Cloud Gateway that handles JWT authentication and rate limiting using Redis, a Catalog Service on port 8081 that manages OTT plans in MySQL, and a Subscription Service on port 8082 that handles user subscriptions. The subscription service calls the catalog service synchronously via REST to validate plans before subscribing. Each service has its own database following the database-per-service pattern. I used centralized exception handling with @RestControllerAdvice, DTOs for clean API contracts, and soft deletes for data integrity."</p>
+  </div>
+</div>
+
+<div style="text-align:center;padding:20px;color:#4a5568;font-size:12px;margin-top:10px">
+  OTT Platform — API Gateway Testing Guide v1.0 · catalog-service · subscription-service · api-gateway
+</div>
+
+</div>
+
+<script>
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = 'Copied!';
+    btn.style.background = '#276749';
+    btn.style.color = '#9ae6b4';
+    setTimeout(() => { btn.textContent = orig; btn.style.background = ''; btn.style.color = ''; }, 1500);
+  });
+}
+
+function copyById(id) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '✅ Copied!';
+    btn.style.background = '#276749';
+    btn.style.color = '#9ae6b4';
+    setTimeout(() => { btn.textContent = orig; btn.style.background = ''; btn.style.color = ''; }, 1500);
+  });
+}
+
+function toggleQA(el) {
+  const answer = el.nextElementSibling;
+  const arrow = el.querySelector('span');
+  const isOpen = answer.classList.contains('open');
+  answer.classList.toggle('open');
+  arrow.textContent = isOpen ? '▼' : '▲';
+}
+</script>
+</body>
+</html>
