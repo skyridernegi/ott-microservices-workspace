@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feign Client — Subscription Service Complete Guide</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#0f1117;color:#e2e8f0;line-height:1.6;font-size:13px}
+.container{max-width:1000px;margin:0 auto;padding:24px 20px}
+h1{font-size:22px;color:#63b3ed;margin-bottom:4px}
+h2{font-size:15px;color:#90cdf4;margin:22px 0 10px}
+h3{font-size:13px;color:#e2e8f0;margin:10px 0 6px;font-weight:600}
+p,li{font-size:12px;color:#a0aec0;line-height:1.8}
+ul{padding-left:18px;margin:6px 0}
+
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;border-bottom:1px solid #2d3748;padding-bottom:12px}
+.tab{background:#1a1f2e;border:1px solid #2d3748;border-radius:6px;padding:7px 14px;font-size:12px;color:#a0aec0;cursor:pointer;transition:all 0.15s}
+.tab:hover{border-color:#4299e1;color:#63b3ed}
+.tab.active{background:#2b6cb0;border-color:#4299e1;color:#fff}
+.section{display:none}.section.active{display:block}
+
+/* Step boxes */
+.step{background:#1a1f2e;border:1px solid #2d3748;border-radius:10px;margin-bottom:14px;overflow:hidden}
+.step-hdr{background:#2d3748;padding:10px 16px;display:flex;align-items:center;gap:10px}
+.step-num{background:#2b6cb0;color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.step-title{font-size:13px;font-weight:600;color:#e2e8f0;flex:1}
+.step-body{padding:14px 16px}
+.step-body p{margin-bottom:8px}
+
+/* File header */
+.file-hdr{background:#1c3829;border:1px solid #276749;border-radius:6px;padding:8px 14px;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.file-hdr .fname{font-size:13px;font-weight:600;color:#9ae6b4}
+.file-hdr .fpath{font-size:11px;color:#718096;font-family:monospace;margin-left:auto}
+
+/* Action badges */
+.act{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;display:inline-block;margin-right:6px}
+.new{background:#1a365d;color:#90cdf4}
+.modify{background:#744210;color:#fbd38d}
+.delete{background:#742a2a;color:#feb2b2}
+.nochange{background:#2d3748;color:#a0aec0}
+
+/* Code */
+pre{background:#0d1117;border:1px solid #2d3748;border-radius:6px;padding:12px 14px;overflow-x:auto;font-size:11px;line-height:1.7;margin:8px 0;position:relative}
+.copy-btn{position:absolute;top:8px;right:8px;background:#2d3748;color:#a0aec0;border:none;border-radius:4px;padding:3px 10px;font-size:10px;cursor:pointer}
+.copy-btn:hover{background:#4a5568;color:#e2e8f0}
+code{background:#2d3748;padding:2px 6px;border-radius:4px;font-size:11px;color:#63b3ed;font-family:monospace}
+
+/* Syntax */
+.kw{color:#c792ea}.an{color:#ffcb6b}.cm{color:#546e7a;font-style:italic}
+.st{color:#c3e88d}.cl{color:#82aaff}.mt{color:#89ddff}.nm{color:#f78c6c}
+.add{background:#1c3829;display:block;border-left:3px solid #48bb78;padding-left:8px}
+.rem{background:#2d1515;display:block;border-left:3px solid #742a2a;padding-left:8px;text-decoration:line-through;opacity:0.6}
+
+/* Alerts */
+.warn{background:#2d1f00;border:1px solid #d69e2e;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#fbd38d}
+.info{background:#1a2744;border:1px solid #4299e1;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#90cdf4}
+.success{background:#1c3829;border:1px solid #48bb78;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#9ae6b4}
+.danger{background:#2d1515;border:1px solid #742a2a;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#feb2b2}
+
+/* Flow */
+.flow{display:flex;flex-direction:column;gap:0;margin:12px 0}
+.flow-item{display:flex;align-items:flex-start;gap:12px}
+.flow-dot{width:22px;height:22px;border-radius:50%;background:#2b6cb0;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px}
+.flow-text{font-size:12px;color:#a0aec0;line-height:1.7;padding-bottom:8px;border-left:1px dashed #2d3748;padding-left:12px;margin-left:-2px;flex:1}
+.flow-arrow{color:#4299e1;padding-left:10px;font-size:14px}
+
+/* URL bar */
+.url-bar{display:flex;align-items:center;gap:8px;background:#0d1117;border:1px solid #4a5568;border-radius:6px;padding:7px 12px;margin:6px 0}
+.method{font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px}
+.GET{background:#1c4532;color:#9ae6b4}.POST{background:#744210;color:#fbd38d}
+.url{font-size:12px;color:#63b3ed;font-family:monospace;flex:1;word-break:break-all}
+
+table{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0}
+th{background:#2d3748;color:#e2e8f0;padding:8px 12px;text-align:left;font-size:11px}
+td{padding:8px 12px;border-bottom:1px solid #2d3748;color:#a0aec0;vertical-align:top}
+tr:last-child td{border-bottom:none}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>🔗 Feign Client — Subscription Service</h1>
+<p style="color:#718096;margin-bottom:8px">Complete implementation guide — what changes, where, why, and how to test</p>
+
+<!-- WHAT IS FEIGN -->
+<div class="info" style="margin-bottom:16px">
+  <strong>What is Feign Client?</strong><br>
+  Feign is a declarative HTTP client. Instead of manually building HTTP requests with RestTemplate (verbose, error-prone), you define a Java interface with annotations and Feign generates the HTTP call automatically. It reads like a normal Java method call but internally makes a real REST API call to another service.
+  <br><br>
+  <strong>RestTemplate (old way):</strong> <code>restTemplate.getForObject("http://localhost:8081/catalog/plans/" + planId, Map.class)</code> — manual URL building, manual response mapping<br>
+  <strong>Feign (new way):</strong> <code>catalogServiceClient.getPlanById(planId)</code> — just call a method, Feign handles everything
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('overview')">Overview</button>
+  <button class="tab" onclick="show('step1')">Step 1: pom.xml</button>
+  <button class="tab" onclick="show('step2')">Step 2: Main Class</button>
+  <button class="tab" onclick="show('step3')">Step 3: New Files</button>
+  <button class="tab" onclick="show('step4')">Step 4: Update Existing</button>
+  <button class="tab" onclick="show('step5')">Step 5: Properties</button>
+  <button class="tab" onclick="show('step6')">Step 6: Test</button>
+  <button class="tab" onclick="show('interview')">Interview Points</button>
+</div>
+
+<!-- ===================== OVERVIEW ===================== -->
+<div id="overview" class="section active">
+  <h2>What changes and what stays the same</h2>
+
+  <table>
+    <tr><th>File</th><th>Action</th><th>Why</th></tr>
+    <tr><td><code>pom.xml</code></td><td><span class="act modify">MODIFY</span></td><td>Add Spring Cloud BOM + Feign dependency</td></tr>
+    <tr><td><code>SubscriptionServiceApplication.java</code></td><td><span class="act modify">MODIFY</span></td><td>Add @EnableFeignClients to activate Feign</td></tr>
+    <tr><td><code>dto/OttPlanDTO.java</code></td><td><span class="act new">NEW FILE</span></td><td>Maps JSON response from catalog-service into Java object</td></tr>
+    <tr><td><code>client/CatalogServiceClient.java</code></td><td><span class="act new">NEW FILE</span></td><td>Feign interface — defines which catalog APIs to call</td></tr>
+    <tr><td><code>client/FeignErrorDecoder.java</code></td><td><span class="act new">NEW FILE</span></td><td>Handles errors (404, 500) from catalog-service cleanly</td></tr>
+    <tr><td><code>config/AppConfig.java</code></td><td><span class="act modify">MODIFY</span></td><td>Remove RestTemplate bean, add Feign logger config</td></tr>
+    <tr><td><code>service/SubscriptionService.java</code></td><td><span class="act modify">MODIFY</span></td><td>Replace RestTemplate call with Feign client call</td></tr>
+    <tr><td><code>application.properties</code></td><td><span class="act modify">MODIFY</span></td><td>Add catalog URL + Feign logging config</td></tr>
+    <tr><td>All model, repository, controller, exception files</td><td><span class="act nochange">NO CHANGE</span></td><td>These don't know how inter-service calls work</td></tr>
+  </table>
+
+  <h2>How Feign connects the two services — the flow</h2>
+  <div class="flow">
+    <div class="flow-item">
+      <div class="flow-dot">1</div>
+      <div class="flow-text">
+        <strong style="color:#e2e8f0">POST /subscriptions</strong> arrives at SubscriptionController<br>
+        Controller calls <code>subscriptionService.subscribe(request)</code>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-dot">2</div>
+      <div class="flow-text">
+        <strong style="color:#e2e8f0">SubscriptionService</strong> validates user exists in DB<br>
+        Then calls <code>catalogServiceClient.getPlanById(planId)</code>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-dot">3</div>
+      <div class="flow-text">
+        <strong style="color:#e2e8f0">CatalogServiceClient (Feign)</strong> automatically makes<br>
+        <code>GET http://localhost:8081/catalog/plans/{planId}</code><br>
+        Feign builds URL, sends request, maps JSON response to OttPlanDTO
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-dot">4</div>
+      <div class="flow-text">
+        If catalog returns <strong style="color:#9ae6b4">200</strong> → OttPlanDTO returned to SubscriptionService<br>
+        If catalog returns <strong style="color:#feb2b2">404/500</strong> → FeignErrorDecoder throws PlanServiceException
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-dot">5</div>
+      <div class="flow-text">
+        <strong style="color:#e2e8f0">SubscriptionService</strong> uses plan price and duration<br>
+        Creates subscription in DB → returns SubscriptionResponseDTO
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== STEP 1: pom.xml ===================== -->
+<div id="step1" class="section">
+  <div class="step">
+    <div class="step-hdr">
+      <div class="step-num">1</div>
+      <div class="step-title">pom.xml — Add Spring Cloud + Feign dependency</div>
+    </div>
+    <div class="step-body">
+      <div class="file-hdr">
+        <span class="fname">pom.xml</span>
+        <span class="act modify">MODIFY</span>
+        <span class="fpath">subscription-service/pom.xml</span>
+      </div>
+
+      <p><strong style="color:#e2e8f0">WHY:</strong> Feign Client is part of Spring Cloud. You need two things — the Spring Cloud BOM (version manager) and the actual openfeign starter.</p>
+
+      <p style="margin-top:10px"><strong style="color:#fbd38d">CHANGE 1 — Add Spring Cloud version property</strong><br>
+      Find the <code>&lt;properties&gt;</code> section → add one line after <code>&lt;java.version&gt;21&lt;/java.version&gt;</code></p>
+
+      <pre id="pom1"><span class="cm">&lt;!-- FIND THIS --&gt;</span>
+&lt;properties&gt;
+    &lt;java.version&gt;21&lt;/java.version&gt;
+    <span class="add">&lt;spring-cloud.version&gt;2023.0.3&lt;/spring-cloud.version&gt;  &lt;!-- ADD THIS LINE --&gt;</span>
+&lt;/properties&gt;</pre>
+      <button class="copy-btn" onclick="copyById('pom1')">Copy</button>
+
+      <div class="info" style="margin-top:10px">
+        <strong>Why 2023.0.3 and not 2024.0.1?</strong><br>
+        Your subscription-service uses Spring Boot 3.5.14. Spring Cloud 2024.0.x only supports Boot 3.4.x (same issue as Gateway). Spring Cloud 2023.0.3 supports Boot 3.2.x to 3.5.x — so this is the safe choice.
+      </div>
+
+      <p style="margin-top:14px"><strong style="color:#fbd38d">CHANGE 2 — Add Spring Cloud BOM</strong><br>
+      After the closing <code>&lt;/properties&gt;</code> tag, add this entire block. If you already have <code>&lt;dependencyManagement&gt;</code>, just add the inner dependency inside it.</p>
+
+      <pre id="pom2"><span class="cm">&lt;!-- ADD THIS ENTIRE BLOCK after &lt;/properties&gt; --&gt;</span>
+&lt;dependencyManagement&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;
+            &lt;version&gt;${spring-cloud.version}&lt;/version&gt;
+            &lt;type&gt;pom&lt;/type&gt;
+            &lt;scope&gt;import&lt;/scope&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+&lt;/dependencyManagement&gt;</pre>
+      <button class="copy-btn" onclick="copyById('pom2')">Copy</button>
+
+      <p style="margin-top:14px"><strong style="color:#fbd38d">CHANGE 3 — Add Feign starter dependency</strong><br>
+      Inside <code>&lt;dependencies&gt;</code> section, add after the validation dependency:</p>
+
+      <pre id="pom3"><span class="cm">&lt;!-- ADD INSIDE &lt;dependencies&gt; section --&gt;</span>
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-openfeign&lt;/artifactId&gt;
+    <span class="cm">&lt;!-- No version needed — Spring Cloud BOM manages it --&gt;</span>
+&lt;/dependency&gt;</pre>
+      <button class="copy-btn" onclick="copyById('pom3')">Copy</button>
+
+      <div class="success" style="margin-top:10px">After all 3 changes: Right-click subscription-service → <strong>Maven → Update Project → OK</strong>. STS will download Feign jars automatically.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== STEP 2: Main Class ===================== -->
+<div id="step2" class="section">
+  <div class="step">
+    <div class="step-hdr">
+      <div class="step-num">2</div>
+      <div class="step-title">SubscriptionServiceApplication.java — Enable Feign with one annotation</div>
+    </div>
+    <div class="step-body">
+      <div class="file-hdr">
+        <span class="fname">SubscriptionServiceApplication.java</span>
+        <span class="act modify">MODIFY</span>
+        <span class="fpath">com.ott.subscription</span>
+      </div>
+
+      <p><strong style="color:#e2e8f0">WHY:</strong> <code>@EnableFeignClients</code> tells Spring to scan for all interfaces annotated with <code>@FeignClient</code> and create HTTP proxy implementations for them at startup. Without this annotation, your <code>CatalogServiceClient</code> interface will be ignored and Spring will throw <code>No qualifying bean of type CatalogServiceClient</code> error.</p>
+
+      <p style="margin-top:10px"><strong style="color:#fbd38d">CHANGE — Add one annotation</strong></p>
+
+      <pre id="mainClass"><span class="kw">package</span> com.ott.subscription;
+
+<span class="kw">import</span> org.springframework.boot.SpringApplication;
+<span class="kw">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;
+<span class="add"><span class="kw">import</span> org.springframework.cloud.openfeign.EnableFeignClients; <span class="cm">// ADD THIS IMPORT</span></span>
+
+<span class="an">@SpringBootApplication</span>
+<span class="add"><span class="an">@EnableFeignClients</span>  <span class="cm">// ADD THIS — activates Feign Client scanning</span></span>
+<span class="kw">public class</span> <span class="cl">SubscriptionServiceApplication</span> {
+
+    <span class="kw">public static void</span> main(String[] args) {
+        SpringApplication.run(SubscriptionServiceApplication.class, args);
+    }
+}</pre>
+      <button class="copy-btn" onclick="copyById('mainClass')">Copy</button>
+
+      <div class="warn" style="margin-top:10px">This is the single most forgotten step. If you get <code>No qualifying bean of type 'CatalogServiceClient'</code> error — it means this annotation is missing.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== STEP 3: New Files ===================== -->
+<div id="step3" class="section">
+
+  <!-- OttPlanDTO -->
+  <div class="step">
+    <div class="step-hdr">
+      <div class="step-num">3A</div>
+      <div class="step-title">Create OttPlanDTO.java — maps catalog-service JSON response</div>
+    </div>
+    <div class="step-body">
+      <div class="file-hdr">
+        <span class="fname">OttPlanDTO.java</span>
+        <span class="act new">NEW FILE</span>
+        <span class="fpath">com.ott.subscription.dto</span>
+      </div>
+
+      <p><strong style="color:#e2e8f0">WHY:</strong> When Feign calls <code>GET /catalog/plans/{planId}</code>, catalog-service returns a JSON object. Feign needs a Java class to map that JSON into. The field names in this class must exactly match the JSON keys that catalog-service returns.</p>
+      <p><strong style="color:#e2e8f0">WHERE TO CREATE:</strong> Right-click <code>com.ott.subscription.dto</code> package → New → Class → name it <code>OttPlanDTO</code></p>
+
+      <pre id="ottPlanDto"><span class="kw">package</span> com.ott.subscription.dto;
+
+<span class="kw">import</span> java.math.BigDecimal;
+
+<span class="cm">/**
+ * PURPOSE: Maps the JSON response from catalog-service
+ * into a Java object that SubscriptionService can use.
+ *
+ * CONNECTS TO:
+ * - CatalogServiceClient uses this as the return type
+ * - SubscriptionService reads planName, price, duration from this
+ *
+ * WHY DTO (not Entity): This class lives in subscription-service
+ * but represents data from catalog-service database. We never
+ * persist this to subscription_db — we just read it and use it.
+ *
+ * FIELD NAMES must match catalog-service JSON keys exactly:
+ * {"planId":"PLAN001","planName":"Disney+ Basic","price":199.0,...}
+ */</span>
+<span class="kw">public class</span> <span class="cl">OttPlanDTO</span> {
+
+    <span class="kw">private</span> String planId;
+    <span class="kw">private</span> String planName;
+    <span class="kw">private</span> BigDecimal price;
+    <span class="kw">private</span> String duration;   <span class="cm">// "MONTHLY" or "YEARLY"</span>
+    <span class="kw">private</span> Boolean isActive;
+    <span class="kw">private</span> String description;
+
+    <span class="cm">// Default constructor — required by Jackson for JSON deserialization</span>
+    <span class="kw">public</span> <span class="cl">OttPlanDTO</span>() {}
+
+    <span class="cm">// Getters and Setters</span>
+    <span class="kw">public</span> String getPlanId() { <span class="kw">return</span> planId; }
+    <span class="kw">public void</span> setPlanId(String planId) { <span class="kw">this</span>.planId = planId; }
+
+    <span class="kw">public</span> String getPlanName() { <span class="kw">return</span> planName; }
+    <span class="kw">public void</span> setPlanName(String planName) { <span class="kw">this</span>.planName = planName; }
+
+    <span class="kw">public</span> BigDecimal getPrice() { <span class="kw">return</span> price; }
+    <span class="kw">public void</span> setPrice(BigDecimal price) { <span class="kw">this</span>.price = price; }
+
+    <span class="kw">public</span> String getDuration() { <span class="kw">return</span> duration; }
+    <span class="kw">public void</span> setDuration(String duration) { <span class="kw">this</span>.duration = duration; }
+
+    <span class="kw">public</span> Boolean getIsActive() { <span class="kw">return</span> isActive; }
+    <span class="kw">public void</span> setIsActive(Boolean isActive) { <span class="kw">this</span>.isActive = isActive; }
+
+    <span class="kw">public</span> String getDescription() { <span class="kw">return</span> description; }
+    <span class="kw">public void</span> setDescription(String description) { <span class="kw">this</span>.description = description; }
+}</pre>
+      <button class="copy-btn" onclick="copyById('ottPlanDto')">Copy</button>
+    </div>
+  </div>
+
+  <!-- CatalogServiceClient -->
+  <div class="step">
+    <div class="step-hdr">
+      <div class="step-num">3B</div>
+      <div class="step-title">Create CatalogServiceClient.java — the Feign interface</div>
+    </div>
+    <div class="step-body">
+      <div class="file-hdr">
+        <span class="fname">CatalogServiceClient.java</span>
+        <span class="act new">NEW FILE</span>
+        <span class="fpath">com.ott.subscription.client</span>
+      </div>
+
+      <p><strong style="color:#e2e8f0">WHY:</strong> This is the heart of Feign. It is just an interface — no implementation class needed. Feign reads the annotations (<code>@GetMapping</code>, <code>@PathVariable</code>) and at runtime generates a real HTTP client class automatically. You call it like a normal Java method but it makes a real REST call to catalog-service.</p>
+      <p><strong style="color:#e2e8f0">WHERE TO CREATE:</strong> First create package <code>com.ott.subscription.client</code> → then New → Class → change to Interface → name it <code>CatalogServiceClient</code></p>
+
+      <pre id="catalogClient"><span class="kw">package</span> com.ott.subscription.client;
+
+<span class="kw">import</span> com.ott.subscription.dto.OttPlanDTO;
+<span class="kw">import</span> org.springframework.cloud.openfeign.FeignClient;
+<span class="kw">import</span> org.springframework.web.bind.annotation.GetMapping;
+<span class="kw">import</span> org.springframework.web.bind.annotation.PathVariable;
+
+<span class="cm">/**
+ * PURPOSE: Declares which catalog-service APIs this service needs to call.
+ * Feign reads this interface at startup and creates an HTTP client
+ * implementation automatically — no code needed from us.
+ *
+ * CONNECTS TO:
+ * - SubscriptionService injects and calls this interface
+ * - FeignErrorDecoder handles errors thrown by this client
+ * - application.properties provides the URL via ${catalog.service.url}
+ *
+ * @FeignClient params:
+ *   name = logical name (used for load balancing if Eureka is added later)
+ *   url  = base URL read from application.properties
+ *         In production this would be replaced by service discovery
+ */</span>
+<span class="an">@FeignClient</span>(name = <span class="st">"catalog-service"</span>, url = <span class="st">"${catalog.service.url}"</span>)
+<span class="kw">public interface</span> <span class="cl">CatalogServiceClient</span> {
+
+    <span class="cm">/**
+     * Calls: GET http://localhost:8081/catalog/plans/{planId}
+     *
+     * Used by: SubscriptionService.subscribe() to validate plan
+     * and get price before creating subscription.
+     *
+     * If plan not found → catalog returns 404
+     * → FeignErrorDecoder converts it to PlanServiceException
+     * → GlobalExceptionHandler returns 502 to client
+     */</span>
+    <span class="an">@GetMapping</span>(<span class="st">"/catalog/plans/{planId}"</span>)
+    <span class="cl">OttPlanDTO</span> getPlanById(<span class="an">@PathVariable</span>(<span class="st">"planId"</span>) String planId);
+}</pre>
+      <button class="copy-btn" onclick="copyById('catalogClient')">Copy</button>
+    </div>
+  </div>
+
+  <!-- FeignErrorDecoder -->
+  <div class="step">
+    <div class="step-hdr">
+      <div class="step-num">3C</div>
+      <div class="step-title">Create FeignErrorDecoder.java — handles errors from catalog-service</div>
+    </div>
+    <div class="step-body">
+      <div class="file-hdr">
+        <span class="fname">FeignErrorDecoder.java</span>
+        <span class="act new">NEW FILE</span>
+        <span class="fpath">com.ott.subscription.client</span>
+      </div>
+
+      <p><strong style="color:#e2e8f0">WHY:</strong> Without this, if catalog-service returns 404 (plan not found), Feign throws a generic <code>FeignException</code> with a confusing message. This decoder intercepts those HTTP errors and converts them into our own meaningful exceptions that <code>GlobalExceptionHandler</code> already knows how to handle.</p>
+      <p><strong style="color:#e2e8f0">WHERE TO CREATE:</strong> Same <code>com.ott.subscription.client</code> package → New → Class → name it <code>FeignErrorDecoder</code></p>
+
+      <pre id="feignDecoder"><span class="kw">package</span> com.ott.subscription.client;
+
+<span class="kw">import</span> com.ott.subscription.exception.PlanServiceException;
+<span class="kw">import</span> feign.Response;
+<span class="kw">import</span> feign.codec.ErrorDecoder;
+<span class="kw">import</span> org.slf4j.Logger;
+<span class="kw">import</span> org.slf4j.LoggerFactory;
+<span class="kw">import</span> org.springframework.stereotype.Component;
+
+<span class="cm">/**
+ * PURPOSE: Converts HTTP error responses from catalog-service
+ * into meaningful Java exceptions.
+ *
+ * CONNECTS TO:
+ * - AppConfig registers this as a bean
+ * - Feign calls decode() automatically when catalog returns 4xx/5xx
+ * - PlanServiceException is caught by GlobalExceptionHandler → 502
+ *
+ * WITHOUT THIS: catalog 404 → FeignException (ugly, hard to handle)
+ * WITH THIS:    catalog 404 → PlanServiceException (clean, meaningful)
+ */</span>
+<span class="an">@Component</span>
+<span class="kw">public class</span> <span class="cl">FeignErrorDecoder</span> <span class="kw">implements</span> <span class="cl">ErrorDecoder</span> {
+
+    <span class="kw">private static final</span> Logger log =
+        LoggerFactory.getLogger(FeignErrorDecoder.class);
+
+    <span class="an">@Override</span>
+    <span class="kw">public</span> Exception decode(String methodKey, Response response) {
+
+        log.error(<span class="st">"Catalog service error — method: {}, status: {}"</span>,
+            methodKey, response.status());
+
+        <span class="kw">switch</span> (response.status()) {
+            <span class="kw">case</span> <span class="nm">404</span>:
+                <span class="kw">return new</span> <span class="cl">PlanServiceException</span>(
+                    <span class="st">"Plan not found in Catalog Service. Check the plan ID."</span>);
+            <span class="kw">case</span> <span class="nm">400</span>:
+                <span class="kw">return new</span> <span class="cl">PlanServiceException</span>(
+                    <span class="st">"Invalid request sent to Catalog Service."</span>);
+            <span class="kw">case</span> <span class="nm">503</span>:
+                <span class="kw">return new</span> <span class="cl">PlanServiceException</span>(
+                    <span class="st">"Catalog Service is currently unavailable."</span>);
+            <span class="kw">default</span>:
+                <span class="kw">return new</span> <span class="cl">PlanServiceException</span>(
+                    <span class="st">"Unexpected error from Catalog Service. Status: "</span>
+                    + response.status());
+        }
+    }
+}</pre>
+      <button class="copy-btn" onclick="copyById('feignDecoder')">Copy</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== STEP 4: Update Existing ===================== -->
+<div id="step4" class="section">
+
+  <!-- AppConfig -->
+  <div class="step">
+    <div class="step-hdr">
+      <div class="step-num">4A</div>
+      <div class="step-title">AppConfig.java — Replace RestTemplate with Feign config</div>
+    </div>
+    <div class="step-body">
+      <div class="file-hdr">
+        <span class="fname">AppConfig.java</span>
+        <span class="act modify">MODIFY</span>
+        <span class="fpath">com.ott.subscription.config</span>
+      </div>
+
+      <p><strong style="color:#e2e8f0">WHY:</strong> If your current AppConfig has a <code>RestTemplate</code> bean, remove it — we no longer need it. Add Feign logger level so you can see the HTTP calls in STS console during testing. Register FeignErrorDecoder as the error handler.</p>
+
+      <p><strong style="color:#fbd38d">REPLACE entire AppConfig.java with this:</strong></p>
+
+      <pre id="appConfig"><span class="kw">package</span> com.ott.subscription.config;
+
+<span class="kw">import</span> com.ott.subscription.client.FeignErrorDecoder;
+<span class="kw">import</span> feign.Logger;
+<span class="kw">import</span> feign.codec.ErrorDecoder;
+<span class="kw">import</span> org.springframework.context.annotation.Bean;
+<span class="kw">import</span> org.springframework.context.annotation.Configuration;
+
+<span class="cm">/**
+ * PURPOSE: Application-level bean configuration.
+ *
+ * CONNECTS TO:
+ * - FeignErrorDecoder — registered here so Feign uses it for errors
+ * - Logger.Level.FULL — tells Feign to log full request/response
+ *   details in STS console (useful during development/testing)
+ *
+ * NOTE: RestTemplate bean REMOVED — Feign replaces it completely.
+ */</span>
+<span class="an">@Configuration</span>
+<span class="kw">public class</span> <span class="cl">AppConfig</span> {
+
+    <span class="cm">/**
+     * FULL logging = Feign logs:
+     * - Request URL, method, headers, body
+     * - Response status, headers, body
+     * You will see these in STS console when subscribe is called.
+     * Change to Logger.Level.NONE in production.
+     */</span>
+    <span class="an">@Bean</span>
+    <span class="kw">public</span> Logger.Level feignLoggerLevel() {
+        <span class="kw">return</span> Logger.Level.FULL;
+    }
+
+    <span class="cm">/**
+     * Registers our custom error decoder.
+     * Feign picks this up automatically and uses it
+     * whenever catalog-service returns 4xx or 5xx.
+     */</span>
+    <span class="an">@Bean</span>
+    <span class="kw">public</span> <span class="cl">ErrorDecoder</span> errorDecoder() {
+        <span class="kw">return new</span> <span class="cl">FeignErrorDecoder</span>();
+    }
+}</pre>
+      <button class="copy-btn" onclick="copyById('appConfig')">Copy</button>
+    </div>
+  </div>
+
+  <!-- SubscriptionService -->
+  <div class="step">
+    <div class="step-hdr">
+      <div class="step-num">4B</div>
+      <div class="step-title">SubscriptionService.java — Replace RestTemplate call with Feign</div>
+    </div>
+    <div class="step-body">
+      <div class="file-hdr">
+        <span class="fname">SubscriptionService.java</span>
+        <span class="act modify">MODIFY</span>
+        <span class="fpath">com.ott.subscription.service</span>
+      </div>
+
+      <p><strong style="color:#e2e8f0">WHY:</strong> This is the only place that calls catalog-service. Replace the old RestTemplate/CatalogClient injection and call with the new Feign CatalogServiceClient. The rest of the business logic stays exactly the same.</p>
+
+      <p><strong style="color:#fbd38d">REPLACE entire SubscriptionService.java with this:</strong></p>
+
+      <pre id="subService"><span class="kw">package</span> com.ott.subscription.service;
+
+<span class="kw">import</span> com.ott.subscription.client.CatalogServiceClient;
+<span class="kw">import</span> com.ott.subscription.dto.OttPlanDTO;
+<span class="kw">import</span> com.ott.subscription.dto.SubscriptionRequestDTO;
+<span class="kw">import</span> com.ott.subscription.dto.SubscriptionResponseDTO;
+<span class="kw">import</span> com.ott.subscription.exception.PlanServiceException;
+<span class="kw">import</span> com.ott.subscription.exception.SubscriptionNotFoundException;
+<span class="kw">import</span> com.ott.subscription.exception.UserNotFoundException;
+<span class="kw">import</span> com.ott.subscription.model.Subscription;
+<span class="kw">import</span> com.ott.subscription.model.User;
+<span class="kw">import</span> com.ott.subscription.repository.SubscriptionRepository;
+<span class="kw">import</span> com.ott.subscription.repository.UserRepository;
+<span class="kw">import</span> org.slf4j.Logger;
+<span class="kw">import</span> org.slf4j.LoggerFactory;
+<span class="kw">import</span> org.springframework.stereotype.Service;
+<span class="kw">import</span> org.springframework.transaction.annotation.Transactional;
+
+<span class="kw">import</span> java.time.LocalDate;
+<span class="kw">import</span> java.util.List;
+<span class="kw">import</span> java.util.stream.Collectors;
+
+<span class="cm">/**
+ * PURPOSE: Business logic for all subscription operations.
+ *
+ * CONNECTS TO:
+ * - SubscriptionController calls this (receives HTTP requests)
+ * - CatalogServiceClient (Feign) is called to validate plan
+ * - SubscriptionRepository saves/reads subscription data
+ * - UserRepository validates user exists before subscribing
+ *
+ * KEY CHANGE FROM RestTemplate:
+ * OLD: restTemplate.getForObject(url, Map.class) — manual, verbose
+ * NEW: catalogServiceClient.getPlanById(id) — clean, one line
+ */</span>
+<span class="an">@Service</span>
+<span class="kw">public class</span> <span class="cl">SubscriptionService</span> {
+
+    <span class="kw">private static final</span> Logger log =
+        LoggerFactory.getLogger(SubscriptionService.class);
+
+    <span class="kw">private final</span> <span class="cl">SubscriptionRepository</span> subscriptionRepository;
+    <span class="kw">private final</span> <span class="cl">UserRepository</span> userRepository;
+    <span class="kw">private final</span> <span class="cl">CatalogServiceClient</span> catalogServiceClient; <span class="cm">// Feign client</span>
+
+    <span class="cm">// Constructor injection — Spring injects Feign proxy automatically</span>
+    <span class="kw">public</span> <span class="cl">SubscriptionService</span>(
+            <span class="cl">SubscriptionRepository</span> subscriptionRepository,
+            <span class="cl">UserRepository</span> userRepository,
+            <span class="cl">CatalogServiceClient</span> catalogServiceClient) {
+        <span class="kw">this</span>.subscriptionRepository = subscriptionRepository;
+        <span class="kw">this</span>.userRepository = userRepository;
+        <span class="kw">this</span>.catalogServiceClient = catalogServiceClient;
+    }
+
+    <span class="cm">/**
+     * Subscribe user to an OTT plan.
+     * FLOW: validate user → call catalog via Feign → save subscription
+     */</span>
+    <span class="an">@Transactional</span>
+    <span class="kw">public</span> <span class="cl">SubscriptionResponseDTO</span> subscribe(<span class="cl">SubscriptionRequestDTO</span> request) {
+        log.info(<span class="st">"Processing subscription — userId:{} planId:{}"</span>,
+            request.getUserId(), request.getPlanId());
+
+        <span class="cm">// Step 1: Validate user exists in subscription_db</span>
+        <span class="cl">User</span> user = userRepository.findById(request.getUserId())
+            .orElseThrow(() -> <span class="kw">new</span> <span class="cl">UserNotFoundException</span>(request.getUserId()));
+
+        <span class="cm">// Step 2: Call catalog-service via Feign — ONE clean line
+        // Feign builds: GET http://localhost:8081/catalog/plans/{planId}
+        // Maps JSON response to OttPlanDTO automatically
+        // If catalog returns 404 → FeignErrorDecoder throws PlanServiceException</span>
+        <span class="cl">OttPlanDTO</span> plan = catalogServiceClient.getPlanById(request.getPlanId());
+
+        <span class="cm">// Step 3: Validate plan is active</span>
+        <span class="kw">if</span> (!plan.getIsActive()) {
+            <span class="kw">throw new</span> <span class="cl">PlanServiceException</span>(
+                <span class="st">"Plan "</span> + request.getPlanId() + <span class="st">" is currently inactive."</span>);
+        }
+
+        <span class="cm">// Step 4: Calculate end date based on plan duration</span>
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = <span class="st">"YEARLY"</span>.equals(plan.getDuration())
+            ? startDate.plusYears(<span class="nm">1</span>)
+            : startDate.plusMonths(<span class="nm">1</span>);
+
+        <span class="cm">// Step 5: Build and save subscription</span>
+        <span class="cl">Subscription</span> subscription = <span class="kw">new</span> <span class="cl">Subscription</span>();
+        subscription.setUser(user);
+        subscription.setPlanId(request.getPlanId());
+        subscription.setStatus(Subscription.SubscriptionStatus.ACTIVE);
+        subscription.setStartDate(startDate);
+        subscription.setEndDate(endDate);
+        subscription.setAmountPaid(plan.getPrice());
+        subscription.setAutoRenewal(request.getAutoRenewal());
+
+        <span class="cl">Subscription</span> saved = subscriptionRepository.save(subscription);
+        log.info(<span class="st">"Subscription created — id:{}"</span>, saved.getSubscriptionId());
+
+        <span class="kw">return</span> buildResponse(saved, plan.getPlanName());
+    }
+
+    <span class="kw">public</span> List&lt;<span class="cl">SubscriptionResponseDTO</span>&gt; getUserSubscriptions(Long userId) {
+        userRepository.findById(userId)
+            .orElseThrow(() -> <span class="kw">new</span> <span class="cl">UserNotFoundException</span>(userId));
+        <span class="kw">return</span> subscriptionRepository.findByUser_UserId(userId)
+            .stream()
+            .map(sub -> buildResponse(sub, sub.getPlanId()))
+            .collect(Collectors.toList());
+    }
+
+    <span class="kw">public</span> <span class="cl">SubscriptionResponseDTO</span> getSubscriptionById(Long subscriptionId) {
+        <span class="cl">Subscription</span> sub = subscriptionRepository.findById(subscriptionId)
+            .orElseThrow(() -> <span class="kw">new</span> <span class="cl">SubscriptionNotFoundException</span>(subscriptionId));
+        <span class="kw">return</span> buildResponse(sub, sub.getPlanId());
+    }
+
+    <span class="an">@Transactional</span>
+    <span class="kw">public</span> <span class="cl">SubscriptionResponseDTO</span> cancelSubscription(Long subscriptionId) {
+        <span class="cl">Subscription</span> sub = subscriptionRepository.findById(subscriptionId)
+            .orElseThrow(() -> <span class="kw">new</span> <span class="cl">SubscriptionNotFoundException</span>(subscriptionId));
+        sub.setStatus(Subscription.SubscriptionStatus.CANCELLED);
+        <span class="kw">return</span> buildResponse(subscriptionRepository.save(sub), sub.getPlanId());
+    }
+
+    <span class="an">@Transactional</span>
+    <span class="kw">public</span> <span class="cl">User</span> registerUser(<span class="cl">User</span> user) {
+        <span class="kw">return</span> userRepository.save(user);
+    }
+
+    <span class="kw">public</span> <span class="cl">User</span> getUserById(Long userId) {
+        <span class="kw">return</span> userRepository.findById(userId)
+            .orElseThrow(() -> <span class="kw">new</span> <span class="cl">UserNotFoundException</span>(userId));
+    }
+
+    <span class="cm">// Builds the clean response DTO from Subscription entity</span>
+    <span class="kw">private</span> <span class="cl">SubscriptionResponseDTO</span> buildResponse(<span class="cl">Subscription</span> sub, String planName) {
+        <span class="cl">SubscriptionResponseDTO</span> res = <span class="kw">new</span> <span class="cl">SubscriptionResponseDTO</span>();
+        res.setSubscriptionId(sub.getSubscriptionId());
+        res.setUserId(sub.getUser().getUserId());
+        res.setUsername(sub.getUser().getUsername());
+        res.setPlanId(sub.getPlanId());
+        res.setPlanName(planName);
+        res.setAmountPaid(sub.getAmountPaid());
+        res.setStatus(sub.getStatus());
+        res.setStartDate(sub.getStartDate());
+        res.setEndDate(sub.getEndDate());
+        res.setAutoRenewal(sub.getAutoRenewal());
+        res.setCreatedAt(sub.getCreatedAt());
+        <span class="kw">return</span> res;
+    }
+}</pre>
+      <button class="copy-btn" onclick="copyById('subService')">Copy</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== STEP 5: Properties ===================== -->
+<div id="step5" class="section">
+  <div class="step">
+    <div class="step-hdr">
+      <div class="step-num">5</div>
+      <div class="step-title">application.properties — Add Feign URL and logging</div>
+    </div>
+    <div class="step-body">
+      <div class="file-hdr">
+        <span class="fname">application.properties</span>
+        <span class="act modify">MODIFY</span>
+        <span class="fpath">src/main/resources/application.properties</span>
+      </div>
+
+      <p><strong style="color:#e2e8f0">WHY:</strong> <code>CatalogServiceClient</code> reads <code>${catalog.service.url}</code> from this file. The Feign logging config tells Spring to log Feign HTTP calls at DEBUG level in STS console so you can see exactly what is being sent and received.</p>
+
+      <p><strong style="color:#fbd38d">ADD these lines at the bottom of your existing application.properties:</strong></p>
+
+      <pre id="appProps"><span class="cm"># ── Feign Client — Catalog Service URL ────────────────────────────
+# CatalogServiceClient reads this: @FeignClient(url="${catalog.service.url}")
+# This is the base URL — Feign appends /catalog/plans/{planId} to it</span>
+catalog.service.url=http://localhost:8081
+
+<span class="cm"># ── Feign Logging ─────────────────────────────────────────────────
+# Shows full HTTP request/response in STS console for Feign calls
+# You will see: ---> GET http://localhost:8081/catalog/plans/PLAN001
+# and:          &lt;--- 200 OK {"planId":"PLAN001",...}
+# Change to ERROR in production to avoid verbose logs</span>
+logging.level.com.ott.subscription.client.CatalogServiceClient=DEBUG
+logging.level.com.ott.subscription=DEBUG</pre>
+      <button class="copy-btn" onclick="copyById('appProps')">Copy</button>
+
+      <div class="warn" style="margin-top:10px">
+        <strong>Your complete application.properties should have all of these:</strong><br>
+        server.port=8082 · spring.application.name · datasource config · jpa config · catalog.service.url · logging config
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete old CatalogClient -->
+  <div class="step">
+    <div class="step-hdr">
+      <div class="step-num">5B</div>
+      <div class="step-title">Delete old CatalogClient.java — if it exists in your project</div>
+    </div>
+    <div class="step-body">
+      <div class="file-hdr">
+        <span class="fname">CatalogClient.java</span>
+        <span class="act delete">DELETE IF EXISTS</span>
+        <span class="fpath">com.ott.subscription.client (old RestTemplate version)</span>
+      </div>
+      <p><strong style="color:#e2e8f0">WHY:</strong> The old <code>CatalogClient.java</code> used RestTemplate. It's now replaced by <code>CatalogServiceClient.java</code> (Feign). Keeping both causes Spring to find two beans for the same purpose and throw a conflict error.</p>
+      <p style="margin-top:8px">In STS: right-click <code>CatalogClient.java</code> → Delete → OK</p>
+      <div class="info">If you never created CatalogClient.java — skip this step.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== STEP 6: TEST ===================== -->
+<div id="step6" class="section">
+  <div class="step">
+    <div class="step-hdr">
+      <div class="step-num">6A</div>
+      <div class="step-title">Start services in correct order</div>
+    </div>
+    <div class="step-body">
+      <pre>1. catalog-service     → Run As Spring Boot App → wait for port 8081
+2. subscription-service → Run As Spring Boot App → wait for port 8082
+3. api-gateway          → Run As Spring Boot App → wait for port 8080</pre>
+      <div class="success" style="margin-top:8px">In STS console for subscription-service, on startup you should see Feign scanning message — no errors means Feign is wired correctly.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <div class="step-num">6B</div>
+      <div class="step-title">Test 1 — Get JWT token first</div>
+    </div>
+    <div class="step-body">
+      <div class="url-bar"><span class="method POST">POST</span><span class="url">http://localhost:8080/auth/token</span></div>
+      <pre>{
+  "username": "john.doe",
+  "role": "USER"
+}</pre>
+      <p>Copy the token from response → use in Authorization: Bearer for all requests below.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <div class="step-num">6C</div>
+      <div class="step-title">Test 2 — Subscribe (this triggers Feign call to catalog-service)</div>
+    </div>
+    <div class="step-body">
+      <div class="url-bar"><span class="method POST">POST</span><span class="url">http://localhost:8080/subscriptions</span></div>
+      <pre>{
+  "userId": 1,
+  "planId": "PLAN001",
+  "autoRenewal": true
+}</pre>
+      <p style="margin-top:8px"><strong style="color:#e2e8f0">What to watch in STS subscription-service console:</strong></p>
+      <pre style="color:#9ae6b4">DEBUG --- [SubscriptionService] : Processing subscription — userId:1 planId:PLAN001
+DEBUG --- [CatalogServiceClient] : ---> GET http://localhost:8081/catalog/plans/PLAN001
+DEBUG --- [CatalogServiceClient] : &lt;--- 200 OK
+DEBUG --- [SubscriptionService] : Subscription created — id:1</pre>
+      <p style="margin-top:8px">The <code>---> GET</code> and <code>&lt;--- 200 OK</code> lines prove Feign made the real HTTP call to catalog-service.</p>
+      <pre style="color:#9ae6b4; margin-top:8px">{
+  "subscriptionId": 1,
+  "planName": "Disney+ Basic",   ← came from catalog-service via Feign!
+  "amountPaid": 199.0,
+  "status": "ACTIVE"
+}</pre>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <div class="step-num">6D</div>
+      <div class="step-title">Test 3 — Subscribe with invalid planId (tests FeignErrorDecoder)</div>
+    </div>
+    <div class="step-body">
+      <div class="url-bar"><span class="method POST">POST</span><span class="url">http://localhost:8080/subscriptions</span></div>
+      <pre>{
+  "userId": 1,
+  "planId": "INVALID_PLAN",
+  "autoRenewal": true
+}</pre>
+      <p style="margin-top:8px">Expected — Feign gets 404 from catalog-service → FeignErrorDecoder fires → GlobalExceptionHandler returns:</p>
+      <pre style="color:#feb2b2">{
+  "status": 502,
+  "error": "Bad Gateway",
+  "message": "Plan not found in Catalog Service. Check the plan ID."
+}</pre>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <div class="step-num">6E</div>
+      <div class="step-title">Test 4 — Stop catalog-service, try to subscribe (tests service down scenario)</div>
+    </div>
+    <div class="step-body">
+      <p>In STS Boot Dashboard → click catalog-service → click Stop button</p>
+      <p style="margin-top:6px">Now call POST /subscriptions again with valid data:</p>
+      <pre style="color:#feb2b2">{
+  "status": 502,
+  "error": "Bad Gateway",
+  "message": "Catalog Service is currently unavailable."
+}</pre>
+      <div class="info" style="margin-top:8px">This proves your error handling works correctly for real-world scenarios where a dependent service goes down.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== INTERVIEW ===================== -->
+<div id="interview" class="section">
+  <h2>Key points to remember for interview</h2>
+
+  <div class="step">
+    <div class="step-hdr"><div class="step-num">Q</div><div class="step-title">Why Feign over RestTemplate?</div></div>
+    <div class="step-body">
+      <p>RestTemplate requires manual URL building, manual response mapping, manual error handling. Feign is declarative — you define an interface, Spring generates the HTTP client. Less code, less bugs, easier to maintain. Feign also integrates with Ribbon (load balancing) and Hystrix (circuit breaker) which RestTemplate doesn't natively support.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><div class="step-num">Q</div><div class="step-title">What does @EnableFeignClients do?</div></div>
+    <div class="step-body">
+      <p>It triggers a component scan specifically for interfaces annotated with @FeignClient. For each one found, Spring generates a dynamic proxy class at runtime that implements the interface and makes real HTTP calls. Without it, @FeignClient interfaces are ignored.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><div class="step-num">Q</div><div class="step-title">What is FeignErrorDecoder?</div></div>
+    <div class="step-body">
+      <p>It's a Feign interceptor that converts HTTP error responses (4xx, 5xx) from downstream services into meaningful Java exceptions. Without it, any error from the called service throws a generic FeignException. With it, we can throw our own exceptions (like PlanServiceException) that GlobalExceptionHandler already knows how to handle and return proper error responses.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><div class="step-num">Q</div><div class="step-title">Why OttPlanDTO and not the OttPlan entity directly?</div></div>
+    <div class="step-body">
+      <p>OttPlan entity belongs to catalog-service and maps to catalog_db. Subscription-service has its own database and should not depend on catalog-service's entity classes. OttPlanDTO is a lightweight copy of only the fields subscription-service needs (planName, price, duration). This maintains loose coupling between services — a core microservices principle.</p>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center;padding:20px;color:#4a5568;font-size:12px;margin-top:10px">
+  Feign Client Complete Guide — subscription-service
+</div>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo(0,0);
+}
+function copyById(id) {
+  const el = document.getElementById(id);
+  navigator.clipboard.writeText(el.innerText).then(() => {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '✅ Copied!';
+    btn.style.background = '#276749';
+    setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 1500);
+  });
+}
+</script>
+</body>
+</html>
