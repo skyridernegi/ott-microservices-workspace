@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spring Cloud 2025.0.0 — All Services Upgrade Guide</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#0f1117;color:#e2e8f0;line-height:1.6;font-size:13px}
+.container{max-width:1000px;margin:0 auto;padding:24px 20px}
+h1{font-size:22px;color:#63b3ed;margin-bottom:4px}
+h2{font-size:15px;color:#90cdf4;margin:22px 0 10px}
+h3{font-size:13px;color:#e2e8f0;margin:10px 0 6px;font-weight:600}
+p,li{font-size:12px;color:#a0aec0;line-height:1.8}
+ul,ol{padding-left:18px;margin:6px 0}
+
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;border-bottom:1px solid #2d3748;padding-bottom:12px}
+.tab{background:#1a1f2e;border:1px solid #2d3748;border-radius:6px;padding:7px 14px;font-size:12px;color:#a0aec0;cursor:pointer;transition:all 0.15s}
+.tab:hover{border-color:#4299e1;color:#63b3ed}
+.tab.active{background:#2b6cb0;border-color:#4299e1;color:#fff}
+.section{display:none}.section.active{display:block}
+
+.step{background:#1a1f2e;border:1px solid #2d3748;border-radius:10px;margin-bottom:14px;overflow:hidden}
+.step-hdr{background:#2d3748;padding:10px 16px;display:flex;align-items:center;gap:10px}
+.step-num{background:#2b6cb0;color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.step-title{font-size:13px;font-weight:600;color:#e2e8f0;flex:1}
+.step-body{padding:14px 16px}
+
+.file-hdr{background:#1c3829;border:1px solid #276749;border-radius:6px;padding:8px 14px;margin:10px 0;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.fname{font-size:13px;font-weight:600;color:#9ae6b4}
+.fpath{font-size:11px;color:#718096;font-family:monospace;margin-left:auto}
+
+.act{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;display:inline-block}
+.modify{background:#744210;color:#fbd38d}
+.nochange{background:#2d3748;color:#a0aec0}
+.new{background:#1a365d;color:#90cdf4}
+
+pre{background:#0d1117;border:1px solid #2d3748;border-radius:6px;padding:12px 14px;overflow-x:auto;font-size:11px;line-height:1.7;margin:8px 0;position:relative}
+.copy-btn{position:absolute;top:8px;right:8px;background:#2d3748;color:#a0aec0;border:none;border-radius:4px;padding:3px 10px;font-size:10px;cursor:pointer}
+.copy-btn:hover{background:#4a5568}
+code{background:#2d3748;padding:2px 6px;border-radius:4px;font-size:11px;color:#63b3ed;font-family:monospace}
+
+.kw{color:#c792ea}.an{color:#ffcb6b}.cm{color:#546e7a;font-style:italic}
+.st{color:#c3e88d}.cl{color:#82aaff}.add{background:#0d2818;display:block;padding-left:8px;border-left:3px solid #48bb78}
+.rem{background:#2d1515;display:block;padding-left:8px;border-left:3px solid #742a2a;opacity:0.6}
+
+.warn{background:#2d1f00;border:1px solid #d69e2e;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#fbd38d}
+.info{background:#1a2744;border:1px solid #4299e1;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#90cdf4}
+.success{background:#1c3829;border:1px solid #48bb78;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#9ae6b4}
+.danger{background:#2d1515;border:1px solid #742a2a;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#feb2b2}
+
+table{width:100%;border-collapse:collapse;font-size:12px;margin:10px 0}
+th{background:#2d3748;color:#e2e8f0;padding:8px 12px;text-align:left;font-size:11px}
+td{padding:8px 12px;border-bottom:1px solid #2d3748;color:#a0aec0;vertical-align:top}
+tr:last-child td{border-bottom:none}
+.yes{color:#48bb78;font-weight:600}
+.no{color:#fc8181;font-weight:600}
+.na{color:#718096}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
+.compat-box{border-radius:8px;padding:12px 14px;font-size:12px}
+.bad{background:#2d1515;border:1px solid #742a2a}
+.good{background:#1c3829;border:1px solid #276749}
+.label{font-size:11px;font-weight:700;margin-bottom:6px}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>🚀 Spring Cloud 2025.0.0 — Version Strategy Guide</h1>
+<p style="color:#718096;margin-bottom:8px">Why upgrade · Official compatibility · Minimal changes · Future-proof for Eureka, Circuit Breaker, Kafka</p>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('why')">Why Upgrade</button>
+  <button class="tab" onclick="show('compat')">Compatibility</button>
+  <button class="tab" onclick="show('catalog')">catalog-service</button>
+  <button class="tab" onclick="show('subscription')">subscription-service</button>
+  <button class="tab" onclick="show('gateway')">api-gateway</button>
+  <button class="tab" onclick="show('future')">Future Features</button>
+  <button class="tab" onclick="show('verify')">Verify & Test</button>
+</div>
+
+<!-- ===================== WHY ===================== -->
+<div id="why" class="section active">
+  <h2>Why your thinking is correct — Senior Architect perspective</h2>
+
+  <div class="grid2">
+    <div class="compat-box bad">
+      <div class="label" style="color:#fc8181">❌ Wrong approach (what we had)</div>
+      <ul>
+        <li>catalog-service: Boot 3.5.14</li>
+        <li>subscription-service: Boot 3.5.14</li>
+        <li>api-gateway: Boot 3.4.5 ← downgraded!</li>
+        <li>Spring Cloud: 2024.0.1 (mixed)</li>
+        <li>Problems: version mismatch between services, Eureka will fail, future upgrades break one service at a time</li>
+      </ul>
+    </div>
+    <div class="compat-box good">
+      <div class="label" style="color:#9ae6b4">✅ Correct approach (what we're doing)</div>
+      <ul>
+        <li>catalog-service: Boot 3.5.14</li>
+        <li>subscription-service: Boot 3.5.14</li>
+        <li>api-gateway: Boot 3.5.14 ← back to same!</li>
+        <li>Spring Cloud: 2025.0.0 everywhere</li>
+        <li>Benefits: consistent stack, all future features work across all services equally</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info" style="margin-top:4px">
+    <strong>Official confirmation from Spring.io:</strong><br>
+    Spring Cloud 2025.0.0 (codename "Northfields") released May 2025 — officially compatible with Spring Boot 3.5.x. This is the currently active supported version.
+  </div>
+
+  <h2>What Spring Cloud 2025.0.0 includes — future features you'll add</h2>
+  <table>
+    <tr><th>Feature</th><th>Spring Cloud Module</th><th>Status in 2025.0.0</th></tr>
+    <tr><td>Feign Client</td><td>spring-cloud-starter-openfeign</td><td><span class="yes">✅ Fully supported</span></td></tr>
+    <tr><td>Eureka Service Discovery</td><td>spring-cloud-starter-netflix-eureka-client</td><td><span class="yes">✅ Fully supported</span></td></tr>
+    <tr><td>Eureka Server</td><td>spring-cloud-starter-netflix-eureka-server</td><td><span class="yes">✅ Fully supported</span></td></tr>
+    <tr><td>API Gateway (WebFlux)</td><td>spring-cloud-starter-gateway</td><td><span class="yes">✅ Supported (deprecated name)</span></td></tr>
+    <tr><td>Config Server</td><td>spring-cloud-config-server</td><td><span class="yes">✅ Fully supported</span></td></tr>
+    <tr><td>Circuit Breaker (Resilience4j)</td><td>spring-cloud-starter-circuitbreaker-resilience4j</td><td><span class="yes">✅ Fully supported</span></td></tr>
+    <tr><td>Load Balancer</td><td>spring-cloud-starter-loadbalancer</td><td><span class="yes">✅ Fully supported</span></td></tr>
+    <tr><td>Distributed Tracing</td><td>spring-cloud-sleuth (via Micrometer)</td><td><span class="yes">✅ Fully supported</span></td></tr>
+  </table>
+
+  <div class="success">With Spring Boot 3.5.14 + Spring Cloud 2025.0.0 across ALL services, every feature in the table above will work without any version conflict. This is the combination you'll use from now onwards.</div>
+</div>
+
+<!-- ===================== COMPATIBILITY ===================== -->
+<div id="compat" class="section">
+  <h2>Official Spring Boot + Spring Cloud Compatibility Matrix</h2>
+
+  <table>
+    <tr><th>Spring Cloud Version</th><th>Codename</th><th>Spring Boot</th><th>Use?</th></tr>
+    <tr style="background:#0d2818">
+      <td><strong style="color:#9ae6b4">2025.0.0</strong></td>
+      <td>Northfields</td>
+      <td><strong style="color:#9ae6b4">3.5.x ← YOUR VERSION</strong></td>
+      <td><span class="yes">✅ USE THIS</span></td>
+    </tr>
+    <tr>
+      <td>2024.0.x</td>
+      <td>Moorgate</td>
+      <td>3.4.x</td>
+      <td><span class="no">❌ Wrong for us</span></td>
+    </tr>
+    <tr>
+      <td>2023.0.x</td>
+      <td>Leyton</td>
+      <td>3.3.x / 3.2.x</td>
+      <td><span class="no">❌ Wrong for us</span></td>
+    </tr>
+    <tr>
+      <td>2025.1.x</td>
+      <td>Oakwood</td>
+      <td>4.0.x</td>
+      <td><span class="na">⏳ Too new</span></td>
+    </tr>
+  </table>
+
+  <div class="warn">
+    <strong>Golden Rule for all future projects:</strong><br>
+    Always match Spring Cloud version to your Spring Boot version using this table.<br>
+    Spring Boot 3.5.x → Spring Cloud 2025.0.x — always.<br>
+    Never mix — e.g. Boot 3.5 + Cloud 2024 = startup failures exactly like you experienced.
+  </div>
+
+  <h2>Version summary — what every service will have after this upgrade</h2>
+  <table>
+    <tr><th>Service</th><th>Spring Boot</th><th>Spring Cloud</th><th>Java</th><th>Changes</th></tr>
+    <tr>
+      <td>catalog-service</td>
+      <td style="color:#9ae6b4">3.5.14</td>
+      <td style="color:#9ae6b4">2025.0.0</td>
+      <td>21</td>
+      <td>Add Cloud BOM only (no Boot features used yet)</td>
+    </tr>
+    <tr>
+      <td>subscription-service</td>
+      <td style="color:#9ae6b4">3.5.14</td>
+      <td style="color:#9ae6b4">2025.0.0</td>
+      <td>21</td>
+      <td>Add Cloud BOM + Feign dependency</td>
+    </tr>
+    <tr>
+      <td>api-gateway</td>
+      <td style="color:#fbd38d">3.4.5 → 3.5.14</td>
+      <td style="color:#9ae6b4">2025.0.0</td>
+      <td>21</td>
+      <td>Upgrade Boot version back to 3.5.14</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ===================== CATALOG SERVICE ===================== -->
+<div id="catalog" class="section">
+  <h2>catalog-service — pom.xml changes</h2>
+
+  <div class="info">
+    <strong>PURPOSE of adding Spring Cloud to catalog-service:</strong><br>
+    catalog-service doesn't USE Spring Cloud features right now. But when we add Eureka next, catalog-service needs to register itself. Adding the BOM now means zero changes to pom.xml when Eureka comes — just add the dependency, version is already managed.
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <div class="step-num">1</div>
+      <div class="step-title">pom.xml — Add Spring Cloud BOM (2 changes only)</div>
+    </div>
+    <div class="step-body">
+      <div class="file-hdr">
+        <span class="fname">pom.xml</span>
+        <span class="act modify">MODIFY</span>
+        <span class="fpath">catalog-service/pom.xml</span>
+      </div>
+
+      <p><strong style="color:#fbd38d">CHANGE 1 — Add version property after &lt;java.version&gt;</strong></p>
+      <pre id="cat1">&lt;properties&gt;
+    &lt;java.version&gt;21&lt;/java.version&gt;
+<span class="add">    &lt;spring-cloud.version&gt;2025.0.0&lt;/spring-cloud.version&gt;</span>
+&lt;/properties&gt;</pre>
+      <button class="copy-btn" onclick="copyById('cat1')">Copy</button>
+
+      <p style="margin-top:14px"><strong style="color:#fbd38d">CHANGE 2 — Add Spring Cloud BOM after &lt;/properties&gt;</strong></p>
+      <pre id="cat2"><span class="add">&lt;dependencyManagement&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;
+            &lt;version&gt;${spring-cloud.version}&lt;/version&gt;
+            &lt;type&gt;pom&lt;/type&gt;
+            &lt;scope&gt;import&lt;/scope&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+&lt;/dependencyManagement&gt;</span></pre>
+      <button class="copy-btn" onclick="copyById('cat2')">Copy</button>
+
+      <div class="success" style="margin-top:10px">That's it for catalog-service. No other changes. Maven Update Project → done.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== SUBSCRIPTION SERVICE ===================== -->
+<div id="subscription" class="section">
+  <h2>subscription-service — pom.xml changes</h2>
+
+  <div class="info">Same BOM addition as catalog-service PLUS the Feign dependency. Spring Cloud BOM manages the Feign version automatically — you never specify a version for it.</div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <div class="step-num">1</div>
+      <div class="step-title">pom.xml — Add Spring Cloud 2025.0.0 BOM + Feign</div>
+    </div>
+    <div class="step-body">
+      <div class="file-hdr">
+        <span class="fname">pom.xml</span>
+        <span class="act modify">MODIFY</span>
+        <span class="fpath">subscription-service/pom.xml</span>
+      </div>
+
+      <p><strong style="color:#fbd38d">CHANGE 1 — Version property</strong></p>
+      <pre id="sub1">&lt;properties&gt;
+    &lt;java.version&gt;21&lt;/java.version&gt;
+<span class="add">    &lt;spring-cloud.version&gt;2025.0.0&lt;/spring-cloud.version&gt;</span>
+&lt;/properties&gt;</pre>
+      <button class="copy-btn" onclick="copyById('sub1')">Copy</button>
+
+      <p style="margin-top:14px"><strong style="color:#fbd38d">CHANGE 2 — Spring Cloud BOM after &lt;/properties&gt;</strong></p>
+      <pre id="sub2"><span class="add">&lt;dependencyManagement&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;
+            &lt;version&gt;${spring-cloud.version}&lt;/version&gt;
+            &lt;type&gt;pom&lt;/type&gt;
+            &lt;scope&gt;import&lt;/scope&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+&lt;/dependencyManagement&gt;</span></pre>
+      <button class="copy-btn" onclick="copyById('sub2')">Copy</button>
+
+      <p style="margin-top:14px"><strong style="color:#fbd38d">CHANGE 3 — Feign dependency inside &lt;dependencies&gt;</strong></p>
+      <pre id="sub3"><span class="add">&lt;!-- Add inside &lt;dependencies&gt; section --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-openfeign&lt;/artifactId&gt;
+    &lt;!-- No version tag needed — BOM manages it --&gt;
+&lt;/dependency&gt;</span></pre>
+      <button class="copy-btn" onclick="copyById('sub3')">Copy</button>
+
+      <div class="success">After changes: Right-click project → Maven → Update Project → OK</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== API GATEWAY ===================== -->
+<div id="gateway" class="section">
+  <h2>api-gateway — pom.xml changes</h2>
+
+  <div class="info">
+    <strong>What happened before:</strong> Gateway had Spring Boot 3.5.14 + Spring Cloud 2024.0.1 → incompatible → we downgraded Boot to 3.4.5 as a workaround.<br><br>
+    <strong>Correct fix now:</strong> Keep Boot 3.5.14 and upgrade Cloud to 2025.0.0 — that's the compatible pair.
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <div class="step-num">1</div>
+      <div class="step-title">pom.xml — Upgrade Boot back to 3.5.14 + Cloud to 2025.0.0</div>
+    </div>
+    <div class="step-body">
+      <div class="file-hdr">
+        <span class="fname">pom.xml</span>
+        <span class="act modify">MODIFY</span>
+        <span class="fpath">api-gateway/pom.xml</span>
+      </div>
+
+      <p><strong style="color:#fbd38d">CHANGE 1 — Upgrade Spring Boot version in parent block</strong></p>
+      <pre id="gw1">&lt;parent&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+<span class="rem">    &lt;version&gt;3.4.5&lt;/version&gt;  &lt;!-- OLD — remove this --&gt;</span>
+<span class="add">    &lt;version&gt;3.5.14&lt;/version&gt; &lt;!-- NEW — same as other services --&gt;</span>
+    &lt;relativePath/&gt;
+&lt;/parent&gt;</pre>
+      <button class="copy-btn" onclick="copyById('gw1')">Copy</button>
+
+      <p style="margin-top:14px"><strong style="color:#fbd38d">CHANGE 2 — Update Spring Cloud version property</strong></p>
+      <pre id="gw2">&lt;properties&gt;
+    &lt;java.version&gt;21&lt;/java.version&gt;
+<span class="rem">    &lt;spring-cloud.version&gt;2024.0.1&lt;/spring-cloud.version&gt;  &lt;!-- OLD --&gt;</span>
+<span class="add">    &lt;spring-cloud.version&gt;2025.0.0&lt;/spring-cloud.version&gt;  &lt;!-- NEW --&gt;</span>
+&lt;/properties&gt;</pre>
+      <button class="copy-btn" onclick="copyById('gw2')">Copy</button>
+
+      <div class="warn" style="margin-top:10px">
+        <strong>After these 2 changes:</strong><br>
+        Right-click api-gateway → Maven → Update Project → OK<br>
+        Then restart api-gateway → check console for startup errors.<br>
+        Spring Cloud 2025.0.0 deprecated some Gateway module names. If you see deprecation warnings they are warnings only — not errors — everything still works.
+      </div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <div class="step-num">2</div>
+      <div class="step-title">application.yml — One property to add for Gateway</div>
+    </div>
+    <div class="step-body">
+      <div class="file-hdr">
+        <span class="fname">application.yml</span>
+        <span class="act modify">MODIFY</span>
+        <span class="fpath">api-gateway/src/main/resources/application.yml</span>
+      </div>
+      <p>Spring Cloud 2025.0.0 changed a default behaviour — X-Forwarded headers are now disabled by default for security. Add this to maintain correct request forwarding to microservices:</p>
+      <pre id="gwyml"><span class="add">spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          trusted-proxies: ".*"  # trust all proxies — for local dev only
+          # In production replace .* with your actual proxy IP range
+          # e.g. "10\\.0\\.0\\..*"</span></pre>
+      <button class="copy-btn" onclick="copyById('gwyml')">Copy</button>
+      <div class="info">This setting is new in Spring Cloud 2025.0.0 as a security improvement. For local development ".*" (trust all) is fine. In production you would restrict to your actual load balancer IP.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== FUTURE FEATURES ===================== -->
+<div id="future" class="section">
+  <h2>Future-proof setup — what you add later with zero version changes</h2>
+
+  <div class="info">With Spring Boot 3.5.14 + Spring Cloud 2025.0.0 locked in across all services, adding any of the following is just adding a dependency — no version management needed.</div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <div class="step-num">Next</div>
+      <div class="step-title">Eureka Service Discovery — just add this to any service</div>
+    </div>
+    <div class="step-body">
+      <pre id="eureka">&lt;!-- Eureka Client — add to catalog-service and subscription-service --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt;
+    &lt;!-- No version — BOM manages it --&gt;
+&lt;/dependency&gt;
+
+&lt;!-- Eureka Server — new eureka-service project --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-server&lt;/artifactId&gt;
+&lt;/dependency&gt;</pre>
+      <button class="copy-btn" onclick="copyById('eureka')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <div class="step-num">Next</div>
+      <div class="step-title">Circuit Breaker (Resilience4j) — for subscription → catalog call failure</div>
+    </div>
+    <div class="step-body">
+      <pre id="circuit">&lt;!-- Circuit Breaker — add to subscription-service --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-circuitbreaker-resilience4j&lt;/artifactId&gt;
+&lt;/dependency&gt;</pre>
+      <button class="copy-btn" onclick="copyById('circuit')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr">
+      <div class="step-num">Next</div>
+      <div class="step-title">Config Server — centralized configuration</div>
+    </div>
+    <div class="step-body">
+      <pre id="config">&lt;!-- Config Server — new config-service project --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-config-server&lt;/artifactId&gt;
+&lt;/dependency&gt;
+
+&lt;!-- Config Client — add to all other services --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-config&lt;/artifactId&gt;
+&lt;/dependency&gt;</pre>
+      <button class="copy-btn" onclick="copyById('config')">Copy</button>
+    </div>
+  </div>
+
+  <h2>Architecture roadmap — how it grows</h2>
+  <pre id="roadmap">Phase 1 (NOW — completed):
+  catalog-service      (Boot 3.5.14 + Cloud 2025.0.0)
+  subscription-service (Boot 3.5.14 + Cloud 2025.0.0 + Feign)
+  api-gateway          (Boot 3.5.14 + Cloud 2025.0.0)
+
+Phase 2 (Eureka — next):
+  + eureka-server      (Boot 3.5.14 + Cloud 2025.0.0)
+  catalog registers itself with Eureka
+  subscription registers itself with Eureka
+  Gateway discovers services via Eureka (remove hardcoded URLs)
+
+Phase 3 (Resilience):
+  + Circuit Breaker in subscription-service (fallback when catalog is down)
+  + Retry logic in Feign Client
+
+Phase 4 (Kafka + Kinesis — original plan):
+  + payment-service    (Boot 3.5.14 + Cloud 2025.0.0)
+  + notification-service
+  + Kafka topics for payment.failed, subscription.expired
+
+Phase 5 (Observability):
+  + Distributed tracing (Micrometer + Zipkin)
+  + Centralized logging (ELK stack)</pre>
+  <button class="copy-btn" onclick="copyById('roadmap')">Copy</button>
+  <div class="success" style="margin-top:10px">Every phase above uses the exact same Spring Boot 3.5.14 + Spring Cloud 2025.0.0 combination. Zero version changes needed for any new service you add.</div>
+</div>
+
+<!-- ===================== VERIFY ===================== -->
+<div id="verify" class="section">
+  <h2>Verify all changes are correct — step by step</h2>
+
+  <div class="step">
+    <div class="step-hdr"><div class="step-num">1</div><div class="step-title">Apply all pom.xml changes in STS</div></div>
+    <div class="step-body">
+      <ol>
+        <li style="margin-bottom:6px">Open <strong>catalog-service/pom.xml</strong> → add spring-cloud.version property + BOM → save → right-click catalog-service → <strong>Maven → Update Project → OK</strong></li>
+        <li style="margin-bottom:6px">Open <strong>subscription-service/pom.xml</strong> → add spring-cloud.version + BOM + Feign dependency → save → Maven Update Project</li>
+        <li style="margin-bottom:6px">Open <strong>api-gateway/pom.xml</strong> → change Boot to 3.5.14 + change Cloud to 2025.0.0 → save → Maven Update Project</li>
+        <li>Open <strong>api-gateway/application.yml</strong> → add trusted-proxies setting</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><div class="step-num">2</div><div class="step-title">Start services and verify console output</div></div>
+    <div class="step-body">
+      <p>Start in order: catalog → subscription → gateway</p>
+      <p style="margin-top:8px"><strong style="color:#e2e8f0">catalog-service console — look for:</strong></p>
+      <pre style="color:#9ae6b4">Started CatalogServiceApplication on port 8081
+  (no Spring Cloud errors)</pre>
+      <p style="margin-top:8px"><strong style="color:#e2e8f0">subscription-service console — look for:</strong></p>
+      <pre style="color:#9ae6b4">Started SubscriptionServiceApplication on port 8082
+  (Feign clients registered — if you added Feign files)</pre>
+      <p style="margin-top:8px"><strong style="color:#e2e8f0">api-gateway console — look for:</strong></p>
+      <pre style="color:#9ae6b4">Started ApiGatewayApplication on port 8080
+  (no compatibility errors — the one you had before is gone now)</pre>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><div class="step-num">3</div><div class="step-title">Quick Postman verification</div></div>
+    <div class="step-body">
+      <p>POST http://localhost:8080/auth/token → get token</p>
+      <p style="margin-top:6px">GET http://localhost:8080/catalog/plans → 200 OK with plans list</p>
+      <p style="margin-top:6px">POST http://localhost:8080/subscriptions → 201 Created (Feign calls catalog)</p>
+      <div class="success" style="margin-top:8px">If all three work → upgrade complete. All services on same consistent version stack.</div>
+    </div>
+  </div>
+
+  <h2>Quick reference — one line version summary to remember</h2>
+  <pre id="summary">Spring Boot   : 3.5.14   (ALL services — catalog, subscription, gateway)
+Spring Cloud  : 2025.0.0 (ALL services — catalog, subscription, gateway)
+Java          : 21       (ALL services)
+MySQL Driver  : managed by Boot BOM
+Feign         : managed by Cloud BOM — no version tag needed
+Eureka        : managed by Cloud BOM — no version tag needed
+Circuit Breaker: managed by Cloud BOM — no version tag needed</pre>
+      <button class="copy-btn" onclick="copyById('summary')">Copy</button>
+</div>
+
+<div style="text-align:center;padding:20px;color:#4a5568;font-size:12px;margin-top:10px">
+  Spring Cloud 2025.0.0 Strategy Guide — OTT Platform
+</div>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo(0,0);
+}
+function copyById(id) {
+  const el = document.getElementById(id);
+  navigator.clipboard.writeText(el.innerText).then(() => {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '✅ Copied!';
+    btn.style.background = '#276749';
+    setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 1500);
+  });
+}
+</script>
+</body>
+</html>
