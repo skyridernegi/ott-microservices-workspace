@@ -1,6 +1,6 @@
 package com.ott.subscription.service;
 
-import com.ott.subscription.client.CatalogClient;
+import com.ott.subscription.client.CatalogClient_RestTemplate;
 import com.ott.subscription.dto.SubscriptionRequestDTO;
 import com.ott.subscription.dto.SubscriptionResponseDTO;
 import com.ott.subscription.exception.SubscriptionNotFoundException;
@@ -29,20 +29,20 @@ import java.util.stream.Collectors;
  * 5. Return response to client
  */
 @Service
-public class SubscriptionService {
+public class SubscriptionService_ForRestTemplate {
 
-    private static final Logger log = LoggerFactory.getLogger(SubscriptionService.class);
+    private static final Logger log = LoggerFactory.getLogger(SubscriptionService_ForRestTemplate.class);
 
     private final SubscriptionRepository subscriptionRepository;
     private final UserRepository userRepository;
-    private final CatalogClient catalogClient;
+    private final CatalogClient_RestTemplate CatalogClient_RestTemplate;
 
-    public SubscriptionService(SubscriptionRepository subscriptionRepository,
+    public SubscriptionService_ForRestTemplate(SubscriptionRepository subscriptionRepository,
                                 UserRepository userRepository,
-                                CatalogClient catalogClient) {
+                                CatalogClient_RestTemplate CatalogClient_RestTemplate) {
         this.subscriptionRepository = subscriptionRepository;
         this.userRepository = userRepository;
-        this.catalogClient = catalogClient;
+        this.CatalogClient_RestTemplate = CatalogClient_RestTemplate;
     }
 
     /**
@@ -59,7 +59,7 @@ public class SubscriptionService {
                 .orElseThrow(() -> new UserNotFoundException(request.getUserId()));
 
         // Step 2: Call Catalog Service to validate plan and get price
-        CatalogClient.PlanDetails planDetails = catalogClient.getPlanDetails(request.getPlanId());
+        CatalogClient_RestTemplate.PlanDetails planDetails = CatalogClient_RestTemplate.getPlanDetails(request.getPlanId());
 
         if (!planDetails.getActive()) {
             throw new RuntimeException("Plan " + request.getPlanId() + " is not active");

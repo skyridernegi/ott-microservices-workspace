@@ -60,6 +60,7 @@ public class CatalogController {
     @GetMapping("/plans/{planId}")
     public ResponseEntity<OttPlan> getPlanById(@PathVariable String planId) {
         log.info("Request received: GET /catalog/plans/{}", planId);
+        System.out.println("Envoked omsairam----> http://localhost:8081/catalog/plans//{planId}: planId: " + planId);
         OttPlan plan = catalogService.getPlanById(planId);
         return ResponseEntity.ok(plan);
     }

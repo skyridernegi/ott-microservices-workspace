@@ -1,7 +1,7 @@
 package com.ott.subscription.controller;
 
 import com.ott.subscription.model.User;
-import com.ott.subscription.service.SubscriptionService;
+import com.ott.subscription.service.SubscriptionService_ForRestTemplate;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +19,9 @@ public class UserController {
 
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
-    private final SubscriptionService subscriptionService;
+    private final SubscriptionService_ForRestTemplate subscriptionService;
 
-    public UserController(SubscriptionService subscriptionService) {
+    public UserController(SubscriptionService_ForRestTemplate subscriptionService) {
         this.subscriptionService = subscriptionService;
     }
 

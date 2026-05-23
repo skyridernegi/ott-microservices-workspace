@@ -41,4 +41,10 @@ public class AppConfig {
     public ErrorDecoder errorDecoder() {
         return new FeignErrorDecoder();
     }
+    
+    
+    @Bean //this bean is just mentioned here to overcome the error of bean not found in CatalogClient_RestTemplate construction injection;
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 }

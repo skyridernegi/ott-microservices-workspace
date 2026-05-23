@@ -3,7 +3,7 @@ package com.ott.subscription.controller;
 import com.ott.subscription.dto.SubscriptionRequestDTO;
 import com.ott.subscription.dto.SubscriptionResponseDTO;
 import com.ott.subscription.model.User;
-import com.ott.subscription.service.SubscriptionService;
+import com.ott.subscription.service.SubscriptionService_ForRestTemplate;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +23,9 @@ public class SubscriptionController {
 
     private static final Logger log = LoggerFactory.getLogger(SubscriptionController.class);
 
-    private final SubscriptionService subscriptionService;
+    private final SubscriptionService_ForRestTemplate subscriptionService;
 
-    public SubscriptionController(SubscriptionService subscriptionService) {
+    public SubscriptionController(SubscriptionService_ForRestTemplate subscriptionService) {
         this.subscriptionService = subscriptionService;
     }
 

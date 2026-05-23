@@ -22,16 +22,16 @@ import java.util.Map;
  * Later (Day 2) we replace this with API Gateway routing.
  */
 @Component
-public class CatalogClient {
+public class CatalogClient_RestTemplate {
 
-    private static final Logger log = LoggerFactory.getLogger(CatalogClient.class);
+    private static final Logger log = LoggerFactory.getLogger(CatalogClient_RestTemplate.class);
 
     private final RestTemplate restTemplate;
 
     @Value("${catalog.service.url}")
     private String catalogServiceUrl;
 
-    public CatalogClient(RestTemplate restTemplate) {
+    public CatalogClient_RestTemplate(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
