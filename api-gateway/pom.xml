@@ -9,8 +9,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.14</version> <!--as this was giving error while starting the service "- Spring Boot [3.5.14] is not compatible with this Spring Cloud release train"-->
-      <!--  <version>3.4.5</version>-->
+        <version>3.5.14</version> 
         <relativePath/>
     </parent>
 
@@ -51,7 +50,8 @@
         -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-gateway</artifactId>
+         <!--   <artifactId>spring-cloud-starter-gateway</artifactId>--> <!--deprecated with spring-cloud version 2025.x-->
+            <artifactId>spring-cloud-starter-gateway-server-webflux</artifactId>
         </dependency>
 
         <!--

@@ -3,6 +3,7 @@ package com.ott.subscription.controller;
 import com.ott.subscription.dto.SubscriptionRequestDTO;
 import com.ott.subscription.dto.SubscriptionResponseDTO;
 import com.ott.subscription.model.User;
+import com.ott.subscription.service.SubscriptionService;
 import com.ott.subscription.service.SubscriptionService_ForRestTemplate;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -23,9 +24,10 @@ public class SubscriptionController {
 
     private static final Logger log = LoggerFactory.getLogger(SubscriptionController.class);
 
-    private final SubscriptionService_ForRestTemplate subscriptionService;
+//    private final SubscriptionService_ForRestTemplate subscriptionService;// For RestTemplate older version
+    private final SubscriptionService subscriptionService;//using Feign
 
-    public SubscriptionController(SubscriptionService_ForRestTemplate subscriptionService) {
+    public SubscriptionController(SubscriptionService subscriptionService) {
         this.subscriptionService = subscriptionService;
     }
 
@@ -46,6 +48,7 @@ public class SubscriptionController {
     public ResponseEntity<SubscriptionResponseDTO> subscribe(
             @Valid @RequestBody SubscriptionRequestDTO request) {
         log.info("POST /subscriptions - userId: {}", request.getUserId());
+        System.out.println("SubscriptionController_omsairam.subscribe: request: " + request);
         SubscriptionResponseDTO response = subscriptionService.subscribe(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

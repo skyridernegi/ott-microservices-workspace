@@ -38,8 +38,7 @@ public class SubscriptionService_ForRestTemplate {
     private final CatalogClient_RestTemplate CatalogClient_RestTemplate;
 
     public SubscriptionService_ForRestTemplate(SubscriptionRepository subscriptionRepository,
-                                UserRepository userRepository,
-                                CatalogClient_RestTemplate CatalogClient_RestTemplate) {
+                                UserRepository userRepository,CatalogClient_RestTemplate CatalogClient_RestTemplate) {
         this.subscriptionRepository = subscriptionRepository;
         this.userRepository = userRepository;
         this.CatalogClient_RestTemplate = CatalogClient_RestTemplate;
