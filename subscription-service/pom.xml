@@ -77,7 +77,11 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
-
+		<!-- Spring Boot Actuator — monitoring endpoints -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
 		<!-- Test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -92,7 +96,7 @@
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
 			<!-- No version tag needed — BOM manages it -->
 		</dependency>
-		
+
 	</dependencies>
 
 	<build>

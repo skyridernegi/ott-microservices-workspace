@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OTT Platform — Monitoring, Docker, AWS, Jenkins Guide</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#0f1117;color:#e2e8f0;line-height:1.6;font-size:13px}
+.container{max-width:1000px;margin:0 auto;padding:24px 20px}
+h1{font-size:22px;color:#63b3ed;margin-bottom:4px}
+h2{font-size:15px;color:#90cdf4;margin:20px 0 10px}
+h3{font-size:13px;color:#e2e8f0;margin:10px 0 6px;font-weight:600}
+p,li{font-size:12px;color:#a0aec0;line-height:1.8}
+ul,ol{padding-left:18px;margin:6px 0}
+
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;border-bottom:1px solid #2d3748;padding-bottom:12px}
+.tab{background:#1a1f2e;border:1px solid #2d3748;border-radius:6px;padding:7px 14px;font-size:12px;color:#a0aec0;cursor:pointer;transition:all 0.15s}
+.tab:hover{border-color:#4299e1;color:#63b3ed}
+.tab.active{background:#2b6cb0;border-color:#4299e1;color:#fff}
+.section{display:none}.section.active{display:block}
+
+.phase{background:#1a1f2e;border:1px solid #2d3748;border-radius:10px;margin-bottom:14px;overflow:hidden}
+.phase-hdr{padding:12px 16px;display:flex;align-items:center;gap:10px}
+.phase-num{color:#fff;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.phase-title{font-size:14px;font-weight:600;color:#e2e8f0;flex:1}
+.phase-time{font-size:11px;padding:2px 10px;border-radius:20px;font-weight:500}
+.phase-body{padding:14px 16px;border-top:1px solid #2d3748}
+
+.step{background:#1a1f2e;border:1px solid #2d3748;border-radius:10px;margin-bottom:12px;overflow:hidden}
+.step-hdr{background:#2d3748;padding:9px 14px;display:flex;align-items:center;gap:10px}
+.step-num{background:#2b6cb0;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.step-title{font-size:13px;font-weight:600;color:#e2e8f0;flex:1}
+.step-body{padding:12px 14px}
+
+.file-hdr{background:#1c3829;border:1px solid #276749;border-radius:6px;padding:7px 12px;margin:8px 0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.fname{font-size:12px;font-weight:600;color:#9ae6b4}
+.fpath{font-size:11px;color:#718096;font-family:monospace;margin-left:auto}
+.act{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px}
+.modify{background:#744210;color:#fbd38d}
+.new{background:#1a365d;color:#90cdf4}
+.all{background:#322659;color:#d6bcfa}
+
+pre{background:#0d1117;border:1px solid #2d3748;border-radius:6px;padding:11px 13px;overflow-x:auto;font-size:11px;line-height:1.7;margin:8px 0;position:relative}
+.copy-btn{position:absolute;top:7px;right:7px;background:#2d3748;color:#a0aec0;border:none;border-radius:4px;padding:3px 9px;font-size:10px;cursor:pointer}
+.copy-btn:hover{background:#4a5568;color:#e2e8f0}
+code{background:#2d3748;padding:2px 6px;border-radius:4px;font-size:11px;color:#63b3ed;font-family:monospace}
+
+.kw{color:#c792ea}.an{color:#ffcb6b}.cm{color:#546e7a;font-style:italic}
+.st{color:#c3e88d}.cl{color:#82aaff}
+.add{background:#0d2818;display:block;padding-left:8px;border-left:3px solid #48bb78}
+
+.warn{background:#2d1f00;border:1px solid #d69e2e;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#fbd38d}
+.info{background:#1a2744;border:1px solid #4299e1;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#90cdf4}
+.success{background:#1c3829;border:1px solid #48bb78;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#9ae6b4}
+.danger{background:#2d1515;border:1px solid #742a2a;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#feb2b2}
+
+table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}
+th{background:#2d3748;color:#e2e8f0;padding:7px 11px;text-align:left;font-size:11px}
+td{padding:7px 11px;border-bottom:1px solid #2d3748;color:#a0aec0;vertical-align:top}
+tr:last-child td{border-bottom:none}
+
+.url-bar{display:flex;align-items:center;gap:8px;background:#0d1117;border:1px solid #4a5568;border-radius:6px;padding:6px 11px;margin:6px 0}
+.method{font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px}
+.GET{background:#1c4532;color:#9ae6b4}
+.POST{background:#744210;color:#fbd38d}
+.url{font-size:11px;color:#63b3ed;font-family:monospace;flex:1;word-break:break-all}
+
+.interview-card{background:#1a1f2e;border:1px solid #2d3748;border-radius:8px;margin-bottom:8px;overflow:hidden}
+.iq{background:#263244;padding:9px 13px;font-size:12px;font-weight:600;color:#e2e8f0;cursor:pointer;display:flex;justify-content:space-between}
+.iq:hover{background:#2d3a52}
+.ia{padding:11px 13px;font-size:12px;color:#a0aec0;line-height:1.7;display:none}
+.ia.open{display:block}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>🚀 OTT Platform — Monitoring, Docker & AWS Guide</h1>
+<p style="color:#718096;margin-bottom:16px">Spring Boot Actuator · Docker · AWS EC2 · Jenkins · CloudFormation · Windows 10</p>
+
+<!-- REALISTIC PLAN -->
+<div class="warn" style="margin-bottom:16px">
+  <strong>Honest time plan — do NOT rush all of this today:</strong><br><br>
+  📅 <strong>TODAY (2-3 hrs):</strong> Phase 1 — Monitoring with Actuator. Most asked in interviews. Minimal code changes.<br>
+  📅 <strong>Day 2 (3-4 hrs):</strong> Phase 2 — Docker. Containerize all 3 services. Run everything with docker-compose.<br>
+  📅 <strong>Day 3-4 (4-5 hrs):</strong> Phase 3 — AWS manual deployment with Docker on EC2.<br>
+  📅 <strong>Day 5-6 (3-4 hrs):</strong> Phase 4 — Jenkins CI/CD + CloudFormation.<br><br>
+  Rushing gives you surface knowledge. Deep understanding = confidence in interviews.
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('phase1')">Phase 1: Monitoring</button>
+  <button class="tab" onclick="show('phase2')">Phase 2: Docker</button>
+  <button class="tab" onclick="show('phase3')">Phase 3: AWS Manual</button>
+  <button class="tab" onclick="show('phase4')">Phase 4: Jenkins + CF</button>
+  <button class="tab" onclick="show('interview')">Interview Q&A</button>
+</div>
+
+<!-- ===================== PHASE 1: MONITORING ===================== -->
+<div id="phase1" class="section active">
+
+  <div class="info">
+    <strong>What is monitoring in microservices?</strong><br>
+    In production, you need to know: Is my service alive? How much memory is it using? How many requests are failing? How slow are my DB queries?<br><br>
+    Spring Boot Actuator exposes built-in HTTP endpoints that answer all these questions. No extra code needed — just add the dependency and configure.
+  </div>
+
+  <h2>Step 1 — Add Actuator dependency to ALL 3 services</h2>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">1</span><span class="step-title">Add to pom.xml — catalog-service, subscription-service, api-gateway</span></div>
+    <div class="step-body">
+      <div class="file-hdr"><span class="fname">pom.xml</span><span class="act all">ALL 3 SERVICES</span><span class="fpath">Add inside &lt;dependencies&gt;</span></div>
+      <p><strong style="color:#e2e8f0">WHY:</strong> Actuator adds /actuator/* endpoints automatically. Health check, metrics, info, environment — all free with this one dependency.</p>
+      <pre id="actuatorDep"><span class="cm">&lt;!-- Spring Boot Actuator — monitoring endpoints --&gt;</span>
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
+&lt;/dependency&gt;</pre>
+      <button class="copy-btn" onclick="copyById('actuatorDep')">Copy</button>
+      <div class="success">After adding to all 3 pom.xml files → right-click each project → Maven → Update Project → OK</div>
+    </div>
+  </div>
+
+  <h2>Step 2 — Configure Actuator in each service's properties</h2>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">2A</span><span class="step-title">catalog-service — application.properties</span></div>
+    <div class="step-body">
+      <div class="file-hdr"><span class="fname">application.properties</span><span class="act modify">MODIFY</span><span class="fpath">catalog-service/src/main/resources</span></div>
+      <p><strong style="color:#e2e8f0">WHY these settings:</strong> By default Actuator only exposes /health. We expose more endpoints so we can see metrics, info, and environment details during development.</p>
+      <pre id="catalogActuator"><span class="cm"># ── Spring Boot Actuator — Monitoring ─────────────────────────
+# Expose all actuator endpoints (restrict in production)
+# health = is service alive?
+# info = app version, name
+# metrics = memory, CPU, request counts
+# env = environment properties</span>
+management.endpoints.web.exposure.include=health,info,metrics,env,loggers
+management.endpoint.health.show-details=always
+management.info.env.enabled=true
+
+<span class="cm"># App info shown at /actuator/info</span>
+info.app.name=Catalog Service
+info.app.version=1.0.0
+info.app.description=OTT Platform - Manages OTT subscription plans</pre>
+      <button class="copy-btn" onclick="copyById('catalogActuator')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">2B</span><span class="step-title">subscription-service — application.properties</span></div>
+    <div class="step-body">
+      <div class="file-hdr"><span class="fname">application.properties</span><span class="act modify">MODIFY</span><span class="fpath">subscription-service/src/main/resources</span></div>
+      <pre id="subActuator"><span class="cm"># ── Spring Boot Actuator — Monitoring ─────────────────────────</span>
+management.endpoints.web.exposure.include=health,info,metrics,env,loggers
+management.endpoint.health.show-details=always
+management.info.env.enabled=true
+
+<span class="cm"># App info shown at /actuator/info</span>
+info.app.name=Subscription Service
+info.app.version=1.0.0
+info.app.description=OTT Platform - Manages user subscriptions</pre>
+      <button class="copy-btn" onclick="copyById('subActuator')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">2C</span><span class="step-title">api-gateway — application.yml</span></div>
+    <div class="step-body">
+      <div class="file-hdr"><span class="fname">application.yml</span><span class="act modify">MODIFY</span><span class="fpath">api-gateway/src/main/resources</span></div>
+      <p>Add at the bottom of your existing application.yml:</p>
+      <pre id="gwActuator"><span class="cm"># ── Spring Boot Actuator — Monitoring ─────────────────────────</span>
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,gateway
+  endpoint:
+    health:
+      show-details: always
+    gateway:
+      enabled: true   <span class="cm"># shows all gateway routes at /actuator/gateway/routes</span>
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: API Gateway
+    version: 1.0.0
+    description: OTT Platform - API Gateway with JWT and Rate Limiting</pre>
+      <button class="copy-btn" onclick="copyById('gwActuator')">Copy</button>
+    </div>
+  </div>
+
+  <h2>Step 3 — Also expose Actuator through Gateway (important)</h2>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">3</span><span class="step-title">Add Actuator public paths to JwtAuthFilter</span></div>
+    <div class="step-body">
+      <div class="file-hdr"><span class="fname">JwtAuthFilter.java</span><span class="act modify">MODIFY</span><span class="fpath">com.ott.gateway.filter</span></div>
+      <p><strong style="color:#e2e8f0">WHY:</strong> Health check endpoints should be accessible without JWT — monitoring tools (AWS health checks, load balancers) call /actuator/health without tokens.</p>
+      <pre id="jwtPublic"><span class="cm">// Add /actuator to PUBLIC_PATHS list</span>
+<span class="kw">private static final</span> List&lt;String&gt; PUBLIC_PATHS = List.of(
+    <span class="st">"/auth/token"</span>,
+    <span class="st">"/auth/refresh"</span>,
+    <span class="add"><span class="st">"/actuator"</span>       <span class="cm">// ADD THIS — health checks skip JWT</span></span>
+);</pre>
+      <button class="copy-btn" onclick="copyById('jwtPublic')">Copy</button>
+    </div>
+  </div>
+
+  <h2>Step 4 — Test Actuator endpoints in Postman</h2>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">4</span><span class="step-title">Restart all services → test these URLs in browser or Postman</span></div>
+    <div class="step-body">
+      <table>
+        <tr><th>URL</th><th>What it returns</th><th>Use in interview</th></tr>
+        <tr>
+          <td><code>GET :8081/actuator/health</code></td>
+          <td>UP/DOWN status + DB connection status</td>
+          <td>Load balancer health check</td>
+        </tr>
+        <tr>
+          <td><code>GET :8081/actuator/info</code></td>
+          <td>App name, version, description</td>
+          <td>Service identification</td>
+        </tr>
+        <tr>
+          <td><code>GET :8081/actuator/metrics</code></td>
+          <td>List of all available metrics</td>
+          <td>Performance monitoring</td>
+        </tr>
+        <tr>
+          <td><code>GET :8081/actuator/metrics/jvm.memory.used</code></td>
+          <td>Current JVM memory usage in bytes</td>
+          <td>Memory monitoring</td>
+        </tr>
+        <tr>
+          <td><code>GET :8080/actuator/gateway/routes</code></td>
+          <td>All configured gateway routes</td>
+          <td>Gateway debugging</td>
+        </tr>
+      </table>
+      <div class="success" style="margin-top:8px">Expected health response:
+{
+  "status": "UP",
+  "components": {
+    "db": {"status": "UP"},
+    "diskSpace": {"status": "UP"}
+  }
+}</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PHASE 2: DOCKER ===================== -->
+<div id="phase2" class="section">
+
+  <div class="info">
+    <strong>What is Docker and why do microservices need it?</strong><br>
+    Docker packages your Java app + all its dependencies into a container — a self-contained box that runs identically on your Windows laptop, your team member's Mac, and the AWS server. No "it works on my machine" problem.<br><br>
+    <strong>CONNECTS TO:</strong> Dockerfile defines the image → docker-compose.yml runs all services together → AWS ECR stores images → EC2 runs containers.
+  </div>
+
+  <h2>Step 1 — Install Docker Desktop on Windows 10 (if not installed)</h2>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">1</span><span class="step-title">Download and install Docker Desktop</span></div>
+    <div class="step-body">
+      <p>Go to: <strong>https://www.docker.com/products/docker-desktop</strong> → Download for Windows → install with all defaults → restart Windows → open Docker Desktop → wait for it to say "Running"</p>
+      <p style="margin-top:8px">Verify in Command Prompt:</p>
+      <pre id="dockerVerify">docker --version
+docker-compose --version</pre>
+      <button class="copy-btn" onclick="copyById('dockerVerify')">Copy</button>
+      <div class="success">Should see: Docker version 24.x.x and Docker Compose version 2.x.x</div>
+    </div>
+  </div>
+
+  <h2>Step 2 — Build JAR files for all services</h2>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">2</span><span class="step-title">Maven build — creates the JAR that Docker will package</span></div>
+    <div class="step-body">
+      <p>In STS: right-click each project → <strong>Run As → Maven build</strong> → Goals: <code>clean package -DskipTests</code> → Run</p>
+      <p style="margin-top:8px">Do this for all 3 services. After build, verify JAR exists:</p>
+      <pre id="jarCheck">catalog-service/target/catalog-service-1.0.0.jar
+subscription-service/target/subscription-service-1.0.0.jar
+api-gateway/target/api-gateway-1.0.0.jar</pre>
+      <button class="copy-btn" onclick="copyById('jarCheck')">Copy</button>
+      <div class="warn">-DskipTests skips unit tests during build. In CI/CD pipeline you would NOT skip tests.</div>
+    </div>
+  </div>
+
+  <h2>Step 3 — Create Dockerfile for each service</h2>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">3A</span><span class="step-title">Dockerfile — catalog-service</span></div>
+    <div class="step-body">
+      <div class="file-hdr"><span class="fname">Dockerfile</span><span class="act new">NEW FILE</span><span class="fpath">catalog-service/ (root folder, same level as pom.xml)</span></div>
+      <p><strong style="color:#e2e8f0">WHY each line:</strong></p>
+      <pre id="catalogDockerfile"><span class="cm"># Base image — Java 21 slim (smaller size, same Java we use)</span>
+FROM eclipse-temurin:21-jre-alpine
+
+<span class="cm"># Create a folder inside container where our app will live</span>
+WORKDIR /app
+
+<span class="cm"># Copy the built JAR from target folder into container</span>
+<span class="cm"># Replace catalog-service-1.0.0.jar with your actual jar name</span>
+COPY target/catalog-service-1.0.0.jar app.jar
+
+<span class="cm"># Expose port 8081 so other containers can reach this service</span>
+EXPOSE 8081
+
+<span class="cm"># Command to run when container starts</span>
+<span class="cm"># -Djava.security.egd reduces startup time for Spring Boot</span>
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "app.jar"]</pre>
+      <button class="copy-btn" onclick="copyById('catalogDockerfile')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">3B</span><span class="step-title">Dockerfile — subscription-service</span></div>
+    <div class="step-body">
+      <div class="file-hdr"><span class="fname">Dockerfile</span><span class="act new">NEW FILE</span><span class="fpath">subscription-service/ (root folder)</span></div>
+      <pre id="subDockerfile">FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+COPY target/subscription-service-1.0.0.jar app.jar
+EXPOSE 8082
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "app.jar"]</pre>
+      <button class="copy-btn" onclick="copyById('subDockerfile')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">3C</span><span class="step-title">Dockerfile — api-gateway</span></div>
+    <div class="step-body">
+      <div class="file-hdr"><span class="fname">Dockerfile</span><span class="act new">NEW FILE</span><span class="fpath">api-gateway/ (root folder)</span></div>
+      <pre id="gwDockerfile">FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+COPY target/api-gateway-1.0.0.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "app.jar"]</pre>
+      <button class="copy-btn" onclick="copyById('gwDockerfile')">Copy</button>
+    </div>
+  </div>
+
+  <h2>Step 4 — Create docker-compose.yml (runs everything together)</h2>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">4</span><span class="step-title">docker-compose.yml — ONE file to start the entire platform</span></div>
+    <div class="step-body">
+      <div class="file-hdr"><span class="fname">docker-compose.yml</span><span class="act new">NEW FILE</span><span class="fpath">Create in a new folder: ott-platform/ (parent of all 3 service folders)</span></div>
+      <p><strong style="color:#e2e8f0">WHY:</strong> Instead of starting Redis, MySQL, and 3 Spring Boot apps manually, one command starts everything. This is what DevOps teams use locally.</p>
+      <pre id="dockerCompose">version: '3.8'
+
+services:
+
+  <span class="cm"># ── MySQL Database ─────────────────────────────</span>
+  mysql:
+    image: mysql:8.0
+    container_name: ott-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: catalog_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql   <span class="cm"># persist data between restarts</span>
+      - ./database_schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    networks:
+      - ott-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  <span class="cm"># ── Redis ──────────────────────────────────────</span>
+  redis:
+    image: redis:7-alpine
+    container_name: ott-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - ott-network
+
+  <span class="cm"># ── Catalog Service ────────────────────────────</span>
+  catalog-service:
+    build:
+      context: ./catalog-service     <span class="cm"># folder containing Dockerfile</span>
+    container_name: ott-catalog
+    ports:
+      - "8081:8081"
+    environment:
+      <span class="cm"># Override application.properties for Docker environment</span>
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/catalog_db?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      mysql:
+        condition: service_healthy   <span class="cm"># wait for MySQL to be ready</span>
+    networks:
+      - ott-network
+
+  <span class="cm"># ── Subscription Service ───────────────────────</span>
+  subscription-service:
+    build:
+      context: ./subscription-service
+    container_name: ott-subscription
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/subscription_db?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      CATALOG_SERVICE_URL: http://catalog-service:8081  <span class="cm"># use container name not localhost</span>
+    depends_on:
+      mysql:
+        condition: service_healthy
+      catalog-service:
+        condition: service_started
+    networks:
+      - ott-network
+
+  <span class="cm"># ── API Gateway ────────────────────────────────</span>
+  api-gateway:
+    build:
+      context: ./api-gateway
+    container_name: ott-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATA_REDIS_HOST: redis  <span class="cm"># use container name not localhost</span>
+    depends_on:
+      - redis
+      - catalog-service
+      - subscription-service
+    networks:
+      - ott-network
+
+networks:
+  ott-network:
+    driver: bridge   <span class="cm"># all containers on same virtual network</span>
+
+volumes:
+  mysql_data:</pre>
+      <button class="copy-btn" onclick="copyById('dockerCompose')">Copy</button>
+    </div>
+  </div>
+
+  <h2>Step 5 — Run everything with Docker</h2>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">5</span><span class="step-title">Windows Command Prompt — run from ott-platform folder</span></div>
+    <div class="step-body">
+      <p>Open Command Prompt → navigate to your ott-platform folder:</p>
+      <pre id="dockerRun"><span class="cm">REM Build all images and start all containers</span>
+docker-compose up --build
+
+<span class="cm">REM Run in background (detached mode)</span>
+docker-compose up --build -d
+
+<span class="cm">REM Check all containers are running</span>
+docker-compose ps
+
+<span class="cm">REM View logs for a specific service</span>
+docker-compose logs catalog-service
+
+<span class="cm">REM Stop everything</span>
+docker-compose down
+
+<span class="cm">REM Stop and delete all data volumes too</span>
+docker-compose down -v</pre>
+      <button class="copy-btn" onclick="copyById('dockerRun')">Copy</button>
+      <div class="success">Once running → test in Postman: POST http://localhost:8080/auth/token → everything works through Docker now!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PHASE 3: AWS MANUAL ===================== -->
+<div id="phase3" class="section">
+
+  <div class="info">
+    <strong>Manual AWS deployment — what we're doing:</strong><br>
+    Push Docker images to AWS ECR (image registry) → Launch EC2 instance (virtual server) → Pull images on EC2 → Run with docker-compose on EC2.<br><br>
+    This is the simplest deployment path — good to understand before adding Jenkins automation.
+  </div>
+
+  <h2>Prerequisites — AWS Free Tier account setup</h2>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">1</span><span class="step-title">AWS account + CLI setup on Windows 10</span></div>
+    <div class="step-body">
+      <p><strong>1.</strong> Create free account at: <strong>https://aws.amazon.com/free</strong> (needs credit card but won't charge for free tier)</p>
+      <p style="margin-top:6px"><strong>2.</strong> Download AWS CLI for Windows: <strong>https://aws.amazon.com/cli</strong> → download MSI installer → install</p>
+      <p style="margin-top:6px"><strong>3.</strong> Configure AWS CLI — open Command Prompt:</p>
+      <pre id="awsConfigure">aws configure</pre>
+      <button class="copy-btn" onclick="copyById('awsConfigure')">Copy</button>
+      <p style="margin-top:6px">It will ask for:</p>
+      <pre>AWS Access Key ID:     [get from AWS Console → IAM → Users → Security credentials]
+AWS Secret Access Key: [same place]
+Default region:        ap-south-1   (Mumbai — closest to India)
+Default output format: json</pre>
+      <div class="warn">Never share your AWS Access Key. Treat it like a password.</div>
+    </div>
+  </div>
+
+  <h2>Step 2 — Push Docker images to AWS ECR</h2>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">2</span><span class="step-title">Create ECR repositories and push images</span></div>
+    <div class="step-body">
+      <p><strong style="color:#e2e8f0">WHY ECR:</strong> ECR (Elastic Container Registry) is AWS's Docker image storage. EC2 pulls images from here. Like Docker Hub but private and integrated with AWS.</p>
+      <p style="margin-top:8px">Open Command Prompt and run these commands one by one:</p>
+      <pre id="ecrPush"><span class="cm">REM Step 1: Login to ECR (replace ACCOUNT_ID and REGION)</span>
+aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com
+
+<span class="cm">REM Step 2: Create repositories in ECR</span>
+aws ecr create-repository --repository-name ott/catalog-service --region ap-south-1
+aws ecr create-repository --repository-name ott/subscription-service --region ap-south-1
+aws ecr create-repository --repository-name ott/api-gateway --region ap-south-1
+
+<span class="cm">REM Step 3: Build images locally</span>
+docker build -t ott/catalog-service ./catalog-service
+docker build -t ott/subscription-service ./subscription-service
+docker build -t ott/api-gateway ./api-gateway
+
+<span class="cm">REM Step 4: Tag images for ECR</span>
+docker tag ott/catalog-service:latest ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ott/catalog-service:latest
+docker tag ott/subscription-service:latest ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ott/subscription-service:latest
+docker tag ott/api-gateway:latest ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ott/api-gateway:latest
+
+<span class="cm">REM Step 5: Push to ECR</span>
+docker push ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ott/catalog-service:latest
+docker push ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ott/subscription-service:latest
+docker push ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ott/api-gateway:latest</pre>
+      <button class="copy-btn" onclick="copyById('ecrPush')">Copy</button>
+    </div>
+  </div>
+
+  <h2>Step 3 — Launch EC2 instance</h2>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">3</span><span class="step-title">Launch free tier EC2 — t2.micro with Amazon Linux 2</span></div>
+    <div class="step-body">
+      <p>AWS Console → EC2 → Launch Instance:</p>
+      <pre>Name:            ott-platform-server
+AMI:             Amazon Linux 2 (free tier eligible)
+Instance type:   t2.micro (free tier — 1 CPU, 1GB RAM)
+Key pair:        Create new → name it "ott-key" → download .pem file
+Security Group:  Allow inbound:
+                 - SSH port 22 (your IP only)
+                 - HTTP port 8080 (anywhere — for Gateway)
+                 - HTTP port 8081 (anywhere — for Catalog)
+                 - HTTP port 8082 (anywhere — for Subscription)
+Storage:         20 GB (free tier allows 30 GB)</pre>
+      <p style="margin-top:8px">Click <strong>Launch Instance</strong></p>
+      <div class="warn">Save the .pem key file safely — you need it every time you connect to EC2. Never lose it.</div>
+    </div>
+  </div>
+
+  <h2>Step 4 — Connect to EC2 and deploy</h2>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">4</span><span class="step-title">Connect to EC2 and run your containers</span></div>
+    <div class="step-body">
+      <p>Open Command Prompt → navigate to folder where ott-key.pem is saved:</p>
+      <pre id="ec2Connect"><span class="cm">REM Connect to EC2 (replace with your EC2 public IP)</span>
+ssh -i ott-key.pem ec2-user@YOUR_EC2_PUBLIC_IP
+
+<span class="cm">REM Once connected — install Docker on EC2</span>
+sudo yum update -y
+sudo yum install docker -y
+sudo service docker start
+sudo usermod -a -G docker ec2-user
+
+<span class="cm">REM Install docker-compose on EC2</span>
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+<span class="cm">REM Login to ECR from EC2</span>
+aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com
+
+<span class="cm">REM Create docker-compose.yml on EC2 (paste your compose file content)</span>
+nano docker-compose-aws.yml
+
+<span class="cm">REM Start everything</span>
+docker-compose -f docker-compose-aws.yml up -d
+
+<span class="cm">REM Verify running</span>
+docker ps</pre>
+      <button class="copy-btn" onclick="copyById('ec2Connect')">Copy</button>
+      <div class="success">Access your Gateway at: http://YOUR_EC2_PUBLIC_IP:8080/actuator/health</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PHASE 4: JENKINS + CLOUDFORMATION ===================== -->
+<div id="phase4" class="section">
+
+  <div class="info">
+    <strong>What is Jenkins CI/CD?</strong><br>
+    Every time you push code to GitHub, Jenkins automatically: builds your code → runs tests → builds Docker image → pushes to ECR → deploys to EC2. No manual steps needed.<br><br>
+    <strong>What is CloudFormation?</strong><br>
+    Instead of manually clicking in AWS Console to create EC2, RDS, security groups — you write a YAML file describing your infrastructure. CloudFormation reads it and creates everything automatically. Infrastructure as Code.
+  </div>
+
+  <h2>CloudFormation Template — complete AWS infrastructure</h2>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">1</span><span class="step-title">cloudformation.yml — creates entire AWS infrastructure</span></div>
+    <div class="step-body">
+      <div class="file-hdr"><span class="fname">cloudformation.yml</span><span class="act new">NEW FILE</span><span class="fpath">ott-platform/aws/</span></div>
+      <pre id="cfTemplate">AWSTemplateFormatVersion: '2010-09-09'
+Description: OTT Platform — Complete AWS Infrastructure
+
+Parameters:
+  KeyPairName:
+    Type: String
+    Description: EC2 Key Pair name for SSH access
+    Default: ott-key
+
+Resources:
+
+  # ── VPC — Virtual Private Cloud ───────────────────────────────
+  # WHY: Isolated network for our services. Like a private office network.
+  OttVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      Tags:
+        - Key: Name
+          Value: ott-platform-vpc
+
+  # ── Public Subnet ─────────────────────────────────────────────
+  OttPublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref OttVPC
+      CidrBlock: 10.0.1.0/24
+      MapPublicIpOnLaunch: true
+      AvailabilityZone: !Select [0, !GetAZs '']
+
+  # ── Internet Gateway — allows internet access ─────────────────
+  OttInternetGateway:
+    Type: AWS::EC2::InternetGateway
+
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref OttVPC
+      InternetGatewayId: !Ref OttInternetGateway
+
+  # ── Security Group — firewall rules ───────────────────────────
+  OttSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: OTT Platform security group
+      VpcId: !Ref OttVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0    # SSH — restrict to your IP in production
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: 0.0.0.0/0    # API Gateway
+        - IpProtocol: tcp
+          FromPort: 8081
+          ToPort: 8082
+          CidrIp: 0.0.0.0/0    # Microservices
+
+  # ── EC2 Instance — runs our Docker containers ──────────────────
+  OttEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro        # free tier
+      ImageId: ami-0c55b159cbfafe1f0  # Amazon Linux 2 (update for your region)
+      KeyName: !Ref KeyPairName
+      SubnetId: !Ref OttPublicSubnet
+      SecurityGroupIds:
+        - !Ref OttSecurityGroup
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash
+          yum update -y
+          yum install docker -y
+          service docker start
+          usermod -a -G docker ec2-user
+          # Install docker-compose
+          curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          chmod +x /usr/local/bin/docker-compose
+      Tags:
+        - Key: Name
+          Value: ott-platform-server
+
+  # ── RDS MySQL — managed database ──────────────────────────────
+  # WHY RDS instead of MySQL in Docker: RDS handles backups,
+  # failover, patches automatically. Production standard.
+  OttDBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: OTT DB subnet group
+      SubnetIds:
+        - !Ref OttPublicSubnet
+
+  OttRDSInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceIdentifier: ott-mysql
+      DBInstanceClass: db.t3.micro   # free tier
+      Engine: mysql
+      MasterUsername: root
+      MasterUserPassword: OttPlatform2024
+      AllocatedStorage: 20
+      DBSubnetGroupName: !Ref OttDBSubnetGroup
+
+Outputs:
+  EC2PublicIP:
+    Description: Public IP of EC2 instance
+    Value: !GetAtt OttEC2Instance.PublicIp
+
+  RDSEndpoint:
+    Description: RDS MySQL endpoint
+    Value: !GetAtt OttRDSInstance.Endpoint.Address</pre>
+      <button class="copy-btn" onclick="copyById('cfTemplate')">Copy</button>
+
+      <p style="margin-top:10px"><strong style="color:#fbd38d">Deploy CloudFormation stack — Command Prompt:</strong></p>
+      <pre id="cfDeploy"><span class="cm">REM Deploy the entire infrastructure with one command</span>
+aws cloudformation deploy ^
+  --template-file cloudformation.yml ^
+  --stack-name ott-platform ^
+  --parameter-overrides KeyPairName=ott-key ^
+  --region ap-south-1
+
+<span class="cm">REM Check stack status</span>
+aws cloudformation describe-stacks --stack-name ott-platform
+
+<span class="cm">REM Delete entire infrastructure (saves cost)</span>
+aws cloudformation delete-stack --stack-name ott-platform</pre>
+      <button class="copy-btn" onclick="copyById('cfDeploy')">Copy</button>
+    </div>
+  </div>
+
+  <h2>Jenkins Pipeline — Jenkinsfile</h2>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">2</span><span class="step-title">Jenkinsfile — complete CI/CD pipeline</span></div>
+    <div class="step-body">
+      <div class="file-hdr"><span class="fname">Jenkinsfile</span><span class="act new">NEW FILE</span><span class="fpath">ott-platform/ (root — commit to GitHub)</span></div>
+      <p><strong style="color:#e2e8f0">WHY:</strong> Every time you push to GitHub, Jenkins reads this file and runs each stage automatically.</p>
+      <pre id="jenkinsfile">pipeline {
+    agent any
+
+    environment {
+        AWS_REGION = 'ap-south-1'
+        ECR_REGISTRY = 'ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com'
+        IMAGE_TAG = "${BUILD_NUMBER}"  // uses Jenkins build number as tag
+    }
+
+    stages {
+
+        // Stage 1: Get code from GitHub
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/YOUR_GITHUB/ott-platform.git'
+                echo 'Code checked out successfully'
+            }
+        }
+
+        // Stage 2: Build all services
+        stage('Build') {
+            steps {
+                dir('catalog-service') {
+                    bat 'mvn clean package -DskipTests'
+                }
+                dir('subscription-service') {
+                    bat 'mvn clean package -DskipTests'
+                }
+                dir('api-gateway') {
+                    bat 'mvn clean package -DskipTests'
+                }
+            }
+        }
+
+        // Stage 3: Run unit tests
+        stage('Test') {
+            steps {
+                dir('catalog-service') {
+                    bat 'mvn test'
+                }
+                dir('subscription-service') {
+                    bat 'mvn test'
+                }
+            }
+        }
+
+        // Stage 4: Build Docker images
+        stage('Docker Build') {
+            steps {
+                bat "docker build -t ${ECR_REGISTRY}/ott/catalog-service:${IMAGE_TAG} ./catalog-service"
+                bat "docker build -t ${ECR_REGISTRY}/ott/subscription-service:${IMAGE_TAG} ./subscription-service"
+                bat "docker build -t ${ECR_REGISTRY}/ott/api-gateway:${IMAGE_TAG} ./api-gateway"
+            }
+        }
+
+        // Stage 5: Push images to AWS ECR
+        stage('Push to ECR') {
+            steps {
+                withAWS(credentials: 'aws-credentials', region: AWS_REGION) {
+                    bat "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}"
+                    bat "docker push ${ECR_REGISTRY}/ott/catalog-service:${IMAGE_TAG}"
+                    bat "docker push ${ECR_REGISTRY}/ott/subscription-service:${IMAGE_TAG}"
+                    bat "docker push ${ECR_REGISTRY}/ott/api-gateway:${IMAGE_TAG}"
+                }
+            }
+        }
+
+        // Stage 6: Deploy to EC2
+        stage('Deploy to EC2') {
+            steps {
+                withAWS(credentials: 'aws-credentials', region: AWS_REGION) {
+                    // SSH to EC2 and pull + restart containers
+                    bat """
+                        ssh -i ott-key.pem -o StrictHostKeyChecking=no ec2-user@EC2_PUBLIC_IP ^
+                        "docker-compose pull && docker-compose up -d"
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully! OTT Platform deployed.'
+        }
+        failure {
+            echo 'Pipeline failed! Check logs above for errors.'
+        }
+    }
+}</pre>
+      <button class="copy-btn" onclick="copyById('jenkinsfile')">Copy</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== INTERVIEW Q&A ===================== -->
+<div id="interview" class="section">
+  <h2>Top interview questions — Monitoring, Docker, AWS, Jenkins</h2>
+
+  <div class="interview-card">
+    <div class="iq" onclick="toggleQA(this)">Q: What is Spring Boot Actuator and how did you use it? <span>▼</span></div>
+    <div class="ia">Spring Boot Actuator provides production-ready monitoring endpoints out of the box. I added it to all three services in our OTT platform. The /actuator/health endpoint is used by AWS load balancers to check if a service is alive. /actuator/metrics provides JVM memory, CPU, and HTTP request statistics. For the API Gateway, I also exposed /actuator/gateway/routes which shows all configured routing rules. I added /actuator to the public paths in JwtAuthFilter so monitoring tools can call health checks without JWT tokens.</div>
+  </div>
+
+  <div class="interview-card">
+    <div class="iq" onclick="toggleQA(this)">Q: What is Docker and why do microservices need it? <span>▼</span></div>
+    <div class="ia">Docker packages an application and all its dependencies into a container — a portable, isolated unit that runs identically everywhere. Without Docker, each microservice needs specific Java version, OS configurations, and library installations on every server. With Docker, you build once and run anywhere. In our OTT platform, I wrote a Dockerfile for each service using the eclipse-temurin:21 base image. Docker Compose coordinates all services, MySQL, and Redis starting together in the correct order with proper networking between them.</div>
+  </div>
+
+  <div class="interview-card">
+    <div class="iq" onclick="toggleQA(this)">Q: What is CloudFormation and how is it different from manual AWS setup? <span>▼</span></div>
+    <div class="ia">CloudFormation is AWS's Infrastructure as Code service. Instead of manually clicking through the AWS console to create EC2 instances, VPCs, security groups, and RDS databases, you write a YAML template describing the desired infrastructure. CloudFormation reads it and creates everything automatically. The key benefits are repeatability (same template creates identical environments), version control (infrastructure changes are tracked in Git), and rollback (if deployment fails, CloudFormation rolls back automatically). I wrote a template that creates VPC, subnets, security groups, EC2 instance, and RDS MySQL for our OTT platform with a single deploy command.</div>
+  </div>
+
+  <div class="interview-card">
+    <div class="iq" onclick="toggleQA(this)">Q: What is Jenkins and what is CI/CD? <span>▼</span></div>
+    <div class="ia">CI/CD stands for Continuous Integration and Continuous Deployment. Jenkins is an automation server that implements CI/CD. In our OTT platform, the Jenkins pipeline has 6 stages: Checkout code from GitHub, Build all Maven projects, Run unit tests, Build Docker images, Push images to AWS ECR, Deploy to EC2 by pulling new images and restarting containers. This means every code push is automatically built, tested, and deployed without any manual steps. The Jenkinsfile lives in the root of the repository — Jenkins reads it and executes the pipeline.</div>
+  </div>
+
+  <div class="interview-card">
+    <div class="iq" onclick="toggleQA(this)">Q: What is the difference between ECR and Docker Hub? <span>▼</span></div>
+    <div class="ia">Both are Docker image registries — storage for Docker images. Docker Hub is public and general purpose. AWS ECR (Elastic Container Registry) is private and deeply integrated with AWS services. ECR images can be pulled by EC2, ECS, and EKS using IAM roles without separate authentication credentials. ECR is in the same AWS region as your compute resources which means faster image pull times and no data transfer costs. For production AWS deployments, ECR is the standard choice over Docker Hub.</div>
+  </div>
+
+  <div class="interview-card">
+    <div class="iq" onclick="toggleQA(this)">Q: How do microservices communicate in Docker Compose vs locally? <span>▼</span></div>
+    <div class="ia">Locally, services use localhost with different ports — subscription-service calls catalog-service at http://localhost:8081. In Docker Compose, each service runs in its own container and localhost refers to that container only, not others. So you use the service name defined in docker-compose.yml as the hostname — subscription-service calls catalog-service at http://catalog-service:8081. Docker's internal DNS resolves container names to IPs automatically. This is why I have CATALOG_SERVICE_URL as an environment variable that gets overridden in docker-compose.yml.</div>
+  </div>
+
+</div>
+
+<div style="text-align:center;padding:20px;color:#4a5568;font-size:12px;margin-top:10px">
+  OTT Platform — Monitoring, Docker, AWS, Jenkins Complete Guide
+</div>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo(0,0);
+}
+function copyById(id) {
+  const el = document.getElementById(id);
+  navigator.clipboard.writeText(el.innerText).then(() => {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '✅ Copied!';
+    btn.style.background = '#276749';
+    setTimeout(() => { btn.textContent = orig; btn.style.background=''; }, 1500);
+  });
+}
+function toggleQA(el) {
+  const a = el.nextElementSibling;
+  const arrow = el.querySelector('span');
+  a.classList.toggle('open');
+  arrow.textContent = a.classList.contains('open') ? '▲' : '▼';
+}
+</script>
+</body>
+</html>

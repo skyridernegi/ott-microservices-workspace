@@ -1,11 +1,3 @@
-# =====================================================
-# API GATEWAY - Application Configuration
-# =====================================================
-# WHY YML instead of .properties?
-# YML supports nested structure — much cleaner for
-# complex Gateway routing config with multiple rules.
-# =====================================================
-
 server:
   port: 8080
 
@@ -13,33 +5,15 @@ spring:
   application:
     name: api-gateway
 
-  # ── Redis (used by Rate Limiter) ──────────────────
   data:
     redis:
       host: localhost
       port: 6379
-      # password: yourpassword   # uncomment if Redis has password
 
-  # ── Spring Cloud Gateway Routes ──────────────────
-  # SPRING CLOUD 2025.0.0 CHANGE:
-  # All gateway config moved under spring.cloud.gateway.server.webflux
-  # Old path: spring.cloud.gateway.routes
-  # New path: spring.cloud.gateway.server.webflux.routes
-  # Same for globalcors — moved under server.webflux
-  # trusted-proxies is NEW in 2025.0.0 — required for X-Forwarded headers
   cloud:
     gateway:
       server:
         webflux:
-
-          # trusted-proxies — NEW required in Spring Cloud 2025.0.0
-          # Enables X-Forwarded headers from proxies
-          # ".*" means trust all — fine for local dev
-          # In production replace with actual load balancer IP e.g. "10\\.0\\.0\\..*"
-          trusted-proxies: ".*"
-
-          # Global CORS — allows Postman and browser to call the gateway
-          # moved from spring.cloud.gateway.globalcors
           globalcors:
             cors-configurations:
               '[/**]':
@@ -47,21 +21,12 @@ spring:
                 allowedMethods: "*"
                 allowedHeaders: "*"
 
-          # moved from spring.cloud.gateway.routes
           routes:
-
-            # ── ROUTE 1: Auth Service (NO JWT filter — public endpoint) ──
-            # /auth/** goes directly to gateway's own AuthController
-            # No JWT validation needed here — this is where you GET the token
             - id: auth-route
               uri: http://localhost:8080
               predicates:
                 - Path=/auth/**
 
-            # ── ROUTE 2: Catalog Service ──────────────────────────────────
-            # All /catalog/** requests → forwarded to catalog-service:8081
-            # JWT filter applied — must send valid token in Authorization header
-            # Rate limiter applied — max 10 requests per second per user
             - id: catalog-service
               uri: http://localhost:8081
               predicates:
@@ -69,14 +34,11 @@ spring:
               filters:
                 - name: RequestRateLimiter
                   args:
-                    redis-rate-limiter.replenishRate: 10      # tokens added per second
-                    redis-rate-limiter.burstCapacity: 20      # max burst allowed
-                    redis-rate-limiter.requestedTokens: 1     # tokens per request
-                    key-resolver: "#{@userKeyResolver}"       # bean defined in RateLimiterConfig
+                    redis-rate-limiter.replenishRate: 10
+                    redis-rate-limiter.burstCapacity: 20
+                    redis-rate-limiter.requestedTokens: 1
+                    key-resolver: "#{@userKeyResolver}"
 
-            # ── ROUTE 3: Subscription Service ────────────────────────────
-            # All /subscriptions/** and /users/** → subscription-service:8082
-            # JWT filter applied + Rate limiter applied
             - id: subscription-service-subscriptions
               uri: http://localhost:8082
               predicates:
@@ -101,16 +63,30 @@ spring:
                     redis-rate-limiter.requestedTokens: 1
                     key-resolver: "#{@userKeyResolver}"
 
-# ── JWT Configuration ─────────────────────────────
-# secret: used to sign and verify JWT tokens
-# expiration: token valid for 1 hour (3600000 ms)
 jwt:
   secret: OTTPlatformSecretKeyForJWTTokenGenerationAndValidation2024
   expiration: 3600000
 
-# ── Logging ──────────────────────────────────────
 logging:
   level:
     com.ott.gateway: DEBUG
     org.springframework.cloud.gateway: INFO
     org.springframework.data.redis: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: [health, info, metrics, gateway]
+  endpoint:
+    health:
+      show-details: always
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: API Gateway
+    version: 1.0.0
+    description: OTT Platform - API Gateway with JWT and Rate Limiting
