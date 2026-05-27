@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OTT Platform — AWS Docker Deployment Guide</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#0f1117;color:#e2e8f0;line-height:1.6;font-size:13px}
+.container{max-width:1000px;margin:0 auto;padding:24px 20px}
+h1{font-size:22px;color:#63b3ed;margin-bottom:4px}
+h2{font-size:15px;color:#90cdf4;margin:20px 0 10px}
+p,li{font-size:12px;color:#a0aec0;line-height:1.8}
+ul,ol{padding-left:18px;margin:6px 0}
+
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:20px;border-bottom:1px solid #2d3748;padding-bottom:12px}
+.tab{background:#1a1f2e;border:1px solid #2d3748;border-radius:6px;padding:7px 14px;font-size:12px;color:#a0aec0;cursor:pointer;transition:all 0.15s}
+.tab:hover{border-color:#4299e1;color:#63b3ed}
+.tab.active{background:#2b6cb0;border-color:#4299e1;color:#fff}
+.section{display:none}.section.active{display:block}
+
+.step{background:#1a1f2e;border:1px solid #2d3748;border-radius:10px;margin-bottom:12px;overflow:hidden}
+.step-hdr{background:#2d3748;padding:10px 16px;display:flex;align-items:center;gap:10px}
+.step-num{background:#2b6cb0;color:#fff;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.step-title{font-size:13px;font-weight:600;color:#e2e8f0;flex:1}
+.step-body{padding:13px 15px}
+
+.file-hdr{background:#1c3829;border:1px solid #276749;border-radius:6px;padding:7px 12px;margin:8px 0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.fname{font-size:12px;font-weight:600;color:#9ae6b4}
+.fpath{font-size:11px;color:#718096;font-family:monospace;margin-left:auto}
+.act{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px}
+.new{background:#1a365d;color:#90cdf4}
+.modify{background:#744210;color:#fbd38d}
+.all3{background:#322659;color:#d6bcfa}
+
+pre{background:#0d1117;border:1px solid #2d3748;border-radius:6px;padding:12px 13px;overflow-x:auto;font-size:11px;line-height:1.8;margin:8px 0;position:relative}
+.copy-btn{position:absolute;top:7px;right:7px;background:#2d3748;color:#a0aec0;border:none;border-radius:4px;padding:3px 9px;font-size:10px;cursor:pointer}
+.copy-btn:hover{background:#4a5568;color:#e2e8f0}
+code{background:#2d3748;padding:2px 6px;border-radius:4px;font-size:11px;color:#63b3ed;font-family:monospace}
+.cm{color:#546e7a;font-style:italic}
+.kw{color:#c792ea}
+.st{color:#c3e88d}
+
+.warn{background:#2d1f00;border:1px solid #d69e2e;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#fbd38d}
+.info{background:#1a2744;border:1px solid #4299e1;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#90cdf4}
+.success{background:#1c3829;border:1px solid #48bb78;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#9ae6b4}
+.danger{background:#2d1515;border:1px solid #742a2a;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#feb2b2}
+
+table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}
+th{background:#2d3748;color:#e2e8f0;padding:7px 11px;text-align:left;font-size:11px}
+td{padding:7px 11px;border-bottom:1px solid #2d3748;color:#a0aec0;vertical-align:top}
+tr:last-child td{border-bottom:none}
+
+.flow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:10px 0}
+.fbox{background:#1a2744;border:1px solid #4299e1;border-radius:6px;padding:6px 12px;font-size:11px;text-align:center}
+.fbox .ft{color:#63b3ed;font-weight:600}
+.fbox .fs{color:#718096;font-size:10px}
+.farr{color:#4299e1;font-size:16px}
+
+.check{display:flex;align-items:flex-start;gap:8px;margin:5px 0;font-size:12px;color:#a0aec0}
+.check-icon{flex-shrink:0;margin-top:2px}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>☁️ AWS Docker Deployment — Complete Guide</h1>
+<p style="color:#718096;margin-bottom:6px">Windows 10 · Docker Desktop · AWS Free Tier · Step by Step</p>
+
+<!-- ARCHITECTURE -->
+<div class="info" style="margin-bottom:14px">
+  <strong>What we're building — deployment flow:</strong><br><br>
+  <div class="flow">
+    <div class="fbox"><div class="ft">STS Build</div><div class="fs">Maven → JAR</div></div>
+    <div class="farr">→</div>
+    <div class="fbox"><div class="ft">Docker Build</div><div class="fs">JAR → Image</div></div>
+    <div class="farr">→</div>
+    <div class="fbox"><div class="ft">AWS ECR</div><div class="fs">Store image</div></div>
+    <div class="farr">→</div>
+    <div class="fbox"><div class="ft">AWS EC2</div><div class="fs">Pull + Run</div></div>
+    <div class="farr">→</div>
+    <div class="fbox" style="background:#1c3829;border-color:#48bb78"><div class="ft" style="color:#9ae6b4">Live on AWS</div><div class="fs">port 8080</div></div>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('phase0')">Setup Check</button>
+  <button class="tab" onclick="show('phase1')">Phase 1: JAR + Dockerfile</button>
+  <button class="tab" onclick="show('phase2')">Phase 2: Local Docker Test</button>
+  <button class="tab" onclick="show('phase3')">Phase 3: AWS CLI Setup</button>
+  <button class="tab" onclick="show('phase4')">Phase 4: ECR Push</button>
+  <button class="tab" onclick="show('phase5')">Phase 5: EC2 Launch</button>
+  <button class="tab" onclick="show('phase6')">Phase 6: Deploy + Test</button>
+</div>
+
+<!-- ===================== SETUP CHECK ===================== -->
+<div id="phase0" class="section active">
+  <h2>Before starting — verify your setup</h2>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">1</span><span class="step-title">Open Command Prompt and run these checks</span></div>
+    <div class="step-body">
+      <p>Open <strong>Command Prompt</strong> (Windows key → type cmd → Enter) and run each line:</p>
+      <pre id="checks"><span class="cm">REM Check Docker is running</span>
+docker --version
+
+<span class="cm">REM Check Docker Compose is available</span>
+docker compose version
+
+<span class="cm">REM Check Java is available</span>
+java -version
+
+<span class="cm">REM Check Maven is available</span>
+mvn -version</pre>
+      <button class="copy-btn" onclick="copyById('checks')">Copy</button>
+
+      <div class="success" style="margin-top:10px">Expected output:
+Docker version 24.x.x or higher ✅
+Docker Compose version 2.x.x ✅
+openjdk version 21.x.x ✅
+Apache Maven 3.x.x ✅</div>
+
+      <div class="warn">If docker compose version fails — try: <code>docker-compose --version</code> (with hyphen). Both work.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">2</span><span class="step-title">Create your project folder structure</span></div>
+    <div class="step-body">
+      <p>Create a folder <strong>ott-platform</strong> on your Desktop and make sure all 3 service folders are inside it:</p>
+      <pre>Desktop\
+└── ott-platform\
+    ├── catalog-service\        ← your existing STS project
+    ├── subscription-service\   ← your existing STS project
+    ├── api-gateway\            ← your existing STS project
+    └── database_schema.sql     ← copy from earlier</pre>
+      <div class="info">If your projects are in a different location (like C:\workspace), that's fine too. Just note the full path — you'll need it when running docker commands.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PHASE 1: JAR + DOCKERFILE ===================== -->
+<div id="phase1" class="section">
+  <h2>Phase 1 — Build JARs and create Dockerfiles</h2>
+
+  <div class="info">
+    <strong>WHY JAR first:</strong> Docker cannot build your Spring Boot app from source code directly. You first build a JAR (Java executable) using Maven, then Docker packages that JAR into an image. Think of it as: Maven builds the car, Docker puts it in a shipping container.
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">1</span><span class="step-title">Build JAR — do this for ALL 3 services in STS</span></div>
+    <div class="step-body">
+      <p>In STS for each service:</p>
+      <pre>Right-click project name (e.g. catalog-service)
+→ Run As
+→ Maven build...
+→ In Goals field type: clean package -DskipTests
+→ Click Run</pre>
+      <div class="success" style="margin-top:8px">
+        Wait for BUILD SUCCESS in STS console. Then verify JAR was created:<br>
+        catalog-service → target → catalog-service-1.0.0.jar ✅<br>
+        subscription-service → target → subscription-service-1.0.0.jar ✅<br>
+        api-gateway → target → api-gateway-1.0.0.jar ✅
+      </div>
+      <div class="warn">If JAR name is different (e.g. catalog-service-0.0.1-SNAPSHOT.jar) — note the exact name. You'll use it in Dockerfile below.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">2</span><span class="step-title">Create Dockerfile — catalog-service</span></div>
+    <div class="step-body">
+      <div class="file-hdr">
+        <span class="fname">Dockerfile</span>
+        <span class="act new">NEW FILE</span>
+        <span class="fpath">catalog-service\ (same folder as pom.xml — NOT inside src)</span>
+      </div>
+      <p><strong style="color:#e2e8f0">HOW TO CREATE IN WINDOWS:</strong> Open Notepad → paste code below → File → Save As → navigate to catalog-service folder → filename: <strong>Dockerfile</strong> (no extension) → Save as type: All Files → Save</p>
+      <p style="margin-top:8px"><strong style="color:#e2e8f0">WHY each line:</strong></p>
+      <pre id="df1"><span class="cm"># FROM — base image. eclipse-temurin:21-jre-alpine is Java 21
+# slim Alpine Linux. Small size (~200MB vs ~500MB for full JDK)</span>
+FROM eclipse-temurin:21-jre-alpine
+
+<span class="cm"># WORKDIR — working directory inside container
+# All subsequent commands run from this folder</span>
+WORKDIR /app
+
+<span class="cm"># COPY — copies JAR from your Windows machine into container
+# Left side: path on Windows (target/catalog-service-1.0.0.jar)
+# Right side: path inside container (app.jar)
+# Update the JAR name if yours is different</span>
+COPY target/catalog-service-1.0.0.jar app.jar
+
+<span class="cm"># EXPOSE — documents which port this container listens on
+# Does NOT actually open the port — that happens in docker-compose</span>
+EXPOSE 8081
+
+<span class="cm"># ENTRYPOINT — command that runs when container starts
+# -Djava.security.egd speeds up Spring Boot startup</span>
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","app.jar"]</pre>
+      <button class="copy-btn" onclick="copyById('df1')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">3</span><span class="step-title">Create Dockerfile — subscription-service</span></div>
+    <div class="step-body">
+      <div class="file-hdr">
+        <span class="fname">Dockerfile</span>
+        <span class="act new">NEW FILE</span>
+        <span class="fpath">subscription-service\ (same folder as pom.xml)</span>
+      </div>
+      <pre id="df2">FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+COPY target/subscription-service-1.0.0.jar app.jar
+EXPOSE 8082
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","app.jar"]</pre>
+      <button class="copy-btn" onclick="copyById('df2')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">4</span><span class="step-title">Create Dockerfile — api-gateway</span></div>
+    <div class="step-body">
+      <div class="file-hdr">
+        <span class="fname">Dockerfile</span>
+        <span class="act new">NEW FILE</span>
+        <span class="fpath">api-gateway\ (same folder as pom.xml)</span>
+      </div>
+      <pre id="df3">FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+COPY target/api-gateway-1.0.0.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","app.jar"]</pre>
+      <button class="copy-btn" onclick="copyById('df3')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">5</span><span class="step-title">Create docker-compose.yml — runs everything together</span></div>
+    <div class="step-body">
+      <div class="file-hdr">
+        <span class="fname">docker-compose.yml</span>
+        <span class="act new">NEW FILE</span>
+        <span class="fpath">ott-platform\ (parent folder — same level as all 3 service folders)</span>
+      </div>
+      <p><strong style="color:#e2e8f0">WHY docker-compose:</strong> Starts MySQL, Redis, and all 3 Spring Boot services in correct order with networking between them — one command instead of 5 separate starts.</p>
+      <pre id="dc">version: '3.8'
+
+services:
+
+  <span class="cm"># ── MySQL ─────────────────────────────────────</span>
+  mysql:
+    image: mysql:8.0
+    container_name: ott-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: catalog_db
+    ports:
+      - "3307:3306"
+    <span class="cm">  # 3307 on Windows to avoid conflict with your local MySQL on 3306</span>
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - ott-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  <span class="cm"># ── Redis ──────────────────────────────────────</span>
+  redis:
+    image: redis:7-alpine
+    container_name: ott-redis
+    ports:
+      - "6380:6379"
+    <span class="cm">  # 6380 on Windows to avoid conflict with your local Redis on 6379</span>
+    networks:
+      - ott-network
+
+  <span class="cm"># ── Catalog Service ────────────────────────────</span>
+  catalog-service:
+    build:
+      context: ./catalog-service
+    container_name: ott-catalog
+    ports:
+      - "8081:8081"
+    environment:
+      <span class="cm"># Override localhost with Docker container names</span>
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/catalog_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - ott-network
+
+  <span class="cm"># ── Subscription Service ───────────────────────</span>
+  subscription-service:
+    build:
+      context: ./subscription-service
+    container_name: ott-subscription
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/subscription_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      <span class="cm"># Use container name instead of localhost for Feign calls</span>
+      CATALOG_SERVICE_URL: http://catalog-service:8081
+    depends_on:
+      mysql:
+        condition: service_healthy
+      catalog-service:
+        condition: service_started
+    networks:
+      - ott-network
+
+  <span class="cm"># ── API Gateway ────────────────────────────────</span>
+  api-gateway:
+    build:
+      context: ./api-gateway
+    container_name: ott-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      <span class="cm"># Use Redis container name instead of localhost</span>
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+    depends_on:
+      - redis
+      - catalog-service
+      - subscription-service
+    networks:
+      - ott-network
+
+networks:
+  ott-network:
+    driver: bridge
+
+volumes:
+  mysql_data:</pre>
+      <button class="copy-btn" onclick="copyById('dc')">Copy</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PHASE 2: LOCAL DOCKER TEST ===================== -->
+<div id="phase2" class="section">
+  <h2>Phase 2 — Test locally with Docker before pushing to AWS</h2>
+
+  <div class="info">
+    <strong>WHY test locally first:</strong> Always verify Docker works on your machine before pushing to AWS. Fixing errors locally takes seconds. Fixing on AWS takes minutes and uses your free tier quota.
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">1</span><span class="step-title">Open Command Prompt — navigate to ott-platform folder</span></div>
+    <div class="step-body">
+      <pre id="nav"><span class="cm">REM Navigate to your ott-platform folder
+REM Replace with your actual path</span>
+cd C:\Users\skyri\Desktop\ott-platform</pre>
+      <button class="copy-btn" onclick="copyById('nav')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">2</span><span class="step-title">Build and start all containers</span></div>
+    <div class="step-body">
+      <pre id="dcup"><span class="cm">REM Build images and start all services
+REM --build forces rebuild even if image already exists</span>
+docker compose up --build
+
+<span class="cm">REM This will take 3-5 minutes first time
+REM You'll see logs from all services streaming</span></pre>
+      <button class="copy-btn" onclick="copyById('dcup')">Copy</button>
+      <div class="success" style="margin-top:8px">Look for these lines in the output:
+ott-catalog      | Started CatalogServiceApplication on port 8081 ✅
+ott-subscription | Started SubscriptionServiceApplication on port 8082 ✅
+ott-gateway      | Started ApiGatewayApplication on port 8080 ✅</div>
+      <div class="warn">If you see "port already in use" — stop your STS services first. Docker and STS cannot both use the same port.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">3</span><span class="step-title">Verify all containers are running</span></div>
+    <div class="step-body">
+      <p>Open a NEW Command Prompt window (keep the first one running) and type:</p>
+      <pre id="dcps">docker compose ps</pre>
+      <button class="copy-btn" onclick="copyById('dcps')">Copy</button>
+      <div class="success" style="margin-top:8px">You should see all 5 containers with status "running":
+ott-mysql        running
+ott-redis        running
+ott-catalog      running
+ott-subscription running
+ott-gateway      running</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">4</span><span class="step-title">Quick Postman test — verify Docker deployment works</span></div>
+    <div class="step-body">
+      <table>
+        <tr><th>Test</th><th>URL</th><th>Expected</th></tr>
+        <tr><td>Health check</td><td>GET http://localhost:8081/actuator/health</td><td>{"status":"UP"}</td></tr>
+        <tr><td>Generate token</td><td>POST http://localhost:8080/auth/token</td><td>{"token":"eyJ..."}</td></tr>
+        <tr><td>Get plans (with token)</td><td>GET http://localhost:8080/catalog/plans</td><td>List of plans</td></tr>
+      </table>
+      <div class="success" style="margin-top:8px">If all 3 work → your Docker setup is correct → ready for AWS!</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">5</span><span class="step-title">Useful Docker commands to know</span></div>
+    <div class="step-body">
+      <pre id="dcCmds"><span class="cm">REM View logs for one service</span>
+docker compose logs catalog-service
+
+<span class="cm">REM Follow logs in real time</span>
+docker compose logs -f api-gateway
+
+<span class="cm">REM Stop all containers (keeps data)</span>
+docker compose stop
+
+<span class="cm">REM Stop and remove containers (keeps data volumes)</span>
+docker compose down
+
+<span class="cm">REM Stop, remove containers AND delete all data</span>
+docker compose down -v
+
+<span class="cm">REM Restart one service without rebuilding</span>
+docker compose restart catalog-service</pre>
+      <button class="copy-btn" onclick="copyById('dcCmds')">Copy</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PHASE 3: AWS CLI SETUP ===================== -->
+<div id="phase3" class="section">
+  <h2>Phase 3 — Set up AWS CLI on Windows 10</h2>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">1</span><span class="step-title">Download and install AWS CLI</span></div>
+    <div class="step-body">
+      <p>Go to: <strong>https://aws.amazon.com/cli</strong> → click Download → download <strong>AWSCLIV2.msi</strong> for Windows → run installer → all defaults → finish</p>
+      <p style="margin-top:8px">Verify in new Command Prompt:</p>
+      <pre id="awsv">aws --version</pre>
+      <button class="copy-btn" onclick="copyById('awsv')">Copy</button>
+      <div class="success">Should show: aws-cli/2.x.x Python/3.x.x Windows/10</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">2</span><span class="step-title">Create IAM user in AWS Console — get Access Keys</span></div>
+    <div class="step-body">
+      <p><strong style="color:#e2e8f0">WHY IAM user:</strong> Never use your root AWS account for CLI. IAM (Identity and Access Management) lets you create a user with specific permissions. Best practice for security.</p>
+      <ol>
+        <li style="margin-bottom:6px">Open <strong>https://console.aws.amazon.com</strong> → login with your account</li>
+        <li style="margin-bottom:6px">Search for <strong>IAM</strong> in top search bar → click IAM</li>
+        <li style="margin-bottom:6px">Left menu → <strong>Users</strong> → click <strong>Create user</strong></li>
+        <li style="margin-bottom:6px">Username: <strong>ott-deployer</strong> → Next</li>
+        <li style="margin-bottom:6px">Permissions: click <strong>Attach policies directly</strong> → search and select:
+          <ul style="margin-top:4px">
+            <li><code>AmazonEC2FullAccess</code></li>
+            <li><code>AmazonECR_FullAccess</code> (or AmazonEC2ContainerRegistryFullAccess)</li>
+          </ul>
+        </li>
+        <li style="margin-bottom:6px">Click <strong>Create user</strong></li>
+        <li style="margin-bottom:6px">Click on the new user → <strong>Security credentials</strong> tab → <strong>Create access key</strong></li>
+        <li style="margin-bottom:6px">Use case: <strong>CLI</strong> → Next → Create</li>
+        <li><strong style="color:#fc8181">DOWNLOAD the CSV file or copy both keys NOW — you cannot see Secret key again!</strong></li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">3</span><span class="step-title">Configure AWS CLI with your credentials</span></div>
+    <div class="step-body">
+      <p>Open Command Prompt and run:</p>
+      <pre id="awsConfig">aws configure</pre>
+      <button class="copy-btn" onclick="copyById('awsConfig')">Copy</button>
+      <p style="margin-top:8px">Enter values when prompted:</p>
+      <pre>AWS Access Key ID:     [paste your Access Key ID]
+AWS Secret Access Key: [paste your Secret Access Key]
+Default region name:   ap-south-1
+Default output format: json</pre>
+      <p style="margin-top:8px">Verify it works:</p>
+      <pre id="awsTest">aws sts get-caller-identity</pre>
+      <button class="copy-btn" onclick="copyById('awsTest')">Copy</button>
+      <div class="success" style="margin-top:6px">Should show your AWS Account ID and username. If you see this — AWS CLI is configured correctly.</div>
+      <div class="warn">If you see "credentials not found" — re-run aws configure and paste keys carefully.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PHASE 4: ECR PUSH ===================== -->
+<div id="phase4" class="section">
+  <h2>Phase 4 — Push Docker images to AWS ECR</h2>
+
+  <div class="info">
+    <strong>WHY ECR:</strong> ECR (Elastic Container Registry) is AWS's private Docker image storage. Your EC2 server will pull images from ECR. Like a private Docker Hub but inside AWS — faster, secure, and integrated with EC2.
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">1</span><span class="step-title">Get your AWS Account ID</span></div>
+    <div class="step-body">
+      <pre id="accountId">aws sts get-caller-identity --query Account --output text</pre>
+      <button class="copy-btn" onclick="copyById('accountId')">Copy</button>
+      <p style="margin-top:6px">This shows your 12-digit Account ID like: <code>123456789012</code></p>
+      <p style="margin-top:4px">Copy it — you need it in every command below. Replace <code>YOUR_ACCOUNT_ID</code> with this number.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">2</span><span class="step-title">Create ECR repositories</span></div>
+    <div class="step-body">
+      <p>Run these 3 commands — creates a repository for each service:</p>
+      <pre id="ecrCreate">aws ecr create-repository --repository-name ott/catalog-service --region ap-south-1
+
+aws ecr create-repository --repository-name ott/subscription-service --region ap-south-1
+
+aws ecr create-repository --repository-name ott/api-gateway --region ap-south-1</pre>
+      <button class="copy-btn" onclick="copyById('ecrCreate')">Copy</button>
+      <div class="success" style="margin-top:6px">Each command shows a JSON response with "repositoryUri". That's the address of your image storage.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">3</span><span class="step-title">Login to ECR from Docker</span></div>
+    <div class="step-body">
+      <p>Replace <code>YOUR_ACCOUNT_ID</code> with your actual account ID from Step 1:</p>
+      <pre id="ecrLogin">aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com</pre>
+      <button class="copy-btn" onclick="copyById('ecrLogin')">Copy</button>
+      <div class="success" style="margin-top:6px">Must see: Login Succeeded ✅ — if not, check your IAM permissions.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">4</span><span class="step-title">Build, tag and push all images to ECR</span></div>
+    <div class="step-body">
+      <p>Run from your <code>ott-platform</code> folder. Replace <code>YOUR_ACCOUNT_ID</code> in each command:</p>
+      <pre id="ecrPushAll"><span class="cm">REM ── catalog-service ──────────────────────────────</span>
+docker build -t ott/catalog-service ./catalog-service
+
+docker tag ott/catalog-service:latest YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ott/catalog-service:latest
+
+docker push YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ott/catalog-service:latest
+
+<span class="cm">REM ── subscription-service ─────────────────────────</span>
+docker build -t ott/subscription-service ./subscription-service
+
+docker tag ott/subscription-service:latest YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ott/subscription-service:latest
+
+docker push YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ott/subscription-service:latest
+
+<span class="cm">REM ── api-gateway ──────────────────────────────────</span>
+docker build -t ott/api-gateway ./api-gateway
+
+docker tag ott/api-gateway:latest YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ott/api-gateway:latest
+
+docker push YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ott/api-gateway:latest</pre>
+      <button class="copy-btn" onclick="copyById('ecrPushAll')">Copy</button>
+      <div class="success" style="margin-top:8px">Each push shows progress bars. When done — verify in AWS Console → ECR → Repositories → you should see all 3 repos with images.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PHASE 5: EC2 LAUNCH ===================== -->
+<div id="phase5" class="section">
+  <h2>Phase 5 — Launch EC2 instance on AWS</h2>
+
+  <div class="info">
+    <strong>WHY EC2:</strong> EC2 (Elastic Compute Cloud) is a virtual server on AWS. We'll run Docker on this server and pull our images from ECR to run the OTT platform publicly accessible on the internet.
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">1</span><span class="step-title">Launch EC2 in AWS Console — step by step</span></div>
+    <div class="step-body">
+      <p>AWS Console → search <strong>EC2</strong> → click EC2 → click <strong>Launch Instance</strong>:</p>
+      <table>
+        <tr><th>Field</th><th>Value</th><th>Why</th></tr>
+        <tr><td>Name</td><td>ott-platform-server</td><td>Easy to identify</td></tr>
+        <tr><td>AMI</td><td>Amazon Linux 2023 (free tier eligible)</td><td>AWS native, has yum package manager</td></tr>
+        <tr><td>Instance type</td><td>t2.micro</td><td>Free tier — 1 CPU, 1GB RAM</td></tr>
+        <tr><td>Key pair</td><td>Create new → name: ott-key → RSA → .pem → Download</td><td>Needed for SSH access</td></tr>
+        <tr><td>Storage</td><td>20 GB gp2</td><td>Free tier allows 30GB</td></tr>
+      </table>
+      <div class="warn" style="margin-top:8px">Save ott-key.pem file somewhere safe — like C:\Users\skyri\aws-keys\ — you CANNOT download it again after this screen.</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">2</span><span class="step-title">Configure Security Group — open required ports</span></div>
+    <div class="step-body">
+      <p>On the same Launch Instance page → Network settings → click <strong>Edit</strong>:</p>
+      <p style="margin-top:8px">Click <strong>Add security group rule</strong> for each row below:</p>
+      <table>
+        <tr><th>Type</th><th>Port</th><th>Source</th><th>Purpose</th></tr>
+        <tr><td>SSH</td><td>22</td><td>My IP</td><td>Connect to server</td></tr>
+        <tr><td>Custom TCP</td><td>8080</td><td>Anywhere (0.0.0.0/0)</td><td>API Gateway</td></tr>
+        <tr><td>Custom TCP</td><td>8081</td><td>Anywhere (0.0.0.0/0)</td><td>Catalog Service</td></tr>
+        <tr><td>Custom TCP</td><td>8082</td><td>Anywhere (0.0.0.0/0)</td><td>Subscription Service</td></tr>
+      </table>
+      <p style="margin-top:8px">Click <strong>Launch Instance</strong> → wait 1-2 minutes → Instance State: Running ✅</p>
+      <p style="margin-top:6px">Note your <strong>Public IPv4 address</strong> — you'll need it to SSH and test.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">3</span><span class="step-title">Attach IAM role to EC2 — allows pulling from ECR</span></div>
+    <div class="step-body">
+      <p><strong style="color:#e2e8f0">WHY:</strong> EC2 needs permission to pull images from ECR. Instead of putting credentials on the server, we attach an IAM Role — AWS automatically provides credentials.</p>
+      <ol>
+        <li style="margin-bottom:5px">AWS Console → IAM → Roles → <strong>Create role</strong></li>
+        <li style="margin-bottom:5px">Trusted entity: <strong>AWS service</strong> → Use case: <strong>EC2</strong> → Next</li>
+        <li style="margin-bottom:5px">Search and select: <strong>AmazonEC2ContainerRegistryReadOnly</strong> → Next</li>
+        <li style="margin-bottom:5px">Role name: <strong>ott-ec2-ecr-role</strong> → Create role</li>
+        <li style="margin-bottom:5px">Go to EC2 → select your instance → Actions → Security → <strong>Modify IAM role</strong></li>
+        <li>Select <strong>ott-ec2-ecr-role</strong> → Save</li>
+      </ol>
+      <div class="success">Now your EC2 can pull from ECR without any access keys on the server.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PHASE 6: DEPLOY + TEST ===================== -->
+<div id="phase6" class="section">
+  <h2>Phase 6 — Connect to EC2 and deploy</h2>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">1</span><span class="step-title">Connect to EC2 via SSH from Windows Command Prompt</span></div>
+    <div class="step-body">
+      <p>Open Command Prompt → navigate to folder where ott-key.pem is saved → run:</p>
+      <pre id="sshConnect"><span class="cm">REM First fix key file permissions (Windows 10)</span>
+icacls ott-key.pem /inheritance:r
+icacls ott-key.pem /grant:r "%USERNAME%:R"
+
+<span class="cm">REM Connect to EC2 — replace YOUR_EC2_PUBLIC_IP</span>
+ssh -i ott-key.pem ec2-user@YOUR_EC2_PUBLIC_IP</pre>
+      <button class="copy-btn" onclick="copyById('sshConnect')">Copy</button>
+      <p style="margin-top:8px">Type <strong>yes</strong> when asked about fingerprint. You'll see:</p>
+      <pre style="color:#9ae6b4">   ,     #_
+   ~\_  ####_        Amazon Linux 2023
+  ~~  \_#####\
+[ec2-user@ip-10-0-1-x ~]$  ← you are now inside EC2!</pre>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">2</span><span class="step-title">Install Docker on EC2 — run these commands inside EC2</span></div>
+    <div class="step-body">
+      <div class="warn">You are now typing inside the EC2 server — NOT your Windows machine. These are Linux commands.</div>
+      <pre id="ec2Setup"><span class="cm"># Update packages</span>
+sudo dnf update -y
+
+<span class="cm"># Install Docker</span>
+sudo dnf install docker -y
+
+<span class="cm"># Start Docker service</span>
+sudo systemctl start docker
+sudo systemctl enable docker
+
+<span class="cm"># Add ec2-user to docker group (no need for sudo)</span>
+sudo usermod -a -G docker ec2-user
+
+<span class="cm"># Install Docker Compose</span>
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+<span class="cm"># Logout and reconnect so group change takes effect</span>
+exit</pre>
+      <button class="copy-btn" onclick="copyById('ec2Setup')">Copy</button>
+      <p style="margin-top:8px">Then reconnect:</p>
+      <pre id="reconnect">ssh -i ott-key.pem ec2-user@YOUR_EC2_PUBLIC_IP</pre>
+      <button class="copy-btn" onclick="copyById('reconnect')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">3</span><span class="step-title">Login to ECR from EC2 and create docker-compose</span></div>
+    <div class="step-body">
+      <p>Inside EC2 terminal — replace YOUR_ACCOUNT_ID:</p>
+      <pre id="ec2Ecr"><span class="cm"># Login to ECR — EC2 uses IAM role, no credentials needed</span>
+aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com
+
+<span class="cm"># Create folder for our app</span>
+mkdir ott-platform
+cd ott-platform
+
+<span class="cm"># Create docker-compose file (opens nano text editor)</span>
+nano docker-compose.yml</pre>
+      <button class="copy-btn" onclick="copyById('ec2Ecr')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">4</span><span class="step-title">Paste this docker-compose.yml inside EC2 nano editor</span></div>
+    <div class="step-body">
+      <p>Replace <code>YOUR_ACCOUNT_ID</code> with your actual account ID before pasting:</p>
+      <pre id="ec2Compose">version: '3.8'
+
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: ott-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: catalog_db
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - ott-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: ott-redis
+    networks:
+      - ott-network
+
+  catalog-service:
+    image: YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ott/catalog-service:latest
+    container_name: ott-catalog
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/catalog_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - ott-network
+
+  subscription-service:
+    image: YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ott/subscription-service:latest
+    container_name: ott-subscription
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/subscription_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      CATALOG_SERVICE_URL: http://catalog-service:8081
+    depends_on:
+      mysql:
+        condition: service_healthy
+      catalog-service:
+        condition: service_started
+    networks:
+      - ott-network
+
+  api-gateway:
+    image: YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ott/api-gateway:latest
+    container_name: ott-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+    depends_on:
+      - redis
+      - catalog-service
+      - subscription-service
+    networks:
+      - ott-network
+
+networks:
+  ott-network:
+    driver: bridge
+
+volumes:
+  mysql_data:</pre>
+      <button class="copy-btn" onclick="copyById('ec2Compose')">Copy</button>
+      <p style="margin-top:8px">In nano: paste → <strong>Ctrl+O</strong> to save → Enter → <strong>Ctrl+X</strong> to exit</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">5</span><span class="step-title">Start the entire OTT platform on AWS</span></div>
+    <div class="step-body">
+      <pre id="ec2Start"><span class="cm"># Pull images from ECR and start all containers</span>
+docker-compose up -d
+
+<span class="cm"># Watch startup logs</span>
+docker-compose logs -f
+
+<span class="cm"># Check all running</span>
+docker-compose ps</pre>
+      <button class="copy-btn" onclick="copyById('ec2Start')">Copy</button>
+      <div class="success" style="margin-top:8px">All 5 containers show "Up" status = your OTT platform is LIVE on AWS! 🎉</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">6</span><span class="step-title">Test your live AWS deployment from Postman</span></div>
+    <div class="step-body">
+      <p>Replace <code>YOUR_EC2_PUBLIC_IP</code> with your actual EC2 IP address:</p>
+      <table>
+        <tr><th>Test</th><th>URL (use EC2 Public IP)</th><th>Expected</th></tr>
+        <tr><td>Health check</td><td>GET http://YOUR_EC2_PUBLIC_IP:8081/actuator/health</td><td>{"status":"UP"}</td></tr>
+        <tr><td>Generate token</td><td>POST http://YOUR_EC2_PUBLIC_IP:8080/auth/token</td><td>{"token":"eyJ..."}</td></tr>
+        <tr><td>Get plans</td><td>GET http://YOUR_EC2_PUBLIC_IP:8080/catalog/plans</td><td>Plans list</td></tr>
+        <tr><td>Subscribe</td><td>POST http://YOUR_EC2_PUBLIC_IP:8080/subscriptions</td><td>201 Created</td></tr>
+      </table>
+      <div class="success" style="margin-top:8px">🎉 If these work — your OTT platform is deployed on AWS and running live on the internet!</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="step-num">7</span><span class="step-title">IMPORTANT — Stop EC2 when not using to save free tier</span></div>
+    <div class="step-body">
+      <p>Free tier gives you 750 hours/month of t2.micro. That's enough for one instance running all month. But stop it when not needed:</p>
+      <pre>AWS Console → EC2 → Instances → select ott-platform-server
+→ Instance state → Stop instance</pre>
+      <div class="warn">STOP not TERMINATE. Stop = like shutting down (data preserved). Terminate = permanent deletion.</div>
+      <p style="margin-top:8px">When you want to use it again → Start instance → wait 1 min → new Public IP will be assigned → update Postman URLs.</p>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center;padding:20px;color:#4a5568;font-size:12px;margin-top:10px">
+  OTT Platform — AWS Docker Deployment Complete Guide · Windows 10
+</div>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo(0,0);
+}
+function copyById(id) {
+  const el = document.getElementById(id);
+  navigator.clipboard.writeText(el.innerText).then(() => {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '✅ Copied!';
+    btn.style.background='#276749';
+    setTimeout(()=>{ btn.textContent=orig; btn.style.background=''; }, 1500);
+  });
+}
+</script>
+</body>
+</html>

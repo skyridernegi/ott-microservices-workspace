@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OTT Platform — Disney Standard Complete Microservices Roadmap</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#0f1117;color:#e2e8f0;line-height:1.6;font-size:13px}
+.container{max-width:1060px;margin:0 auto;padding:24px 20px}
+h1{font-size:22px;color:#63b3ed;margin-bottom:4px}
+h2{font-size:15px;color:#90cdf4;margin:20px 0 10px}
+h3{font-size:13px;color:#e2e8f0;margin:10px 0 6px;font-weight:600}
+p,li{font-size:12px;color:#a0aec0;line-height:1.8}
+ul,ol{padding-left:18px;margin:6px 0}
+
+.tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:20px;border-bottom:1px solid #2d3748;padding-bottom:10px}
+.tab{background:#1a1f2e;border:1px solid #2d3748;border-radius:6px;padding:6px 11px;font-size:11px;color:#a0aec0;cursor:pointer;transition:all 0.15s}
+.tab:hover{border-color:#4299e1;color:#63b3ed}
+.tab.active{background:#2b6cb0;border-color:#4299e1;color:#fff}
+.section{display:none}.section.active{display:block}
+
+.card{background:#1a1f2e;border:1px solid #2d3748;border-radius:10px;padding:14px 16px;margin-bottom:12px}
+.card.green{border-left:4px solid #48bb78}
+.card.blue{border-left:4px solid #4299e1}
+.card.orange{border-left:4px solid #ed8936}
+.card.purple{border-left:4px solid #9f7aea}
+.card.red{border-left:4px solid #fc8181}
+.card.yellow{border-left:4px solid #f6e05e}
+.card.teal{border-left:4px solid #38b2ac}
+.card.pink{border-left:4px solid #ed64a6}
+
+.step{background:#1a1f2e;border:1px solid #2d3748;border-radius:10px;margin-bottom:10px;overflow:hidden}
+.step-hdr{background:#2d3748;padding:9px 14px;display:flex;align-items:center;gap:10px}
+.snum{background:#2b6cb0;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.stitle{font-size:13px;font-weight:600;color:#e2e8f0;flex:1}
+.step-body{padding:12px 14px}
+
+pre{background:#0d1117;border:1px solid #2d3748;border-radius:6px;padding:11px 13px;overflow-x:auto;font-size:11px;line-height:1.7;margin:8px 0;position:relative}
+.copy-btn{position:absolute;top:7px;right:7px;background:#2d3748;color:#a0aec0;border:none;border-radius:4px;padding:3px 9px;font-size:10px;cursor:pointer}
+.copy-btn:hover{background:#4a5568}
+code{background:#2d3748;padding:2px 6px;border-radius:4px;font-size:11px;color:#63b3ed;font-family:monospace}
+
+.warn{background:#2d1f00;border:1px solid #d69e2e;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#fbd38d}
+.info{background:#1a2744;border:1px solid #4299e1;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#90cdf4}
+.success{background:#1c3829;border:1px solid #48bb78;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#9ae6b4}
+.danger{background:#2d1515;border:1px solid #742a2a;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#feb2b2}
+
+table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}
+th{background:#2d3748;color:#e2e8f0;padding:7px 11px;text-align:left;font-size:11px}
+td{padding:7px 11px;border-bottom:1px solid #2d3748;color:#a0aec0;vertical-align:top}
+tr:last-child td{border-bottom:none}
+.yes{color:#48bb78;font-weight:600}.no{color:#fc8181}.partial{color:#fbd38d}
+
+.badge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;display:inline-block;margin:2px}
+.b-done{background:#1c4532;color:#9ae6b4}
+.b-next{background:#744210;color:#fbd38d}
+.b-later{background:#2d3748;color:#a0aec0}
+.b-disney{background:#1a365d;color:#90cdf4}
+
+.arch-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.arch-svc{border-radius:8px;padding:10px 12px;font-size:11px;flex:1;min-width:140px}
+.arch-svc .asn{font-weight:600;font-size:12px}
+.arch-svc .asp{font-size:10px;opacity:0.8;margin-top:2px}
+.arch-svc .asd{font-size:11px;margin-top:4px}
+
+.iq-card{background:#1a1f2e;border:1px solid #2d3748;border-radius:8px;margin-bottom:8px;overflow:hidden}
+.iq{background:#263244;padding:9px 13px;font-size:12px;font-weight:600;color:#e2e8f0;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.iq:hover{background:#2d3a52}
+.ia{padding:11px 13px;font-size:12px;color:#a0aec0;line-height:1.7;display:none}
+.ia.open{display:block}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>🏰 Disney-Standard OTT Platform — Complete Microservices Roadmap</h1>
+<p style="color:#718096;margin-bottom:6px">All 16 topics · Learning order · Use cases · Interview preparation · Complete architecture</p>
+
+<div class="warn" style="margin-bottom:16px">
+  <strong>Reality check — honest timeline:</strong><br>
+  All 16 topics done properly = 6-8 weeks of focused learning. Each tab in this guide is 2-4 days of work.<br>
+  <strong>For interviews next week:</strong> Focus on tabs marked <span class="badge b-next">NEXT</span> — these are most asked.<br>
+  <strong>Already done:</strong> Tabs marked <span class="badge b-done">DONE</span> — you built these already!
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('architecture')">Full Architecture</button>
+  <button class="tab" onclick="show('services')">All Services</button>
+  <button class="tab" onclick="show('eureka')">Service Discovery</button>
+  <button class="tab" onclick="show('circuit')">Circuit Breaker</button>
+  <button class="tab" onclick="show('config')">Config Server</button>
+  <button class="tab" onclick="show('kafka')">Kafka Messaging</button>
+  <button class="tab" onclick="show('oauth2')">OAuth2 + Security</button>
+  <button class="tab" onclick="show('loadbalancer')">Load Balancing</button>
+  <button class="tab" onclick="show('logging')">ELK Logging</button>
+  <button class="tab" onclick="show('tracing')">Distributed Tracing</button>
+  <button class="tab" onclick="show('kubernetes')">Kubernetes</button>
+  <button class="tab" onclick="show('aws')">AWS Services</button>
+  <button class="tab" onclick="show('interview')">Interview Master</button>
+</div>
+
+<!-- ===================== FULL ARCHITECTURE ===================== -->
+<div id="architecture" class="section active">
+  <h2>Complete Disney-standard OTT Platform Architecture</h2>
+
+  <pre id="arch">
+                          ┌─────────────────────────────────────────────────────┐
+                          │              ESPN Web UI (React/JS)                  │
+                          │    Login · Subscribe · Browse · Notifications        │
+                          └─────────────────────┬───────────────────────────────┘
+                                                │ HTTP
+                          ┌─────────────────────▼───────────────────────────────┐
+                          │                 AWS ALB (Load Balancer)              │
+                          │         Routes traffic to API Gateway instances      │
+                          └─────────────────────┬───────────────────────────────┘
+                                                │
+                          ┌─────────────────────▼───────────────────────────────┐
+                          │              API Gateway (Spring Cloud Gateway)      │
+                          │   JWT Validation · Rate Limiting · Routing · CORS   │
+                          └──┬──────┬────────┬────────┬────────┬────────┬───────┘
+                             │      │        │        │        │        │
+              ┌──────────────▼┐ ┌───▼────┐ ┌▼──────┐ ┌▼──────┐ ┌▼──────┐ ┌▼──────┐
+              │  User Service │ │Catalog │ │Payment│ │Subscr │ │Campaign│ │Notif  │
+              │  Auth/JWT     │ │Service │ │Service│ │Service│ │Service │ │Service│
+              │  Port: 8083   │ │:8081   │ │:8084  │ │:8082  │ │:8085   │ │:8086  │
+              └───────┬───────┘ └───┬────┘ └───┬───┘ └───┬───┘ └───┬────┘ └───┬───┘
+                      │             │           │         │         │           │
+                      │       ┌─────▼───────────▼─────────▼─────────▼──────────▼──┐
+                      │       │          Kafka (Event Bus)                         │
+                      │       │  payment.failed · subscription.expired · campaigns │
+                      │       └──────────────────────────────────────────────────┘
+                      │
+              ┌────────▼──────────────────────────────────────────────────────────┐
+              │                    Eureka Service Registry                        │
+              │         All services register here — Gateway discovers them       │
+              └───────────────────────────────────────────────────────────────────┘
+
+  DATABASES (each service has its own — Database per Service pattern):
+  User Service    → user_db (MySQL)
+  Catalog Service → catalog_db (MySQL)
+  Payment Service → payment_db (MySQL)
+  Subscription    → subscription_db (MySQL)
+  Campaign        → campaign_db (MySQL)
+
+  INFRASTRUCTURE:
+  Config Server → centralizes all application.properties
+  Zipkin        → distributed tracing
+  ELK Stack     → centralized logging
+  Prometheus+Grafana → metrics monitoring
+  Redis         → rate limiter + session cache
+  </pre>
+  <button class="copy-btn" onclick="copyById('arch')">Copy</button>
+
+  <h2>What you've built vs what's remaining</h2>
+  <table>
+    <tr><th>Service/Component</th><th>Status</th><th>Priority</th><th>Days needed</th></tr>
+    <tr><td>catalog-service</td><td><span class="badge b-done">✅ DONE</span></td><td>—</td><td>—</td></tr>
+    <tr><td>subscription-service + Feign</td><td><span class="badge b-done">✅ DONE</span></td><td>—</td><td>—</td></tr>
+    <tr><td>api-gateway + JWT + Rate Limiter</td><td><span class="badge b-done">✅ DONE</span></td><td>—</td><td>—</td></tr>
+    <tr><td>Prometheus + Grafana monitoring</td><td><span class="badge b-done">✅ DONE</span></td><td>—</td><td>—</td></tr>
+    <tr><td>Docker + docker-compose</td><td><span class="badge b-done">✅ DONE</span></td><td>—</td><td>—</td></tr>
+    <tr><td>user-service (Auth/JWT generation)</td><td><span class="badge b-next">🔥 NEXT</span></td><td>Interview critical</td><td>2 days</td></tr>
+    <tr><td>payment-service + Kafka events</td><td><span class="badge b-next">🔥 NEXT</span></td><td>Interview critical</td><td>2 days</td></tr>
+    <tr><td>notification-service (Kafka consumer)</td><td><span class="badge b-next">🔥 NEXT</span></td><td>Interview critical</td><td>1 day</td></tr>
+    <tr><td>Eureka service discovery</td><td><span class="badge b-next">🔥 NEXT</span></td><td>Interview critical</td><td>1 day</td></tr>
+    <tr><td>Circuit Breaker (Resilience4j)</td><td><span class="badge b-next">🔥 NEXT</span></td><td>High</td><td>1 day</td></tr>
+    <tr><td>campaign-service</td><td><span class="badge b-later">LATER</span></td><td>Medium</td><td>2 days</td></tr>
+    <tr><td>Config Server</td><td><span class="badge b-later">LATER</span></td><td>Medium</td><td>1 day</td></tr>
+    <tr><td>ESPN UI (HTML/JS)</td><td><span class="badge b-later">LATER</span></td><td>Medium</td><td>1 day</td></tr>
+    <tr><td>ELK Stack logging</td><td><span class="badge b-later">LATER</span></td><td>Medium</td><td>2 days</td></tr>
+    <tr><td>Distributed Tracing (Zipkin)</td><td><span class="badge b-later">LATER</span></td><td>Medium</td><td>1 day</td></tr>
+    <tr><td>Kubernetes + EKS</td><td><span class="badge b-later">LATER</span></td><td>Advanced</td><td>5 days</td></tr>
+    <tr><td>Jenkins CI/CD</td><td><span class="badge b-later">LATER</span></td><td>Advanced</td><td>2 days</td></tr>
+  </table>
+</div>
+
+<!-- ===================== ALL SERVICES ===================== -->
+<div id="services" class="section">
+  <h2>All Services — Purpose, Port, Database, Kafka Topics</h2>
+
+  <div class="arch-row">
+    <div class="arch-svc" style="background:#1a2744;border:1px solid #4299e1">
+      <div class="asn" style="color:#63b3ed">user-service <span class="badge b-next">BUILD NEXT</span></div>
+      <div class="asp" style="color:#718096">Port 8083 · user_db</div>
+      <div class="asd">Handles registration, login, JWT token generation. ESPN UI calls this directly. All other services call it to validate tokens. This is the real auth server that replaces our temporary AuthController in the Gateway.</div>
+    </div>
+    <div class="arch-svc" style="background:#1c3829;border:1px solid #276749">
+      <div class="asn" style="color:#9ae6b4">catalog-service <span class="badge b-done">DONE</span></div>
+      <div class="asp" style="color:#718096">Port 8081 · catalog_db</div>
+      <div class="asd">OTT plan management. Exposes plan details to subscription-service via Feign. You worked on this at your previous company.</div>
+    </div>
+  </div>
+
+  <div class="arch-row">
+    <div class="arch-svc" style="background:#2d1f00;border:1px solid #d69e2e">
+      <div class="asn" style="color:#fbd38d">payment-service <span class="badge b-next">BUILD NEXT</span></div>
+      <div class="asp" style="color:#718096">Port 8084 · payment_db</div>
+      <div class="asd">Processes payments for subscriptions. On failure publishes payment.failed to Kafka. On success publishes payment.success. Subscription-service listens for payment.success to activate the subscription.</div>
+    </div>
+    <div class="arch-svc" style="background:#1a1f2e;border:1px solid #9f7aea">
+      <div class="asn" style="color:#d6bcfa">notification-service <span class="badge b-next">BUILD NEXT</span></div>
+      <div class="asp" style="color:#718096">Port 8086 · No DB (stateless)</div>
+      <div class="asd">Pure Kafka consumer. Listens to payment.failed, subscription.expired, payment.success topics. Sends email/SMS notifications. No REST API — only reacts to events.</div>
+    </div>
+  </div>
+
+  <div class="arch-row">
+    <div class="arch-svc" style="background:#1a1f2e;border:1px solid #ed8936">
+      <div class="asn" style="color:#ed8936">campaign-service <span class="badge b-later">ADD LATER</span></div>
+      <div class="asp" style="color:#718096">Port 8085 · campaign_db</div>
+      <div class="asd">Manages promotional campaigns, free trials, discount codes. You worked on this at Disney! Same as catalog — manages offers that subscription-service applies during checkout.</div>
+    </div>
+    <div class="arch-svc" style="background:#1a1f2e;border:1px solid #48bb78">
+      <div class="asn" style="color:#9ae6b4">subscription-service <span class="badge b-done">DONE</span></div>
+      <div class="asp" style="color:#718096">Port 8082 · subscription_db</div>
+      <div class="asd">Handles user subscriptions. Calls catalog via Feign. Will call payment-service to process payment. Listens to payment.success via Kafka to activate subscription.</div>
+    </div>
+  </div>
+
+  <h2>About campaign-service — your Disney experience</h2>
+  <div class="card orange">
+    <h3>Should you add campaign-service? YES — here's why</h3>
+    <p>You worked on campaign-service at Disney/Tavant — this is your real work experience. Adding it to your project means you can say in interviews: <em>"I built this service professionally and then recreated the same functionality in my personal project to deepen my understanding."</em></p>
+    <p style="margin-top:8px">Campaign service responsibilities in OTT platform:</p>
+    <ul>
+      <li>Create and manage promotional campaigns (e.g. "Disney+ free for 3 months")</li>
+      <li>Apply discount codes during subscription checkout</li>
+      <li>Push campaign notifications (subscription-service calls this)</li>
+      <li>Track campaign performance metrics</li>
+    </ul>
+    <p style="margin-top:8px">This is exactly what your Disney ESPN+ promotions project did — free trial offers, plan upgrade promotions, subscription renewal incentives.</p>
+  </div>
+
+  <h2>About OAuth2 — do you need it?</h2>
+  <div class="card purple">
+    <h3>OAuth2 vs JWT — honest answer</h3>
+    <p><strong style="color:#e2e8f0">What OAuth2 is:</strong> A protocol for authorization. "Sign in with Google" is OAuth2. When you click Google/Facebook login, that website is using OAuth2 to get your identity from Google without handling your password.</p>
+    <p style="margin-top:8px"><strong style="color:#e2e8f0">What you already have:</strong> JWT-based authentication. User logs in with username/password → your user-service generates a JWT → client sends JWT in every request → API Gateway validates it.</p>
+    <p style="margin-top:8px"><strong style="color:#e2e8f0">For your project:</strong> JWT is sufficient and more commonly asked in interviews for backend roles. OAuth2 is needed if you want "Sign in with Google/Apple" on the ESPN website. For now add it as a talking point: "We use JWT for internal auth; OAuth2 could be added for social login integration."</p>
+    <p style="margin-top:8px"><strong style="color:#e2e8f0">Interview answer:</strong> "Our platform uses JWT-based stateless authentication via a dedicated user-service. The API Gateway validates tokens on every request. We could extend this with OAuth2/OIDC for social login integration, but for an OTT subscription platform, JWT is the industry standard."</p>
+  </div>
+</div>
+
+<!-- ===================== EUREKA ===================== -->
+<div id="eureka" class="section">
+  <h2>Service Discovery with Eureka — concept + implementation</h2>
+
+  <div class="card blue">
+    <h3>What is Service Discovery and WHY do we need it?</h3>
+    <p><strong style="color:#e2e8f0">Problem without it:</strong> In your current code, subscription-service calls catalog-service at hardcoded <code>http://localhost:8081</code>. On AWS, services run on different servers with different IPs. When you scale to 3 catalog-service instances, which IP does subscription-service call?</p>
+    <p style="margin-top:8px"><strong style="color:#e2e8f0">Solution — Eureka:</strong> Every service registers itself with Eureka on startup ("Hi, I'm catalog-service and my IP is 10.0.1.5"). When subscription-service wants to call catalog, it asks Eureka "where is catalog-service?" — Eureka returns the current IP. No hardcoded URLs.</p>
+    <p style="margin-top:8px"><strong style="color:#e2e8f0">Use case from Disney:</strong> When Disney deploys catalog-service on 3 EC2 instances during peak load (e.g., new Marvel movie release), all 3 register with Eureka. Subscription-service automatically load-balances calls across all 3.</p>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">1</span><span class="stitle">Create eureka-server — new Spring Boot project</span></div>
+    <div class="step-body">
+      <p>In STS: File → New → Spring Starter Project</p>
+      <pre>Name:    eureka-server
+Port:    8761
+Group:   com.ott
+Package: com.ott.eureka</pre>
+      <p style="margin-top:8px">Dependencies: <strong>Eureka Server</strong> only</p>
+      <p style="margin-top:8px"><strong>EurekaServerApplication.java:</strong></p>
+      <pre id="eurekaMain"><span style="color:#ffcb6b">@SpringBootApplication</span>
+<span style="color:#ffcb6b">@EnableEurekaServer</span>  <span style="color:#546e7a">// This single annotation makes it a Eureka server</span>
+<span style="color:#c792ea">public class</span> <span style="color:#82aaff">EurekaServerApplication</span> {
+    <span style="color:#c792ea">public static void</span> main(String[] args) {
+        SpringApplication.run(EurekaServerApplication.class, args);
+    }
+}</pre>
+      <button class="copy-btn" onclick="copyById('eurekaMain')">Copy</button>
+      <p style="margin-top:8px"><strong>application.properties:</strong></p>
+      <pre id="eurekaProp">server.port=8761
+spring.application.name=eureka-server
+
+<span style="color:#546e7a"># Don't register itself as a client</span>
+eureka.client.register-with-eureka=false
+eureka.client.fetch-registry=false
+eureka.server.wait-time-in-ms-when-sync-empty=0</pre>
+      <button class="copy-btn" onclick="copyById('eurekaProp')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">2</span><span class="stitle">Register ALL services with Eureka — same change for each</span></div>
+    <div class="step-body">
+      <p>For <strong>every service</strong> (catalog, subscription, gateway, payment, notification, user):</p>
+      <p style="margin-top:8px"><strong>pom.xml — add dependency:</strong></p>
+      <pre id="eurekaClient">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt;
+    <span style="color:#546e7a">&lt;!-- No version — Spring Cloud BOM manages it --&gt;</span>
+&lt;/dependency&gt;</pre>
+      <button class="copy-btn" onclick="copyById('eurekaClient')">Copy</button>
+      <p style="margin-top:8px"><strong>application.properties — add:</strong></p>
+      <pre id="eurekaClientProp"><span style="color:#546e7a"># Register with Eureka server</span>
+eureka.client.service-url.defaultZone=http://localhost:8761/eureka/
+eureka.instance.prefer-ip-address=true</pre>
+      <button class="copy-btn" onclick="copyById('eurekaClientProp')">Copy</button>
+      <p style="margin-top:8px"><strong>Now update Feign Client in subscription-service:</strong></p>
+      <pre id="feignEureka"><span style="color:#546e7a">// BEFORE (hardcoded URL):</span>
+<span style="color:#ffcb6b">@FeignClient</span>(name = <span style="color:#c3e88d">"catalog-service"</span>, url = <span style="color:#c3e88d">"${catalog.service.url}"</span>)
+
+<span style="color:#546e7a">// AFTER (Eureka-based — no hardcoded URL!):</span>
+<span style="color:#ffcb6b">@FeignClient</span>(name = <span style="color:#c3e88d">"catalog-service"</span>)
+<span style="color:#546e7a">// Feign asks Eureka for catalog-service IP automatically</span></pre>
+      <button class="copy-btn" onclick="copyById('feignEureka')">Copy</button>
+      <div class="success" style="margin-top:8px">Access Eureka dashboard at: http://localhost:8761 — you'll see all registered services with their IPs</div>
+    </div>
+  </div>
+
+  <div class="card teal">
+    <h3>Interview answer — What is service discovery?</h3>
+    <p>"Service discovery solves the problem of dynamic service location in microservices. We use Netflix Eureka. Each service registers with Eureka on startup with its name and IP. When subscription-service needs to call catalog-service via Feign, it asks Eureka for the current address instead of using hardcoded URLs. This enables zero-configuration scaling — when I add a second catalog-service instance, it registers with Eureka and immediately starts receiving traffic without any configuration change."</p>
+  </div>
+</div>
+
+<!-- ===================== CIRCUIT BREAKER ===================== -->
+<div id="circuit" class="section">
+  <h2>Circuit Breaker with Resilience4j</h2>
+
+  <div class="card orange">
+    <h3>What is Circuit Breaker and why is it NOT the same as Rate Limiter?</h3>
+    <p><strong style="color:#e2e8f0">Rate Limiter</strong> = protects YOUR service from too many incoming requests. "You can only call me 10 times per second."</p>
+    <p style="margin-top:6px"><strong style="color:#e2e8f0">Circuit Breaker</strong> = protects YOU when a service you CALL starts failing. "catalog-service has been failing for 10 seconds, I'll stop calling it and use a fallback instead."</p>
+    <p style="margin-top:8px"><strong style="color:#e2e8f0">Use case:</strong> subscription-service calls catalog-service. If catalog-service goes down, without Circuit Breaker: every subscription request hangs for 30 seconds waiting for timeout → thread pool exhausted → subscription-service also crashes → cascade failure across all microservices. Disney/Netflix call this a "cascading failure" — the #1 production incident cause in microservices.</p>
+    <p style="margin-top:8px">Circuit Breaker states: <strong style="color:#9ae6b4">CLOSED</strong> (normal, calls pass through) → <strong style="color:#fc8181">OPEN</strong> (circuit tripped, calls fail fast with fallback) → <strong style="color:#fbd38d">HALF-OPEN</strong> (testing if service recovered)</p>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">1</span><span class="stitle">Add Resilience4j to subscription-service pom.xml</span></div>
+    <div class="step-body">
+      <pre id="r4jPom">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-circuitbreaker-resilience4j&lt;/artifactId&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-aop&lt;/artifactId&gt;
+&lt;/dependency&gt;</pre>
+      <button class="copy-btn" onclick="copyById('r4jPom')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">2</span><span class="stitle">Configure Circuit Breaker in application.properties</span></div>
+    <div class="step-body">
+      <pre id="r4jProps"><span style="color:#546e7a"># Circuit Breaker config for catalog-service calls
+# slidingWindowSize=10: track last 10 calls
+# failureRateThreshold=50: open circuit if 50% of last 10 calls fail
+# waitDurationInOpenState=10s: wait 10s before trying again (HALF-OPEN)
+# permittedNumberOfCallsInHalfOpenState=3: allow 3 test calls in HALF-OPEN</span>
+resilience4j.circuitbreaker.instances.catalog-service.sliding-window-size=10
+resilience4j.circuitbreaker.instances.catalog-service.failure-rate-threshold=50
+resilience4j.circuitbreaker.instances.catalog-service.wait-duration-in-open-state=10s
+resilience4j.circuitbreaker.instances.catalog-service.permitted-number-of-calls-in-half-open-state=3
+resilience4j.circuitbreaker.instances.catalog-service.register-health-indicator=true</pre>
+      <button class="copy-btn" onclick="copyById('r4jProps')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">3</span><span class="stitle">Apply Circuit Breaker to SubscriptionService.java</span></div>
+    <div class="step-body">
+      <pre id="r4jCode"><span style="color:#ffcb6b">@CircuitBreaker</span>(name = <span style="color:#c3e88d">"catalog-service"</span>, fallbackMethod = <span style="color:#c3e88d">"getPlanFallback"</span>)
+<span style="color:#c792ea">public</span> OttPlanDTO getPlanFromCatalog(String planId) {
+    <span style="color:#546e7a">// Normal call — Feign calls catalog-service</span>
+    <span style="color:#c792ea">return</span> catalogServiceClient.getPlanById(planId);
+}
+
+<span style="color:#546e7a">// FALLBACK METHOD — called when circuit is OPEN
+// Must have same return type + Throwable parameter</span>
+<span style="color:#c792ea">public</span> OttPlanDTO getPlanFallback(String planId, Throwable throwable) {
+    log.warn(<span style="color:#c3e88d">"Circuit OPEN for catalog-service. Returning fallback for plan: {}"</span>, planId);
+    <span style="color:#546e7a">// Return a default/cached response instead of failing completely</span>
+    OttPlanDTO fallback = <span style="color:#c792ea">new</span> OttPlanDTO();
+    fallback.setPlanId(planId);
+    fallback.setPlanName(<span style="color:#c3e88d">"Plan temporarily unavailable"</span>);
+    fallback.setIsActive(<span style="color:#c792ea">false</span>);
+    <span style="color:#c792ea">return</span> fallback;
+}</pre>
+      <button class="copy-btn" onclick="copyById('r4jCode')">Copy</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== CONFIG SERVER ===================== -->
+<div id="config" class="section">
+  <h2>Centralized Configuration — Spring Cloud Config Server</h2>
+
+  <div class="card teal">
+    <h3>Problem it solves — use case</h3>
+    <p>Currently each service has its own application.properties. If you have 6 services and the MySQL password changes, you have to update 6 files and restart 6 services. With Config Server: one place to change → all services pick up the change (some without restart).</p>
+    <p style="margin-top:8px"><strong style="color:#e2e8f0">Disney use case:</strong> When they move from one RDS instance to another during maintenance, Config Server updates the DB URL — all services get the new URL without redeployment.</p>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">1</span><span class="stitle">Create config-server project</span></div>
+    <div class="step-body">
+      <p>New Spring Boot project — dependency: <strong>Config Server</strong></p>
+      <pre id="configServer"><span style="color:#ffcb6b">@SpringBootApplication</span>
+<span style="color:#ffcb6b">@EnableConfigServer</span>  <span style="color:#546e7a">// This is all you need</span>
+<span style="color:#c792ea">public class</span> <span style="color:#82aaff">ConfigServerApplication</span> {
+    <span style="color:#c792ea">public static void</span> main(String[] args) {
+        SpringApplication.run(ConfigServerApplication.class, args);
+    }
+}</pre>
+      <button class="copy-btn" onclick="copyById('configServer')">Copy</button>
+      <pre id="configProps">server.port=8888
+spring.application.name=config-server
+
+<span style="color:#546e7a"># Point to GitHub repo containing all config files
+# Create a GitHub repo with files like:
+# catalog-service.properties
+# subscription-service.properties</span>
+spring.cloud.config.server.git.uri=https://github.com/YOUR_USERNAME/ott-config
+spring.cloud.config.server.git.default-label=main
+spring.cloud.config.server.git.clone-on-start=true</pre>
+      <button class="copy-btn" onclick="copyById('configProps')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">2</span><span class="stitle">Each service reads from Config Server</span></div>
+    <div class="step-body">
+      <p>Add to each service's pom.xml:</p>
+      <pre id="configClient">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-config&lt;/artifactId&gt;
+&lt;/dependency&gt;</pre>
+      <button class="copy-btn" onclick="copyById('configClient')">Copy</button>
+      <p style="margin-top:8px">Create <strong>bootstrap.properties</strong> in each service (runs before application.properties):</p>
+      <pre id="bootstrap">spring.application.name=catalog-service
+spring.config.import=optional:configserver:http://localhost:8888</pre>
+      <button class="copy-btn" onclick="copyById('bootstrap')">Copy</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== KAFKA ===================== -->
+<div id="kafka" class="section">
+  <h2>Kafka Async Messaging — Event-Driven Architecture</h2>
+
+  <div class="card yellow">
+    <h3>Use case — why Kafka in OTT platform</h3>
+    <p><strong style="color:#e2e8f0">Without Kafka (synchronous):</strong> When payment fails → payment-service directly calls notification-service API → if notification-service is slow → payment-service waits → user waits → bad experience.</p>
+    <p style="margin-top:8px"><strong style="color:#e2e8f0">With Kafka (asynchronous):</strong> Payment fails → payment-service publishes event to Kafka topic "payment.failed" → returns 200 to user immediately → notification-service consumes event in background → sends email/SMS → completely decoupled.</p>
+    <p style="margin-top:8px"><strong style="color:#e2e8f0">Disney's Kafka topics in our OTT platform:</strong></p>
+    <ul>
+      <li><code>payment.failed</code> → notification-service sends failure email</li>
+      <li><code>payment.success</code> → subscription-service activates the plan</li>
+      <li><code>subscription.expired</code> → notification-service sends renewal reminder</li>
+      <li><code>subscription.created</code> → campaign-service checks if promo applies</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">1</span><span class="stitle">Kafka event model — PaymentEvent.java</span></div>
+    <div class="step-body">
+      <pre id="kafkaEvent"><span style="color:#c792ea">package</span> com.ott.payment.event;
+
+<span style="color:#546e7a">/**
+ * Kafka event published when payment succeeds or fails.
+ * This class is shared between producer (payment-service)
+ * and consumer (subscription-service, notification-service).
+ * In production: put in a shared library or use Avro schema.
+ */</span>
+<span style="color:#c792ea">public class</span> <span style="color:#82aaff">PaymentEvent</span> {
+    <span style="color:#c792ea">private</span> String paymentId;
+    <span style="color:#c792ea">private</span> String userId;
+    <span style="color:#c792ea">private</span> String planId;
+    <span style="color:#c792ea">private</span> String status;  <span style="color:#546e7a">// SUCCESS or FAILED</span>
+    <span style="color:#c792ea">private</span> String failureReason;
+    <span style="color:#c792ea">private</span> java.time.LocalDateTime eventTime;
+    <span style="color:#546e7a">// getters/setters...</span>
+}</pre>
+      <button class="copy-btn" onclick="copyById('kafkaEvent')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">2</span><span class="stitle">Producer — payment-service publishes to Kafka</span></div>
+    <div class="step-body">
+      <pre id="kafkaProducer"><span style="color:#ffcb6b">@Service</span>
+<span style="color:#c792ea">public class</span> <span style="color:#82aaff">PaymentEventPublisher</span> {
+
+    <span style="color:#c792ea">private final</span> KafkaTemplate&lt;String, PaymentEvent&gt; kafkaTemplate;
+
+    <span style="color:#c792ea">public</span> PaymentEventPublisher(KafkaTemplate&lt;String, PaymentEvent&gt; kafkaTemplate) {
+        <span style="color:#c792ea">this</span>.kafkaTemplate = kafkaTemplate;
+    }
+
+    <span style="color:#c792ea">public void</span> publishPaymentFailed(PaymentEvent event) {
+        kafkaTemplate.send(<span style="color:#c3e88d">"payment.failed"</span>, event.getUserId(), event);
+        log.info(<span style="color:#c3e88d">"Published payment.failed event for user: {}"</span>, event.getUserId());
+    }
+
+    <span style="color:#c792ea">public void</span> publishPaymentSuccess(PaymentEvent event) {
+        kafkaTemplate.send(<span style="color:#c3e88d">"payment.success"</span>, event.getUserId(), event);
+        log.info(<span style="color:#c3e88d">"Published payment.success event for user: {}"</span>, event.getUserId());
+    }
+}</pre>
+      <button class="copy-btn" onclick="copyById('kafkaProducer')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">3</span><span class="stitle">Consumer — notification-service listens to Kafka topics</span></div>
+    <div class="step-body">
+      <pre id="kafkaConsumer"><span style="color:#ffcb6b">@Service</span>
+<span style="color:#c792ea">public class</span> <span style="color:#82aaff">NotificationKafkaConsumer</span> {
+
+    <span style="color:#546e7a">/**
+     * @KafkaListener — Spring automatically calls this method
+     * whenever a message arrives on "payment.failed" topic.
+     * groupId — consumer group. All instances with same groupId
+     * share the load. Only ONE instance processes each message.
+     */</span>
+    <span style="color:#ffcb6b">@KafkaListener</span>(topics = <span style="color:#c3e88d">"payment.failed"</span>, groupId = <span style="color:#c3e88d">"notification-group"</span>)
+    <span style="color:#c792ea">public void</span> handlePaymentFailed(PaymentEvent event) {
+        log.info(<span style="color:#c3e88d">"Received payment.failed for user: {}"</span>, event.getUserId());
+        <span style="color:#546e7a">// Send email notification</span>
+        emailService.sendPaymentFailedEmail(event.getUserId(), event.getFailureReason());
+    }
+
+    <span style="color:#ffcb6b">@KafkaListener</span>(topics = <span style="color:#c3e88d">"subscription.expired"</span>, groupId = <span style="color:#c3e88d">"notification-group"</span>)
+    <span style="color:#c792ea">public void</span> handleSubscriptionExpired(SubscriptionEvent event) {
+        log.info(<span style="color:#c3e88d">"Received subscription.expired for user: {}"</span>, event.getUserId());
+        emailService.sendRenewalReminderEmail(event.getUserId(), event.getPlanId());
+    }
+}</pre>
+      <button class="copy-btn" onclick="copyById('kafkaConsumer')">Copy</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== OAUTH2 ===================== -->
+<div id="oauth2" class="section">
+  <h2>Security — JWT vs OAuth2 — what to use where</h2>
+
+  <div class="card purple">
+    <h3>Clear explanation — JWT, OAuth2, Spring Security roles</h3>
+    <table>
+      <tr><th>Technology</th><th>What it is</th><th>Use in our project</th></tr>
+      <tr><td>JWT</td><td>Token format — stores user identity in a signed string</td><td>✅ Already implemented — token for API calls</td></tr>
+      <tr><td>Spring Security</td><td>Framework that secures endpoints, manages users</td><td>✅ Used in user-service for authentication</td></tr>
+      <tr><td>OAuth2</td><td>Protocol for delegated authorization</td><td>Add later for "Sign in with Google"</td></tr>
+      <tr><td>OIDC</td><td>OAuth2 + identity (who the user is)</td><td>Same as above — social login extension</td></tr>
+    </table>
+    <p style="margin-top:10px"><strong style="color:#e2e8f0">Current architecture (correct for Disney-scale):</strong></p>
+    <ol>
+      <li style="margin-bottom:4px">User calls user-service: POST /auth/login with username+password</li>
+      <li style="margin-bottom:4px">user-service validates credentials against user_db</li>
+      <li style="margin-bottom:4px">user-service generates JWT with userId, roles, expiry</li>
+      <li style="margin-bottom:4px">Client sends JWT in every request: Authorization: Bearer token</li>
+      <li style="margin-bottom:4px">API Gateway validates JWT signature — no DB call needed</li>
+      <li>Services receive X-Username header — know who is calling</li>
+    </ol>
+    <p style="margin-top:8px"><strong style="color:#e2e8f0">Do you need OAuth2 in each microservice?</strong> NO. Only the API Gateway validates tokens. Individual services trust the X-Username header set by Gateway. This is correct — putting auth logic in every service would be a mistake.</p>
+  </div>
+</div>
+
+<!-- ===================== LOAD BALANCER ===================== -->
+<div id="loadbalancer" class="section">
+  <h2>Load Balancing — Spring Cloud LoadBalancer + AWS ALB</h2>
+
+  <div class="card green">
+    <h3>Two levels of load balancing</h3>
+    <p><strong style="color:#e2e8f0">Client-side (Spring Cloud LoadBalancer):</strong> When subscription-service calls catalog-service and there are 3 instances, Spring Cloud LoadBalancer in subscription-service picks which instance to call (Round Robin / Random). Works with Eureka — gets list of instances from Eureka, distributes calls.</p>
+    <p style="margin-top:8px"><strong style="color:#e2e8f0">Server-side (AWS ALB):</strong> When ESPN website calls your API Gateway and you have 2 gateway instances, AWS ALB distributes incoming traffic across them. External load balancer.</p>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">1</span><span class="stitle">Add Spring Cloud LoadBalancer to subscription-service</span></div>
+    <div class="step-body">
+      <pre id="lbPom">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-loadbalancer&lt;/artifactId&gt;
+&lt;/dependency&gt;</pre>
+      <button class="copy-btn" onclick="copyById('lbPom')">Copy</button>
+      <p style="margin-top:8px">Configure load balancing strategy in application.properties:</p>
+      <pre id="lbProps"><span style="color:#546e7a"># Round Robin (default) — cycles through instances evenly
+# Request 1 → Instance 1, Request 2 → Instance 2, Request 3 → Instance 3, repeat</span>
+spring.cloud.loadbalancer.ribbon.enabled=false
+
+<span style="color:#546e7a"># For Random strategy — add this config class instead</span></pre>
+      <button class="copy-btn" onclick="copyById('lbProps')">Copy</button>
+      <p style="margin-top:8px">Once you have Eureka + LoadBalancer, Feign automatically load balances across all catalog-service instances — no code change needed!</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">2</span><span class="stitle">Auto-scaling on AWS — how it works</span></div>
+    <div class="step-body">
+      <p><strong style="color:#e2e8f0">AWS Auto Scaling:</strong> You define rules like "if catalog-service CPU > 70% for 5 minutes → add 2 more instances". AWS automatically launches new EC2 instances, they start catalog-service, register with Eureka, and immediately start receiving traffic.</p>
+      <p style="margin-top:8px"><strong>Manual test — run 3 catalog-service instances locally:</strong></p>
+      <pre id="multiInstance"><span style="color:#546e7a">REM Windows — run 3 catalog instances on different ports</span>
+<span style="color:#546e7a">REM Open 3 separate Command Prompt windows</span>
+
+<span style="color:#546e7a">REM Window 1:</span>
+java -jar -Dserver.port=8081 catalog-service-1.0.0.jar
+
+<span style="color:#546e7a">REM Window 2:</span>
+java -jar -Dserver.port=8091 catalog-service-1.0.0.jar
+
+<span style="color:#546e7a">REM Window 3:</span>
+java -jar -Dserver.port=8092 catalog-service-1.0.0.jar
+
+<span style="color:#546e7a">REM All 3 register with Eureka → subscription-service distributes calls across all 3</span></pre>
+      <button class="copy-btn" onclick="copyById('multiInstance')">Copy</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== LOGGING ===================== -->
+<div id="logging" class="section">
+  <h2>Centralized Logging — ELK Stack</h2>
+
+  <div class="card red">
+    <h3>Problem and solution — use case</h3>
+    <p><strong style="color:#e2e8f0">Without ELK:</strong> User reports "my subscription failed at 3pm". You have 6 services each with their own log file on different servers. You SSH to each server, grep through logs, try to correlate what happened — takes 2 hours.</p>
+    <p style="margin-top:8px"><strong style="color:#e2e8f0">With ELK:</strong> Open Kibana (like Google for your logs), search "userId=12345 timestamp=3pm" — see all logs from all 6 services for that user in one screen, sorted by time. Takes 2 minutes.</p>
+    <p style="margin-top:8px"><strong style="color:#e2e8f0">ELK = Elasticsearch + Logstash + Kibana:</strong></p>
+    <ul>
+      <li><strong>Logstash</strong> — collects logs from all services and sends to Elasticsearch</li>
+      <li><strong>Elasticsearch</strong> — stores and indexes logs for fast search</li>
+      <li><strong>Kibana</strong> — UI to search, filter, and visualize logs</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">1</span><span class="stitle">Add Logstash appender to each service</span></div>
+    <div class="step-body">
+      <pre id="logstashPom">&lt;!-- Sends Spring Boot logs directly to Logstash --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;net.logstash.logback&lt;/groupId&gt;
+    &lt;artifactId&gt;logstash-logback-encoder&lt;/artifactId&gt;
+    &lt;version&gt;7.4&lt;/version&gt;
+&lt;/dependency&gt;</pre>
+      <button class="copy-btn" onclick="copyById('logstashPom')">Copy</button>
+      <p style="margin-top:8px">Create <strong>logback-spring.xml</strong> in src/main/resources:</p>
+      <pre id="logbackXml">&lt;configuration&gt;
+    &lt;!-- Console appender — for local development --&gt;
+    &lt;appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender"&gt;
+        &lt;encoder&gt;
+            &lt;pattern&gt;%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n&lt;/pattern&gt;
+        &lt;/encoder&gt;
+    &lt;/appender&gt;
+
+    &lt;!-- Logstash appender — sends JSON logs to Logstash --&gt;
+    &lt;appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender"&gt;
+        &lt;destination&gt;localhost:5000&lt;/destination&gt;
+        &lt;encoder class="net.logstash.logback.encoder.LogstashEncoder"&gt;
+            &lt;customFields&gt;{"service":"catalog-service"}&lt;/customFields&gt;
+        &lt;/encoder&gt;
+    &lt;/appender&gt;
+
+    &lt;root level="INFO"&gt;
+        &lt;appender-ref ref="CONSOLE" /&gt;
+        &lt;appender-ref ref="LOGSTASH" /&gt;
+    &lt;/root&gt;
+&lt;/configuration&gt;</pre>
+      <button class="copy-btn" onclick="copyById('logbackXml')">Copy</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TRACING ===================== -->
+<div id="tracing" class="section">
+  <h2>Distributed Tracing — Zipkin + Micrometer</h2>
+
+  <div class="card blue">
+    <h3>What is distributed tracing — use case</h3>
+    <p><strong style="color:#e2e8f0">Problem:</strong> User subscribes → request goes Gateway → subscription-service → catalog-service → payment-service. Where is it slow? Without tracing, you have no way to know which service took how long.</p>
+    <p style="margin-top:8px"><strong style="color:#e2e8f0">Solution — Zipkin:</strong> Each request gets a unique <code>traceId</code>. Every service adds timing info to that trace. Zipkin shows a waterfall chart: Gateway(5ms) → subscription(120ms) → catalog(300ms ← here's the problem!) → payment(50ms). Total: 475ms.</p>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">1</span><span class="stitle">Add Zipkin to all services</span></div>
+    <div class="step-body">
+      <pre id="zipkinPom">&lt;!-- Micrometer Tracing with Zipkin --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;io.micrometer&lt;/groupId&gt;
+    &lt;artifactId&gt;micrometer-tracing-bridge-brave&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;io.zipkin.reporter2&lt;/groupId&gt;
+    &lt;artifactId&gt;zipkin-reporter-brave&lt;/artifactId&gt;
+&lt;/dependency&gt;</pre>
+      <button class="copy-btn" onclick="copyById('zipkinPom')">Copy</button>
+      <pre id="zipkinProps"><span style="color:#546e7a"># application.properties — add to all services</span>
+management.tracing.sampling.probability=1.0
+management.zipkin.tracing.endpoint=http://localhost:9411/api/v2/spans</pre>
+      <button class="copy-btn" onclick="copyById('zipkinProps')">Copy</button>
+      <p style="margin-top:8px">Run Zipkin with Docker:</p>
+      <pre id="zipkinDocker">docker run -d -p 9411:9411 openzipkin/zipkin</pre>
+      <button class="copy-btn" onclick="copyById('zipkinDocker')">Copy</button>
+      <div class="success">Open http://localhost:9411 → click Find Traces → see distributed trace for each request</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== KUBERNETES ===================== -->
+<div id="kubernetes" class="section">
+  <h2>Kubernetes — Container Orchestration</h2>
+
+  <div class="card teal">
+    <h3>What is Kubernetes — use case</h3>
+    <p><strong style="color:#e2e8f0">Docker Compose problem:</strong> docker-compose runs on ONE machine. If that machine crashes, everything is down. Manual scaling.</p>
+    <p style="margin-top:8px"><strong style="color:#e2e8f0">Kubernetes (K8s) solution:</strong> Runs containers across a CLUSTER of machines. If one machine crashes, K8s automatically moves containers to healthy machines. If load increases, K8s automatically scales to more containers. This is what Disney uses for their streaming platform.</p>
+    <p style="margin-top:8px"><strong style="color:#e2e8f0">Key K8s concepts:</strong></p>
+    <ul>
+      <li><strong>Pod</strong> — smallest unit, runs 1+ containers (like one catalog-service instance)</li>
+      <li><strong>Deployment</strong> — manages pods, handles scaling, rolling updates</li>
+      <li><strong>Service</strong> — stable network endpoint for pods (load balances between pod instances)</li>
+      <li><strong>HPA (Horizontal Pod Autoscaler)</strong> — automatically scales pods based on CPU/memory</li>
+      <li><strong>EKS (AWS)</strong> — managed Kubernetes on AWS, Disney uses this</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">1</span><span class="stitle">Kubernetes deployment for catalog-service</span></div>
+    <div class="step-body">
+      <pre id="k8sDeploy">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-service
+spec:
+  replicas: 2          # Start with 2 instances
+  selector:
+    matchLabels:
+      app: catalog-service
+  template:
+    metadata:
+      labels:
+        app: catalog-service
+    spec:
+      containers:
+      - name: catalog-service
+        image: YOUR_ECR/ott/catalog-service:latest
+        ports:
+        - containerPort: 8081
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+---
+# HPA — auto-scale when CPU > 70%
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: catalog-service-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: catalog-service
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70</pre>
+      <button class="copy-btn" onclick="copyById('k8sDeploy')">Copy</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== AWS ===================== -->
+<div id="aws" class="section">
+  <h2>AWS Services — All 11 services explained</h2>
+
+  <table>
+    <tr><th>AWS Service</th><th>What it is</th><th>Use in OTT Platform</th><th>Free tier?</th></tr>
+    <tr><td><strong>ALB</strong></td><td>Application Load Balancer — distributes HTTP traffic</td><td>Distributes ESPN website requests across API Gateway instances</td><td>750 hrs/month</td></tr>
+    <tr><td><strong>EC2</strong></td><td>Virtual machines in AWS cloud</td><td>Runs our Spring Boot services and Docker containers</td><td>t2.micro free</td></tr>
+    <tr><td><strong>ECS</strong></td><td>Managed Docker container hosting</td><td>Run Docker containers without managing EC2 — AWS handles it</td><td>No free tier</td></tr>
+    <tr><td><strong>EKS</strong></td><td>Managed Kubernetes</td><td>Run K8s cluster — auto-scaling, self-healing containers</td><td>No free tier</td></tr>
+    <tr><td><strong>ECR</strong></td><td>Docker image registry (like Docker Hub but private)</td><td>Stores Docker images for all 6 services</td><td>500MB free</td></tr>
+    <tr><td><strong>RDS</strong></td><td>Managed MySQL/PostgreSQL database</td><td>Hosts all 5 MySQL databases instead of running MySQL in Docker</td><td>t2.micro free</td></tr>
+    <tr><td><strong>S3</strong></td><td>Object storage — files, images, backups</td><td>Store user profile photos, campaign images, DB backups</td><td>5GB free</td></tr>
+    <tr><td><strong>CloudWatch</strong></td><td>AWS native monitoring and logging</td><td>Collect logs from all EC2 instances, set CPU alerts</td><td>10 metrics free</td></tr>
+    <tr><td><strong>Secrets Manager</strong></td><td>Secure storage for passwords and API keys</td><td>Store DB passwords, JWT secret — never in code or environment variables</td><td>$0.40/secret</td></tr>
+    <tr><td><strong>SQS</strong></td><td>Message queue service</td><td>Alternative to Kafka for simpler messaging — payment failure queue</td><td>1M msgs free</td></tr>
+    <tr><td><strong>MSK</strong></td><td>Managed Kafka on AWS</td><td>Production Kafka — no self-management of Kafka cluster</td><td>No free tier</td></tr>
+  </table>
+
+  <div class="info" style="margin-top:10px">
+    <strong>For your free tier account — use these only:</strong> EC2 (t2.micro), RDS (db.t3.micro), ECR, S3, CloudWatch basic. ECS/EKS/MSK have costs — don't use until you understand billing.
+  </div>
+</div>
+
+<!-- ===================== INTERVIEW MASTER ===================== -->
+<div id="interview" class="section">
+  <h2>Master Interview Q&A — all 16 topics</h2>
+
+  <div class="iq-card">
+    <div class="iq" onclick="toggleQA(this)">Describe your complete microservices architecture <span>▼</span></div>
+    <div class="ia">"I built a Disney-style OTT subscription platform with 6 microservices: user-service for authentication, catalog-service for plan management, subscription-service for user subscriptions, payment-service for billing, notification-service for alerts, and campaign-service for promotions. They communicate through an API Gateway built with Spring Cloud Gateway which handles JWT authentication and rate limiting. For async communication — payment failures and subscription events — I use Kafka. Service discovery is via Eureka. The entire platform is containerized with Docker, monitored with Prometheus and Grafana, and deployable to AWS."</div>
+  </div>
+
+  <div class="iq-card">
+    <div class="iq" onclick="toggleQA(this)">What is the difference between Circuit Breaker and Rate Limiter? <span>▼</span></div>
+    <div class="ia">Rate Limiter protects YOUR service from too many incoming requests — it controls how many requests clients can send to you. Circuit Breaker protects YOU when services you call start failing — it detects failures and stops calling the broken service, returning a fallback instead. Rate Limiter = incoming traffic control. Circuit Breaker = outgoing call protection. In our platform, Rate Limiter in API Gateway limits clients to 10 req/sec. Circuit Breaker in subscription-service stops calling catalog-service if it starts timing out, preventing cascade failures.</div>
+  </div>
+
+  <div class="iq-card">
+    <div class="iq" onclick="toggleQA(this)">How does auto-scaling work in your system? <span>▼</span></div>
+    <div class="ia">On AWS, I configure an Auto Scaling Group for catalog-service. If CPU usage exceeds 70% for 5 minutes, AWS automatically launches new EC2 instances, installs Docker, pulls the catalog-service image from ECR, and starts it. Each new instance registers with Eureka on startup. Spring Cloud LoadBalancer in subscription-service automatically discovers the new instances and starts distributing Feign calls to them. When load drops, Auto Scaling terminates excess instances. The whole process is automatic and takes about 2 minutes.</div>
+  </div>
+
+  <div class="iq-card">
+    <div class="iq" onclick="toggleQA(this)">What is the role of Kafka in your platform? <span>▼</span></div>
+    <div class="ia">Kafka provides asynchronous event-driven communication between services. When a payment fails, payment-service publishes to the payment.failed Kafka topic and immediately returns a response to the user — it doesn't wait for notifications to be sent. notification-service independently consumes from that topic and sends the email. This decoupling means: notification-service going down doesn't affect payment processing, services are independently scalable, and we have a complete audit trail of all events. We also use Kafka for subscription.expired events which trigger renewal reminders.</div>
+  </div>
+
+  <div class="iq-card">
+    <div class="iq" onclick="toggleQA(this)">How would you handle a Disney+ launch day with 10x traffic? <span>▼</span></div>
+    <div class="ia">Several layers: API Gateway rate limiter prevents any single user from overwhelming the system. AWS ALB distributes traffic across multiple Gateway instances. Auto Scaling Groups on EC2 automatically scale catalog-service and subscription-service based on CPU metrics. Redis caching in catalog-service means plan data is served from memory, not DB. RDS read replicas handle read-heavy queries. Circuit Breakers prevent cascade failures if any service degrades. For extreme events like a new Star Wars release, we'd pre-scale manually via AWS console, setting minimum instances to 10 in the Auto Scaling Group before the launch time.</div>
+  </div>
+
+  <div class="iq-card">
+    <div class="iq" onclick="toggleQA(this)">Why did you add campaign-service to your project? <span>▼</span></div>
+    <div class="ia">I worked on campaign-service professionally at Tavant for the Disney/ESPN project. In that role I maintained the service that managed promotional campaigns — free trial offers, plan upgrade incentives, and subscription renewal promotions. Adding it to my personal project deepened my understanding of the entire system. Campaign-service integrates with subscription-service during checkout to check if any active campaigns apply. It also publishes events to Kafka when campaigns end, triggering notification-service to inform affected users.</div>
+  </div>
+</div>
+
+<div style="text-align:center;padding:20px;color:#4a5568;font-size:12px;margin-top:10px">
+  Disney-Standard OTT Platform — Complete Microservices Roadmap v1.0
+</div>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo(0,0);
+}
+function copyById(id) {
+  const el = document.getElementById(id);
+  navigator.clipboard.writeText(el.innerText).then(() => {
+    const btn = event.target;
+    const orig = btn.textContent;
+    btn.textContent = '✅ Copied!';
+    btn.style.background='#276749';
+    setTimeout(()=>{ btn.textContent=orig; btn.style.background=''; },1500);
+  });
+}
+function toggleQA(el) {
+  const a = el.nextElementSibling;
+  const s = el.querySelector('span');
+  a.classList.toggle('open');
+  s.textContent = a.classList.contains('open') ? '▲' : '▼';
+}
+</script>
+</body>
+</html>

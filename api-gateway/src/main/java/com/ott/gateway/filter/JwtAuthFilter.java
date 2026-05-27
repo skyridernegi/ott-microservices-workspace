@@ -49,7 +49,8 @@ public class JwtAuthFilter implements GlobalFilter, Ordered {
     // These paths skip JWT validation — public endpoints
     private static final List<String> PUBLIC_PATHS = List.of(
             "/auth/token",
-            "/auth/refresh"
+            "/auth/refresh",
+            "/actuator"    // ADD THIS — Prometheus scrapes without JWT token
     );
 
     private final JwtUtil jwtUtil;

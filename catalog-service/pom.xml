@@ -32,6 +32,24 @@
 		<spring-cloud.version>2025.0.0</spring-cloud.version>
 	</properties>
 	<dependencies>
+		<!-- Spring Boot Actuator
+     PURPOSE: Exposes /actuator/health, /actuator/metrics, /actuator/prometheus
+     CONNECTS TO: Prometheus scrapes /actuator/prometheus endpoint -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+		<!-- Micrometer Prometheus Registry
+     PURPOSE: Converts Spring Boot metrics to Prometheus format
+     WITHOUT THIS: /actuator/prometheus endpoint returns 404
+     WITH THIS: Returns metrics like:
+       http_server_requests_seconds_count{uri="/catalog/plans"} 42
+       jvm_memory_used_bytes{area="heap"} 123456789-->
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>

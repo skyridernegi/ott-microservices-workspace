@@ -1,0 +1,50 @@
+# prometheus.yml
+# PURPOSE: Tells Prometheus WHERE to scrape metrics FROM and HOW OFTEN
+#
+# global: default settings for all scrape jobs
+# scrape_configs: list of targets to scrape
+
+global:
+  scrape_interval: 15s      # scrape every 15 seconds
+  evaluation_interval: 15s  # evaluate alerting rules every 15 seconds
+
+scrape_configs:
+
+  # __ Prometheus itself __________________________________________
+  # Prometheus monitors itself too — useful to check if it's healthy
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # __ Catalog Service ____________________________________________
+  # Prometheus calls GET http://catalog-service:8081/actuator/prometheus
+  # every 15 seconds and stores the metrics
+  # NOTE: In Docker, use container names (catalog-service) not localhost
+  - job_name: 'catalog-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['catalog-service:8081']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'catalog-service'
+
+  # __ Subscription Service _______________________________________
+  - job_name: 'subscription-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['subscription-service:8082']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'subscription-service'
+
+  # __ API Gateway ________________________________________________
+  - job_name: 'api-gateway'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['api-gateway:8080']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'api-gateway'

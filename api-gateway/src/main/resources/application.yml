@@ -77,12 +77,22 @@ management:
   endpoints:
     web:
       exposure:
-        include: [health, info, metrics, gateway]
+        # Expose Actuator endpoints over the web, including Prometheus and Gateway control
+        include: [health, info, metrics, prometheus, gateway]
   endpoint:
     health:
+      # Show full details (components and status) for the health check endpoint
       show-details: always
+    gateway:
+      # Explicitly enable the Spring Cloud Gateway Actuator endpoint
+      enabled: true
+  metrics:
+    tags:
+      # Apply a global application tag to all metrics for easier filtering in Prometheus/Grafana
+      application: api-gateway
   info:
     env:
+      # Enable environment details visibility under the /actuator/info endpoint
       enabled: true
 
 info:
