@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OTT Platform — HLD & LLD Complete Design</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#0f1117;color:#e2e8f0;line-height:1.6;font-size:13px}
+.container{max-width:1060px;margin:0 auto;padding:24px 20px}
+h1{font-size:24px;color:#63b3ed;margin-bottom:4px}
+h2{font-size:16px;color:#90cdf4;margin:24px 0 10px;border-bottom:1px solid #2d3748;padding-bottom:6px}
+h3{font-size:13px;color:#e2e8f0;margin:12px 0 6px;font-weight:600}
+p,li{font-size:12px;color:#a0aec0;line-height:1.8}
+ul,ol{padding-left:18px;margin:6px 0}
+
+.tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:20px;border-bottom:1px solid #2d3748;padding-bottom:10px}
+.tab{background:#1a1f2e;border:1px solid #2d3748;border-radius:6px;padding:7px 13px;font-size:12px;color:#a0aec0;cursor:pointer;transition:all 0.15s}
+.tab:hover{border-color:#4299e1;color:#63b3ed}
+.tab.active{background:#2b6cb0;border-color:#4299e1;color:#fff}
+.section{display:none}.section.active{display:block}
+
+.card{background:#1a1f2e;border:1px solid #2d3748;border-radius:10px;padding:14px 16px;margin-bottom:12px}
+.card.blue{border-left:4px solid #4299e1}
+.card.green{border-left:4px solid #48bb78}
+.card.orange{border-left:4px solid #ed8936}
+.card.purple{border-left:4px solid #9f7aea}
+.card.red{border-left:4px solid #fc8181}
+.card.teal{border-left:4px solid #38b2ac}
+.card.yellow{border-left:4px solid #f6e05e}
+.card.pink{border-left:4px solid #ed64a6}
+
+pre{background:#0d1117;border:1px solid #2d3748;border-radius:6px;padding:12px 14px;overflow-x:auto;font-size:11px;line-height:1.7;margin:8px 0;position:relative;white-space:pre}
+.copy-btn{position:absolute;top:7px;right:7px;background:#2d3748;color:#a0aec0;border:none;border-radius:4px;padding:3px 9px;font-size:10px;cursor:pointer}
+.copy-btn:hover{background:#4a5568}
+code{background:#2d3748;padding:2px 6px;border-radius:4px;font-size:11px;color:#63b3ed;font-family:monospace}
+
+.warn{background:#2d1f00;border:1px solid #d69e2e;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#fbd38d}
+.info{background:#1a2744;border:1px solid #4299e1;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#90cdf4}
+.success{background:#1c3829;border:1px solid #48bb78;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#9ae6b4}
+
+table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}
+th{background:#2d3748;color:#e2e8f0;padding:7px 11px;text-align:left;font-size:11px}
+td{padding:7px 11px;border-bottom:1px solid #2d3748;color:#a0aec0;vertical-align:top}
+tr:last-child td{border-bottom:none}
+
+.svc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.svc-card{background:#1a1f2e;border-radius:8px;padding:12px 14px;border:1px solid #2d3748}
+.svc-name{font-size:13px;font-weight:600;margin-bottom:4px}
+.svc-port{font-size:10px;font-family:monospace;margin-bottom:6px;opacity:0.7}
+.svc-item{font-size:11px;color:#a0aec0;line-height:1.7}
+
+.flow-step{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.fn{background:#2b6cb0;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px}
+.ft{font-size:12px;color:#a0aec0;line-height:1.7}
+.farr{color:#4299e1;padding-left:6px;font-size:14px}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>🏰 OTT Platform — HLD & LLD Complete Design Document</h1>
+<p style="color:#718096;margin-bottom:16px">Disney-Standard · All Services · All Technologies · Complete Flow</p>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('hld')">HLD</button>
+  <button class="tab" onclick="show('services')">All Services</button>
+  <button class="tab" onclick="show('flow')">Request Flows</button>
+  <button class="tab" onclick="show('lld')">LLD</button>
+  <button class="tab" onclick="show('kafka')">Kafka Events</button>
+  <button class="tab" onclick="show('aws')">AWS Architecture</button>
+  <button class="tab" onclick="show('db')">DB Design</button>
+  <button class="tab" onclick="show('interview')">Interview Answers</button>
+</div>
+
+<!-- HLD -->
+<div id="hld" class="section active">
+  <h2>High Level Design — OTT Platform</h2>
+
+  <pre id="hldDiagram">
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    ESPN WEB UI  (React/JavaScript)                          ║
+║   Browse Plans · Login · Subscribe · View Notifications · Apply Campaigns   ║
+╚══════════════════════════════╦═════════════════════════════════════════════╝
+                               ║ HTTPS
+╔══════════════════════════════▼═════════════════════════════════════════════╗
+║                   AWS ALB (Application Load Balancer)                      ║
+║              Distributes traffic across API Gateway instances              ║
+╚══════════════════════════════╦═════════════════════════════════════════════╝
+                               ║
+╔══════════════════════════════▼═════════════════════════════════════════════╗
+║              API GATEWAY  (Spring Cloud Gateway · Port 8080)               ║
+║  JWT Validation · Rate Limiting · Routing · CORS · Global Logging          ║
+╚═══╦═══════╦═══════╦═══════╦═══════╦═══════╦═══════════════════════════════╝
+    ║       ║       ║       ║       ║       ║
+    ▼       ▼       ▼       ▼       ▼       ▼
+┌───────┐┌──────┐┌───────┐┌───────┐┌────────┐┌──────────┐
+│ USER  ││CATLOG││SUBSCR ││PAYMENT││CAMPAIGN││NOTIF     │
+│SERVICE││:8081 ││:8082  ││:8084  ││:8085   ││SERVICE   │
+│:8083  ││      ││       ││       ││        ││:8086     │
+└───┬───┘└──┬───┘└───┬───┘└───┬───┘└────┬───┘└────┬─────┘
+    │       │        │        │         │          │
+    └───────┴────────┴────┬───┘         │          │
+                          ▼             │          │
+                   ┌──────────────┐     │          │
+                   │    EUREKA    │◄────┘          │
+                   │  :8761       │                │
+                   │  Service Reg │                │
+                   └──────────────┘                │
+                                                   │
+    ┌──────────────────────────────────────────────┘
+    │         KAFKA EVENT BUS
+    │  payment.failed · payment.success
+    │  subscription.expired · subscription.created
+    │  campaign.applied
+    └──────────────────────────────────────────────►
+                   ┌──────────────┐
+                   │NOTIFICATION  │
+                   │SERVICE:8086  │
+                   │Kafka Consumer│
+                   └──────────────┘
+
+INFRASTRUCTURE:
+┌─────────────────┐  ┌────────────────┐  ┌──────────────────┐
+│  CONFIG SERVER  │  │    ZIPKIN      │  │  PROMETHEUS +    │
+│  :8888          │  │  :9411         │  │  GRAFANA         │
+│  Centralizes    │  │  Distributed   │  │  :9090 + :3000   │
+│  all configs    │  │  Tracing       │  │  Monitoring      │
+└─────────────────┘  └────────────────┘  └──────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                    ELK STACK                                │
+│  Logstash(:5000) → Elasticsearch(:9200) → Kibana(:5601)    │
+│  Centralized logging from all 6 services                   │
+└─────────────────────────────────────────────────────────────┘
+  </pre>
+  <button class="copy-btn" onclick="copyById('hldDiagram')">Copy</button>
+
+  <h2>Technology Stack</h2>
+  <table>
+    <tr><th>Concern</th><th>Technology</th><th>Why</th></tr>
+    <tr><td>API Gateway</td><td>Spring Cloud Gateway</td><td>Reactive, JWT auth, rate limiting</td></tr>
+    <tr><td>Service Discovery</td><td>Netflix Eureka</td><td>Dynamic service location, auto load balance</td></tr>
+    <tr><td>Load Balancing</td><td>Spring Cloud LoadBalancer</td><td>Client-side, works with Eureka</td></tr>
+    <tr><td>Config Management</td><td>Spring Cloud Config Server</td><td>Centralized properties, hot reload</td></tr>
+    <tr><td>Service Communication</td><td>OpenFeign</td><td>Declarative REST client, integrates with Eureka</td></tr>
+    <tr><td>Circuit Breaker</td><td>Resilience4j</td><td>Fault tolerance, cascade failure prevention</td></tr>
+    <tr><td>Security</td><td>Spring Security + JWT</td><td>Stateless auth, scalable</td></tr>
+    <tr><td>Async Messaging</td><td>Apache Kafka</td><td>Event-driven, decoupled services</td></tr>
+    <tr><td>Monitoring</td><td>Actuator + Micrometer + Prometheus + Grafana</td><td>Industry standard observability</td></tr>
+    <tr><td>Tracing</td><td>Zipkin + Micrometer Tracing</td><td>Cross-service request tracking</td></tr>
+    <tr><td>Logging</td><td>ELK Stack</td><td>Centralized searchable logs</td></tr>
+    <tr><td>Containerization</td><td>Docker</td><td>Consistent deployments</td></tr>
+    <tr><td>Orchestration</td><td>Kubernetes (EKS)</td><td>Auto-scaling, self-healing</td></tr>
+    <tr><td>CI/CD</td><td>Jenkins</td><td>Automated build, test, deploy</td></tr>
+    <tr><td>Cloud</td><td>AWS (EC2, RDS, ECR, MSK, ALB)</td><td>Production hosting</td></tr>
+  </table>
+</div>
+
+<!-- ALL SERVICES -->
+<div id="services" class="section">
+  <h2>All Services — Role, Input, Output, DB</h2>
+
+  <div class="svc-grid">
+    <div class="svc-card" style="border-color:#4299e1">
+      <div class="svc-name" style="color:#63b3ed">user-service</div>
+      <div class="svc-port">Port: 8083 · DB: user_db</div>
+      <div class="svc-item"><strong style="color:#e2e8f0">Role:</strong> Authentication and user management. The ONLY service that generates JWT tokens.</div>
+      <div class="svc-item" style="margin-top:4px"><strong style="color:#e2e8f0">Input:</strong> Registration data, login credentials</div>
+      <div class="svc-item"><strong style="color:#e2e8f0">Output:</strong> JWT token, user profile</div>
+      <div class="svc-item"><strong style="color:#e2e8f0">APIs:</strong> POST /auth/register, POST /auth/login, GET /users/{id}</div>
+    </div>
+    <div class="svc-card" style="border-color:#48bb78">
+      <div class="svc-name" style="color:#9ae6b4">catalog-service ✅ Built</div>
+      <div class="svc-port">Port: 8081 · DB: catalog_db</div>
+      <div class="svc-item"><strong style="color:#e2e8f0">Role:</strong> Manages all OTT plans (Disney+, ESPN+, Combo). Read-heavy service.</div>
+      <div class="svc-item" style="margin-top:4px"><strong style="color:#e2e8f0">Input:</strong> Plan ID, plan creation data</div>
+      <div class="svc-item"><strong style="color:#e2e8f0">Output:</strong> Plan details, plan list</div>
+      <div class="svc-item"><strong style="color:#e2e8f0">APIs:</strong> GET /catalog/plans, GET /catalog/plans/{id}</div>
+    </div>
+    <div class="svc-card" style="border-color:#9f7aea">
+      <div class="svc-name" style="color:#d6bcfa">subscription-service ✅ Built</div>
+      <div class="svc-port">Port: 8082 · DB: subscription_db</div>
+      <div class="svc-item"><strong style="color:#e2e8f0">Role:</strong> Manages user subscriptions. Calls catalog via Feign. Calls payment-service. Listens to payment.success Kafka event.</div>
+      <div class="svc-item" style="margin-top:4px"><strong style="color:#e2e8f0">Input:</strong> userId, planId, payment result</div>
+      <div class="svc-item"><strong style="color:#e2e8f0">Output:</strong> Subscription details, status</div>
+      <div class="svc-item"><strong style="color:#e2e8f0">APIs:</strong> POST /subscriptions, GET /subscriptions/user/{id}</div>
+    </div>
+    <div class="svc-card" style="border-color:#ed8936">
+      <div class="svc-name" style="color:#ed8936">payment-service 🔥 Build next</div>
+      <div class="svc-port">Port: 8084 · DB: payment_db</div>
+      <div class="svc-item"><strong style="color:#e2e8f0">Role:</strong> Processes subscription payments. Publishes payment.success or payment.failed to Kafka.</div>
+      <div class="svc-item" style="margin-top:4px"><strong style="color:#e2e8f0">Input:</strong> userId, planId, amount, card details</div>
+      <div class="svc-item"><strong style="color:#e2e8f0">Output:</strong> Payment status, receipt</div>
+      <div class="svc-item"><strong style="color:#e2e8f0">Kafka Produces:</strong> payment.success, payment.failed</div>
+    </div>
+    <div class="svc-card" style="border-color:#f6e05e">
+      <div class="svc-name" style="color:#f6e05e">campaign-service 🔥 Build next</div>
+      <div class="svc-port">Port: 8085 · DB: campaign_db</div>
+      <div class="svc-item"><strong style="color:#e2e8f0">Role:</strong> Manages promotional campaigns (free trials, discounts). You built this at Disney/Tavant!</div>
+      <div class="svc-item" style="margin-top:4px"><strong style="color:#e2e8f0">Input:</strong> Campaign data, promo code, user eligibility</div>
+      <div class="svc-item"><strong style="color:#e2e8f0">Output:</strong> Active campaigns, discount applied</div>
+      <div class="svc-item"><strong style="color:#e2e8f0">APIs:</strong> GET /campaigns/active, POST /campaigns/apply</div>
+    </div>
+    <div class="svc-card" style="border-color:#ed64a6">
+      <div class="svc-name" style="color:#ed64a6">notification-service 🔥 Build next</div>
+      <div class="svc-port">Port: 8086 · No DB (stateless)</div>
+      <div class="svc-item"><strong style="color:#e2e8f0">Role:</strong> Pure Kafka consumer. No REST API. Sends email/SMS for payment failures, subscription expiry, renewals.</div>
+      <div class="svc-item" style="margin-top:4px"><strong style="color:#e2e8f0">Kafka Consumes:</strong> payment.failed, payment.success, subscription.expired</div>
+      <div class="svc-item"><strong style="color:#e2e8f0">Output:</strong> Email / SMS to user</div>
+    </div>
+  </div>
+
+  <h2>Supporting Infrastructure</h2>
+  <table>
+    <tr><th>Component</th><th>Port</th><th>Role</th><th>Input</th><th>Output</th></tr>
+    <tr><td>api-gateway</td><td>8080</td><td>Single entry point, JWT validation, rate limiting, routing</td><td>All HTTP requests from ESPN UI</td><td>Routed requests to correct service</td></tr>
+    <tr><td>eureka-server</td><td>8761</td><td>Service registry — all services register on startup</td><td>Service registration</td><td>Service IP/port lookup</td></tr>
+    <tr><td>config-server</td><td>8888</td><td>Centralized configuration — all application.properties</td><td>Service startup requests</td><td>Configuration properties</td></tr>
+    <tr><td>kafka</td><td>9092</td><td>Async event bus between services</td><td>Published events from services</td><td>Events delivered to consumers</td></tr>
+    <tr><td>prometheus</td><td>9090</td><td>Scrapes metrics from all services every 15s</td><td>/actuator/prometheus endpoints</td><td>Time-series metrics data</td></tr>
+    <tr><td>grafana</td><td>3000</td><td>Visualizes Prometheus metrics as dashboards</td><td>Prometheus queries</td><td>Charts, graphs, alerts</td></tr>
+    <tr><td>zipkin</td><td>9411</td><td>Distributed tracing — traces requests across services</td><td>Trace data from all services</td><td>Request waterfall diagrams</td></tr>
+    <tr><td>elasticsearch</td><td>9200</td><td>Stores and indexes all service logs</td><td>Logs from Logstash</td><td>Searchable log queries</td></tr>
+    <tr><td>kibana</td><td>5601</td><td>UI to search and visualize logs</td><td>Elasticsearch queries</td><td>Log dashboards</td></tr>
+    <tr><td>redis</td><td>6379</td><td>Rate limiter storage + session cache</td><td>Rate limit checks from Gateway</td><td>Token bucket counts</td></tr>
+    <tr><td>mysql</td><td>3306</td><td>Persistent data for all services</td><td>JPA queries from services</td><td>Stored data</td></tr>
+  </table>
+</div>
+
+<!-- FLOW -->
+<div id="flow" class="section">
+  <h2>Key Request Flows — End to End</h2>
+
+  <div class="card blue">
+    <h3>Flow 1: User Login → Get JWT Token</h3>
+    <div class="flow-step"><div class="fn">1</div><div class="ft">ESPN UI: POST /auth/login {username, password}</div></div>
+    <div class="farr">↓</div>
+    <div class="flow-step"><div class="fn">2</div><div class="ft">API Gateway: checks if /auth/login is in PUBLIC_PATHS → YES → forwards without JWT check</div></div>
+    <div class="farr">↓</div>
+    <div class="flow-step"><div class="fn">3</div><div class="ft">user-service: validates credentials against user_db → generates JWT with userId, roles, expiry</div></div>
+    <div class="farr">↓</div>
+    <div class="flow-step"><div class="fn">4</div><div class="ft">Response: {"token": "eyJhbG...", "userId": 1, "expiresIn": "1 hour"}</div></div>
+    <div class="farr">↓</div>
+    <div class="flow-step"><div class="fn">5</div><div class="ft">ESPN UI: stores token in localStorage → sends in Authorization: Bearer header for all future calls</div></div>
+  </div>
+
+  <div class="card green">
+    <h3>Flow 2: User Subscribes to Disney+ Plan</h3>
+    <div class="flow-step"><div class="fn">1</div><div class="ft">ESPN UI: POST /subscriptions {planId: "PLAN001", paymentDetails: {...}} with JWT token</div></div>
+    <div class="farr">↓</div>
+    <div class="flow-step"><div class="fn">2</div><div class="ft">API Gateway: validates JWT → rate limit check → routes to subscription-service:8082</div></div>
+    <div class="farr">↓</div>
+    <div class="flow-step"><div class="fn">3</div><div class="ft">subscription-service: validates user exists → calls catalog-service via Feign: GET /catalog/plans/PLAN001</div></div>
+    <div class="farr">↓</div>
+    <div class="flow-step"><div class="fn">4</div><div class="ft">subscription-service: checks campaign-service via Feign: GET /campaigns/apply?planId=PLAN001&userId=1 (any promo?)</div></div>
+    <div class="farr">↓</div>
+    <div class="flow-step"><div class="fn">5</div><div class="ft">subscription-service: calls payment-service via Feign: POST /payments {userId, planId, amount}</div></div>
+    <div class="farr">↓</div>
+    <div class="flow-step"><div class="fn">6</div><div class="ft">payment-service: processes payment → publishes to Kafka: payment.success OR payment.failed</div></div>
+    <div class="farr">↓</div>
+    <div class="flow-step"><div class="fn">7</div><div class="ft">notification-service: consumes payment.success from Kafka → sends "Welcome to Disney+!" email</div></div>
+    <div class="farr">↓</div>
+    <div class="flow-step"><div class="fn">8</div><div class="ft">subscription-service: listens to payment.success → activates subscription → responds to user: 201 Created</div></div>
+  </div>
+
+  <div class="card orange">
+    <h3>Flow 3: Payment Failure → Notification</h3>
+    <div class="flow-step"><div class="fn">1</div><div class="ft">payment-service: card declined → saves failed payment to payment_db</div></div>
+    <div class="farr">↓</div>
+    <div class="flow-step"><div class="fn">2</div><div class="ft">payment-service: publishes PaymentEvent to Kafka topic "payment.failed" → returns immediately (async)</div></div>
+    <div class="farr">↓</div>
+    <div class="flow-step"><div class="fn">3</div><div class="ft">notification-service: @KafkaListener receives event → sends "Your payment failed, please retry" email</div></div>
+    <div class="farr">↓</div>
+    <div class="flow-step"><div class="fn">4</div><div class="ft">subscription-service: @KafkaListener on payment.failed → keeps subscription in PENDING status</div></div>
+  </div>
+
+  <div class="card purple">
+    <h3>Flow 4: Subscription Expiry Reminder</h3>
+    <div class="flow-step"><div class="fn">1</div><div class="ft">Scheduled job in subscription-service runs daily at midnight: finds subscriptions expiring in 3 days</div></div>
+    <div class="farr">↓</div>
+    <div class="flow-step"><div class="fn">2</div><div class="ft">Publishes SubscriptionEvent to Kafka topic "subscription.expiring"</div></div>
+    <div class="farr">↓</div>
+    <div class="flow-step"><div class="fn">3</div><div class="ft">notification-service: consumes event → sends "Your subscription expires in 3 days — renew now!" email</div></div>
+    <div class="farr">↓</div>
+    <div class="flow-step"><div class="fn">4</div><div class="ft">campaign-service: consumes same event → checks if renewal offer applies → sends promo notification</div></div>
+  </div>
+</div>
+
+<!-- LLD -->
+<div id="lld" class="section">
+  <h2>Low Level Design — Package Structure All Services</h2>
+
+  <pre id="lldStructure">
+ott-platform/
+│
+├── eureka-server/                          ← Service Registry (Port 8761)
+│   └── src/main/java/com/ott/eureka/
+│       └── EurekaServerApplication.java   (@EnableEurekaServer)
+│
+├── config-server/                          ← Config Server (Port 8888)
+│   └── src/main/java/com/ott/config/
+│       └── ConfigServerApplication.java   (@EnableConfigServer)
+│
+├── api-gateway/                            ← API Gateway (Port 8080)
+│   └── src/main/java/com/ott/gateway/
+│       ├── ApiGatewayApplication.java
+│       ├── filter/
+│       │   ├── JwtAuthFilter.java          (GlobalFilter — runs on every request)
+│       │   └── LoggingFilter.java          (GlobalFilter — logs all requests)
+│       ├── util/JwtUtil.java               (generate + validate JWT)
+│       ├── config/RateLimiterConfig.java   (Redis rate limiter key resolver)
+│       └── controller/AuthController.java  (temporary — moved to user-service)
+│
+├── user-service/                           ← Auth Service (Port 8083)
+│   └── src/main/java/com/ott/user/
+│       ├── controller/AuthController.java  (POST /auth/login, /auth/register)
+│       ├── service/AuthService.java        (JWT generation, password validation)
+│       ├── model/User.java                 (Entity — maps to user_db.users)
+│       ├── repository/UserRepository.java
+│       ├── security/JwtUtil.java           (same JWT util as gateway)
+│       ├── dto/LoginRequest.java
+│       ├── dto/LoginResponse.java          (contains JWT token)
+│       └── exception/GlobalExceptionHandler.java
+│
+├── catalog-service/                        ← Catalog Service (Port 8081) ✅ BUILT
+│   └── src/main/java/com/ott/catalog/
+│       ├── controller/CatalogController.java
+│       ├── service/CatalogService.java
+│       ├── model/OttPlan.java
+│       ├── repository/OttPlanRepository.java
+│       └── exception/GlobalExceptionHandler.java
+│
+├── subscription-service/                   ← Subscription Service (Port 8082) ✅ BUILT
+│   └── src/main/java/com/ott/subscription/
+│       ├── controller/SubscriptionController.java
+│       ├── controller/UserController.java
+│       ├── service/SubscriptionService.java
+│       ├── client/CatalogServiceClient.java    (Feign → catalog-service)
+│       ├── client/PaymentServiceClient.java    (Feign → payment-service)
+│       ├── client/CampaignServiceClient.java   (Feign → campaign-service)
+│       ├── kafka/SubscriptionEventPublisher.java
+│       ├── kafka/PaymentEventConsumer.java     (@KafkaListener)
+│       ├── model/Subscription.java
+│       ├── model/User.java
+│       ├── dto/SubscriptionRequestDTO.java
+│       ├── dto/SubscriptionResponseDTO.java
+│       └── exception/GlobalExceptionHandler.java
+│
+├── payment-service/                        ← Payment Service (Port 8084) 🔥 BUILD
+│   └── src/main/java/com/ott/payment/
+│       ├── controller/PaymentController.java
+│       ├── service/PaymentService.java
+│       ├── kafka/PaymentEventPublisher.java    (@KafkaProducer)
+│       ├── model/Payment.java
+│       ├── dto/PaymentRequestDTO.java
+│       ├── dto/PaymentResponseDTO.java
+│       ├── event/PaymentEvent.java
+│       └── exception/GlobalExceptionHandler.java
+│
+├── campaign-service/                       ← Campaign Service (Port 8085) 🔥 BUILD
+│   └── src/main/java/com/ott/campaign/
+│       ├── controller/CampaignController.java
+│       ├── service/CampaignService.java
+│       ├── model/Campaign.java
+│       ├── model/CampaignApplication.java
+│       ├── repository/CampaignRepository.java
+│       ├── dto/CampaignResponseDTO.java
+│       ├── dto/ApplyCampaignRequestDTO.java
+│       └── exception/GlobalExceptionHandler.java
+│
+├── notification-service/                   ← Notification Service (Port 8086) 🔥 BUILD
+│   └── src/main/java/com/ott/notification/
+│       ├── NotificationServiceApplication.java
+│       ├── kafka/PaymentFailedConsumer.java    (@KafkaListener)
+│       ├── kafka/PaymentSuccessConsumer.java   (@KafkaListener)
+│       ├── kafka/SubscriptionExpiryConsumer.java
+│       └── service/EmailNotificationService.java
+│
+└── monitoring/
+    ├── prometheus/prometheus.yml
+    └── grafana/provisioning/
+        ├── datasources/prometheus.yml
+        └── dashboards/
+            ├── dashboard.yml
+            └── spring-boot.json
+  </pre>
+  <button class="copy-btn" onclick="copyById('lldStructure')">Copy</button>
+</div>
+
+<!-- KAFKA -->
+<div id="kafka" class="section">
+  <h2>Kafka Topics — Complete Event Flow</h2>
+  <table>
+    <tr><th>Topic</th><th>Producer</th><th>Consumer(s)</th><th>When triggered</th><th>Action taken</th></tr>
+    <tr><td><code>payment.success</code></td><td>payment-service</td><td>subscription-service, notification-service</td><td>Payment processes successfully</td><td>Activate subscription, send welcome email</td></tr>
+    <tr><td><code>payment.failed</code></td><td>payment-service</td><td>subscription-service, notification-service</td><td>Card declined or payment error</td><td>Keep subscription PENDING, send failure email</td></tr>
+    <tr><td><code>subscription.created</code></td><td>subscription-service</td><td>campaign-service</td><td>New subscription saved to DB</td><td>Check if campaign applies, apply discount</td></tr>
+    <tr><td><code>subscription.expired</code></td><td>subscription-service (scheduler)</td><td>notification-service, campaign-service</td><td>Daily job finds expired subs</td><td>Send expiry email, check renewal offers</td></tr>
+    <tr><td><code>subscription.expiring</code></td><td>subscription-service (scheduler)</td><td>notification-service</td><td>3 days before expiry</td><td>Send "renew now" reminder email</td></tr>
+    <tr><td><code>campaign.applied</code></td><td>campaign-service</td><td>notification-service</td><td>Promo applied to subscription</td><td>Send "You got X% off!" notification</td></tr>
+  </table>
+</div>
+
+<!-- AWS -->
+<div id="aws" class="section">
+  <h2>AWS Production Architecture</h2>
+  <pre id="awsArch">
+INTERNET
+    │
+    ▼
+┌─────────────────────────────────────────────────────────────┐
+│                  AWS Route 53 (DNS)                         │
+│           espn.com → AWS ALB endpoint                       │
+└──────────────────────────┬──────────────────────────────────┘
+                           │
+┌──────────────────────────▼──────────────────────────────────┐
+│              AWS ALB (Application Load Balancer)            │
+│    HTTPS termination · Health checks · Target Groups        │
+└──────────┬──────────────────────────────────────────────────┘
+           │
+┌──────────▼──────────────────────────────────────────────────┐
+│  AWS ECS / EKS Cluster (Containers)                        │
+│  ┌──────────────┐  ┌──────────────┐  ┌─────────────────┐  │
+│  │ api-gateway  │  │ api-gateway  │  │ api-gateway     │  │
+│  │ Task 1       │  │ Task 2       │  │ Task 3 (scaled) │  │
+│  └──────────────┘  └──────────────┘  └─────────────────┘  │
+│  ┌────────────┐  ┌────────────┐  ┌────────────┐           │
+│  │catalog-svc │  │catalog-svc │  │catalog-svc │ (3 pods)  │
+│  └────────────┘  └────────────┘  └────────────┘           │
+│  ┌────────────┐  ┌────────────┐  ┌────────────┐           │
+│  │subscr-svc  │  │payment-svc │  │campaign-svc│           │
+│  └────────────┘  └────────────┘  └────────────┘           │
+└─────────────────────────────────────────────────────────────┘
+
+AWS MANAGED SERVICES:
+┌────────────┐ ┌────────────┐ ┌────────────┐ ┌────────────┐
+│  AWS RDS   │ │  AWS MSK   │ │  AWS ECR   │ │  AWS S3    │
+│  MySQL     │ │  Kafka     │ │  Docker    │ │  Images    │
+│  Multi-AZ  │ │  Managed   │ │  Registry  │ │  Backups   │
+└────────────┘ └────────────┘ └────────────┘ └────────────┘
+┌────────────┐ ┌────────────┐ ┌────────────┐
+│ CloudWatch │ │  Secrets   │ │  ElastiCache│
+│ Logs+Alerts│ │  Manager   │ │  Redis     │
+└────────────┘ └────────────┘ └────────────┘
+  </pre>
+  <button class="copy-btn" onclick="copyById('awsArch')">Copy</button>
+</div>
+
+<!-- DB -->
+<div id="db" class="section">
+  <h2>Database Design — All Services</h2>
+  <pre id="dbDesign">
+user_db:
+  users: id, username, email, password_hash, full_name, phone, role, is_active, created_at
+
+catalog_db:
+  ott_plans: plan_id, plan_name, price, duration, description, is_active, created_at
+
+subscription_db:
+  users: user_id, username, email, full_name, phone, is_active, created_at
+  subscriptions: id, user_id, plan_id, status, start_date, end_date, amount_paid, auto_renewal
+
+payment_db:
+  payments: id, user_id, plan_id, amount, status(SUCCESS/FAILED/PENDING),
+            payment_method, failure_reason, transaction_id, created_at
+  payment_retries: id, payment_id, retry_count, last_retry_at, next_retry_at
+
+campaign_db:
+  campaigns: id, name, description, discount_percent, start_date, end_date,
+             eligible_plans, promo_code, max_uses, current_uses, is_active
+  campaign_applications: id, campaign_id, user_id, plan_id, discount_applied, applied_at
+  </pre>
+  <button class="copy-btn" onclick="copyById('dbDesign')">Copy</button>
+</div>
+
+<!-- INTERVIEW -->
+<div id="interview" class="section">
+  <h2>HLD/LLD Interview Answers</h2>
+
+  <div class="card green">
+    <h3>How to walk through HLD in interview (2 minutes)</h3>
+    <p style="color:#9ae6b4">"Our OTT platform has 6 microservices: user-service for authentication, catalog-service for plan management, subscription-service for user subscriptions, payment-service for billing, campaign-service for promotions, and notification-service for alerts. The ESPN React frontend calls the API Gateway which validates JWT tokens and routes requests. Services communicate synchronously via Feign for data queries and asynchronously via Kafka for events like payment results. Each service has its own MySQL database following the database-per-service pattern. The infrastructure includes Eureka for service discovery, Spring Cloud Config for centralized configuration, Prometheus+Grafana for monitoring, Zipkin for distributed tracing, and ELK for centralized logging. On AWS we use ECS for containers, RDS for databases, MSK for Kafka, and ALB for load balancing."</p>
+  </div>
+
+  <div class="card blue">
+    <h3>Why does notification-service have no database?</h3>
+    <p>"Notification-service is a pure event consumer — it only reads from Kafka topics and sends notifications. It has no state of its own to persist. If notification delivery history is needed, we'd add a notifications table, but for our current design, the email/SMS provider (like AWS SES) handles delivery tracking. This keeps the service lightweight and stateless."</p>
+  </div>
+
+  <div class="card orange">
+    <h3>Why did you put JWT validation in Gateway and not each service?</h3>
+    <p>"Cross-cutting concerns like authentication should be centralized. If each service validates JWT, you have duplicated auth code across 6 services. Any change to auth logic needs 6 updates. With Gateway as the single enforcement point, each service trusts the X-Username header that Gateway sets — they focus purely on business logic. This is the separation of concerns principle applied at architectural level."</p>
+  </div>
+</div>
+
+<div style="text-align:center;padding:20px;color:#4a5568;font-size:12px">OTT Platform HLD & LLD — Complete Design Document</div>
+</div>
+<script>
+function show(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById(id).classList.add('active');event.target.classList.add('active');window.scrollTo(0,0);}
+function copyById(id){navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>{const b=event.target;const o=b.textContent;b.textContent='✅ Copied!';b.style.background='#276749';setTimeout(()=>{b.textContent=o;b.style.background=''},1500)});}
+</script>
+</body>
+</html>
