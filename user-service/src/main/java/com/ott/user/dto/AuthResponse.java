@@ -1,0 +1,22 @@
+package com.ott.user.dto;
+
+/** What user-service returns after login/register — contains JWT token */
+public class AuthResponse {
+    private String token;
+    private Long userId;
+    private String username;
+    private String email;
+    private String role;
+    private String expiresIn = "1 hour";
+
+    public AuthResponse(String token, Long userId, String username, String email, String role) {
+        this.token = token; this.userId = userId;
+        this.username = username; this.email = email; this.role = role;
+    }
+    public String getToken() { return token; }
+    public Long getUserId() { return userId; }
+    public String getUsername() { return username; }
+    public String getEmail() { return email; }
+    public String getRole() { return role; }
+    public String getExpiresIn() { return expiresIn; }
+}
