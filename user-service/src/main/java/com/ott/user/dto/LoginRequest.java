@@ -9,4 +9,10 @@ public class LoginRequest {
     public void setUsername(String v) { username = v; }
     public String getPassword() { return password; }
     public void setPassword(String v) { password = v; }
+	@Override
+	public String toString() {
+		return "LoginRequest [username=" + username + ", password=" + password + "]";
+	}
+    
+    
 }

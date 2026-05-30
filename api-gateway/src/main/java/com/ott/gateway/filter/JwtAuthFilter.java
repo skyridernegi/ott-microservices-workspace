@@ -51,6 +51,8 @@ public class JwtAuthFilter implements GlobalFilter, Ordered {
             "/auth/token",
             "/auth/refresh",
             "/actuator"    // ADD THIS — Prometheus scrapes without JWT token
+            ,"/auth/login"  //allow user to access login and register functionality with token
+            ,"/auth/register" //allow user to access login and register functionality with token
     );
 
     private final JwtUtil jwtUtil;

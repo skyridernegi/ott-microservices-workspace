@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.14</version>
+			<version>3.5.14</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ott</groupId>
@@ -66,10 +66,16 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<dependency>
+	<!--	<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<!--   <artifactId>spring-cloud-starter-gateway</artifactId>--> <!--deprecated with spring-cloud version 2025.x-->
+			   <artifactId>spring-cloud-starter-gateway</artifactId> deprecated with spring-cloud version 2025.x
 			<artifactId>spring-cloud-starter-gateway-server-webflux</artifactId>
+		</dependency>--> 
+		<!-- MySQL Driver - to connect to MySQL -->
+		<dependency>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

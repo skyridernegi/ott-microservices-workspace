@@ -67,4 +67,12 @@ public class User {
     public void setIsActive(Boolean v) { isActive = v; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
+	@Override
+	public String toString() {
+		return "User [userId=" + userId + ", username=" + username + ", email=" + email + ", password=" + password
+				+ ", fullName=" + fullName + ", phone=" + phone + ", role=" + role + ", isActive=" + isActive
+				+ ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
+	}
+    
+    
 }

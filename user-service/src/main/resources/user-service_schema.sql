@@ -22,4 +22,7 @@ INSERT INTO users (username, email, password, full_name, phone, role) VALUES
 ('jane.smith', 'jane.smith@gmail.com', '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj4J4JqXqBnO', 'Jane Smith', '9876543211', 'USER'),
 ('admin',      'admin@espn.com',       '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj4J4JqXqBnO', 'Admin User', '9999999999', 'ADMIN');
 
+SET SQL_SAFE_UPDATES = 0;
+DELETE FROM users;
+SET SQL_SAFE_UPDATES = 1;
 select * from users;
