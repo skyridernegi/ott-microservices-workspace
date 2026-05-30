@@ -28,6 +28,7 @@ public class AuthController {
      */
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest req) {
+    	System.out.println("incomming....LoginRequest::"+req);
         return ResponseEntity.ok(authService.login(req));
     }
 
@@ -49,5 +50,10 @@ public class AuthController {
     @GetMapping("/me/{userId}")
     public ResponseEntity<?> getMe(@PathVariable Long userId) {
         return ResponseEntity.ok(authService.getUserById(userId));
+    }
+    
+    @GetMapping("/me")
+    public ResponseEntity<?> getMe() {
+        return ResponseEntity.ok(authService.getUsers());
     }
 }

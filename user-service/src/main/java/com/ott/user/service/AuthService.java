@@ -5,6 +5,9 @@ import com.ott.user.repository.UserRepository;
 import com.ott.user.util.JwtUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 import org.slf4j.*;
 
 /**
@@ -35,10 +38,11 @@ public class AuthService {
     public AuthResponse login(LoginRequest req) {
         User user = userRepository.findByUsername(req.getUsername())
             .orElseThrow(() -> new RuntimeException("Invalid username or password"));
-
+        System.out.println("...incomingUserDetailsVarified by DB:"+user);
         if (!user.getIsActive())
             throw new RuntimeException("Account is deactivated");
 
+        System.out.println(req.getPassword() +"<----- user.getPasswdFromReq    &&&&&    user.getPasswdFromDB:->"+ user.getPassword());
         // BCrypt check: compares raw password with stored hash
         if (!passwordEncoder.matches(req.getPassword(), user.getPassword()))
             throw new RuntimeException("Invalid username or password");
@@ -71,6 +75,10 @@ public class AuthService {
     }
 
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found into DAtabase"));
+    }
+    public List<User> getUsers() { // for testing()
+//        return userRepository.findAll().orElseThrow(() -> new RuntimeException("No User found in DB"));
+    	return userRepository.findAll();//.orElseThrow(() -> new RuntimeException("No User found in DB"));
     }
 }
