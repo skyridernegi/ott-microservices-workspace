@@ -1,0 +1,783 @@
+{
+  "info": {
+    "_postman_id": "90c524ef-1b7c-483a-85e7-33b0885ff30f",
+    "name": "Ott Plateform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "25529162"
+  },
+  "item": [
+    {
+      "name": "catalogservice",
+      "item": [
+        {
+          "name": "AllPlan-GET",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/catalog/plans",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "catalog",
+                "plans"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET-PlansByPlanId",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "GET-PlansByPlanIdByduration[MONTHLY/YEARLY]",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/catalog/plans/duration/YEARLY",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "catalog",
+                "plans",
+                "duration",
+                "YEARLY"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET-PlansByPlanId",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/catalog/plans/PLAN006",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "catalog",
+                "plans",
+                "PLAN006"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "addingNewPlans",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"planId\": \"PLAN006\",\r\n  \"planName\": \"Hotstar Premium\",\r\n  \"price\": 349.00,\r\n  \"duration\": \"MONTHLY\",\r\n  \"description\": \"Hotstar premium content access\",\r\n  \"isActive\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8081/catalog/plans",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "catalog",
+                "plans"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "deleteORBasicallyDeactivating-Plans",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8081/catalog/plans/PLAN006",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "catalog",
+                "plans",
+                "PLAN006"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "activating-Plans",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"planId\": \"PLAN006\",\r\n  \"planName\": \"Hotstar Premium\",\r\n  \"price\": 349.00,\r\n  \"duration\": \"MONTHLY\",\r\n  \"description\": \"Hotstar premium content access\",\r\n  \"isActive\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8081/catalog/plans/PLAN006",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "catalog",
+                "plans",
+                "PLAN006"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "updateExistingPlan",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \r\n  \"planName\": \"Hotstar Premium\",\r\n  \"price\": 309.00,\r\n  \"duration\": \"MONTHLY\",\r\n  \"description\": \"Hotstar premium content access\",\r\n  \"isActive\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8081/catalog/plans/PLAN006",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "catalog",
+                "plans",
+                "PLAN006"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "subscriptionservice",
+      "item": [
+        {
+          "name": "getUserByUserId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8082/users/4",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8082",
+              "path": [
+                "users",
+                "4"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getSubscriptionByUserId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8082/subscriptions/user/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8082",
+              "path": [
+                "subscriptions",
+                "user",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "regiserNewUser",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"username\": \"sonuKumarNegi\",\r\n  \"email\": \"skyn@gmail.com\",\r\n  \"fullName\": \"Skyri Kumar\",\r\n  \"phone\": \"989768\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8082/users/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8082",
+              "path": [
+                "users",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "userPlanSubscription",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"userId\": 4,\r\n  \"planId\": \"PLAN002\",\r\n  \"autoRenewal\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8082/subscriptions",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8082",
+              "path": [
+                "subscriptions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "getSubscriptionBySubId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8082/subscriptions/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8082",
+              "path": [
+                "subscriptions",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "updatingSubscriptionStatus(ACTIVE,EXPIRED,CANCELLED,PENDING)",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8082/subscriptions/1/cancel",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8082",
+              "path": [
+                "subscriptions",
+                "1",
+                "cancel"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "api-gateway",
+      "item": [
+        {
+          "name": "catalogserviceViaAG",
+          "item": [
+            {
+              "name": "AllPlan-GET",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huLmRvZSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzc5MzU0NTEyLCJleHAiOjE3NzkzNTgxMTJ9.5Fc8Y568QMZLD7YgWFDj6Kkgqt_L5biTIc18aCXm8Jw",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8081/catalog/plans",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8081",
+                  "path": [
+                    "catalog",
+                    "plans"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET-PlansByPlanId",
+              "request": {
+                "method": "GET",
+                "header": []
+              },
+              "response": []
+            },
+            {
+              "name": "GET-PlansByPlanIdByduration[MONTHLY/YEARLY]",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/catalog/plans/duration/YEARLY",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "catalog",
+                    "plans",
+                    "duration",
+                    "YEARLY"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GET-PlansByPlanId",
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8081/catalog/plans/PLAN006",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8081",
+                  "path": [
+                    "catalog",
+                    "plans",
+                    "PLAN006"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "addingNewPlans",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"planId\": \"PLAN006\",\r\n  \"planName\": \"Hotstar Premium\",\r\n  \"price\": 349.00,\r\n  \"duration\": \"MONTHLY\",\r\n  \"description\": \"Hotstar premium content access\",\r\n  \"isActive\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8081/catalog/plans",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8081",
+                  "path": [
+                    "catalog",
+                    "plans"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "deleteORBasicallyDeactivating-Plans",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8081/catalog/plans/PLAN006",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8081",
+                  "path": [
+                    "catalog",
+                    "plans",
+                    "PLAN006"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "activating-Plans",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"planId\": \"PLAN006\",\r\n  \"planName\": \"Hotstar Premium\",\r\n  \"price\": 349.00,\r\n  \"duration\": \"MONTHLY\",\r\n  \"description\": \"Hotstar premium content access\",\r\n  \"isActive\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8081/catalog/plans/PLAN006",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8081",
+                  "path": [
+                    "catalog",
+                    "plans",
+                    "PLAN006"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "updateExistingPlan",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \r\n  \"planName\": \"Hotstar Premium\",\r\n  \"price\": 309.00,\r\n  \"duration\": \"MONTHLY\",\r\n  \"description\": \"Hotstar premium content access\",\r\n  \"isActive\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8081/catalog/plans/PLAN006",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8081",
+                  "path": [
+                    "catalog",
+                    "plans",
+                    "PLAN006"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ott_user-service",
+      "item": [
+        {
+          "name": "findAllUsers",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8083/auth/me",
+              "host": [
+                "localhost"
+              ],
+              "port": "8083",
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"username\":\"john.doe\",\r\n\"password\":\"password123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8083/auth/login",
+              "host": [
+                "localhost"
+              ],
+              "port": "8083",
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"username\":\"skyri\",\r\n\"email\":\"skyri@gmail.com\",\r\n\"password\":\"pass123\",\r\n\"fullName\":\"Skyrider\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8083/auth/register",
+              "host": [
+                "localhost"
+              ],
+              "port": "8083",
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register_ViaAG",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\"username\":\"sonu\",\r\n\"email\":\"sonunegi_negi@gmail.com\",\r\n\"password\":\"password123\",\r\n\"fullName\":\"Skyrider\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8083/auth/register",
+              "host": [
+                "localhost"
+              ],
+              "port": "8083",
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "loginViaAG",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8083/auth/me",
+              "host": [
+                "localhost"
+              ],
+              "port": "8083",
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "findAllUserbyID",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "localhost:8083/auth/me/3",
+              "host": [
+                "localhost"
+              ],
+              "port": "8083",
+              "path": [
+                "auth",
+                "me",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "AG_PostToken",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"john.doe\",\r\n    \"role\": \"USER\"\r\n }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/auth/token",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "auth",
+            "token"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
