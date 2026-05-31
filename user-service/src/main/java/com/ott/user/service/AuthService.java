@@ -55,9 +55,9 @@ public class AuthService {
     /** REGISTER: Creates new user account, returns JWT token */
     public AuthResponse register(RegisterRequest req) {
         if (userRepository.existsByUsername(req.getUsername()))
-            throw new RuntimeException("Username already taken");
+            throw new RuntimeException("Can't Register as New USER, username already taken");
         if (userRepository.existsByEmail(req.getEmail()))
-            throw new RuntimeException("Email already registered");
+            throw new RuntimeException("Can't Register as New USER, Email already registered");
 
         User user = new User();
         user.setUsername(req.getUsername());

@@ -1,0 +1,2130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OTT Platform — Complete Master Guide</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#0f1117;color:#e2e8f0;line-height:1.6;font-size:13px}
+.container{max-width:1060px;margin:0 auto;padding:20px}
+h1{font-size:22px;color:#63b3ed;margin-bottom:4px}
+h2{font-size:15px;color:#90cdf4;margin:20px 0 8px;padding-bottom:6px;border-bottom:1px solid #2d3748}
+h3{font-size:13px;color:#e2e8f0;margin:12px 0 6px;font-weight:600}
+p,li{font-size:12px;color:#a0aec0;line-height:1.8}
+ul,ol{padding-left:18px;margin:6px 0}
+
+/* TABS */
+.tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:20px;border-bottom:2px solid #2d3748;padding-bottom:10px;position:sticky;top:0;background:#0f1117;z-index:50;padding-top:8px}
+.tab{background:#1a1f2e;border:1px solid #2d3748;border-radius:6px;padding:6px 12px;font-size:11px;color:#a0aec0;cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.tab:hover{border-color:#4299e1;color:#63b3ed}
+.tab.active{background:#2b6cb0;border-color:#4299e1;color:#fff}
+.section{display:none}.section.active{display:block}
+
+/* STEP BOXES */
+.step{background:#1a1f2e;border:1px solid #2d3748;border-radius:10px;margin-bottom:10px;overflow:hidden}
+.step-hdr{background:#2d3748;padding:9px 14px;display:flex;align-items:center;gap:10px}
+.snum{background:#2b6cb0;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.stitle{font-size:13px;font-weight:600;color:#e2e8f0;flex:1}
+.sbadge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600}
+.step-body{padding:12px 14px}
+
+/* FILE HEADERS */
+.fhdr{display:flex;align-items:center;gap:8px;background:#1c3829;border:1px solid #276749;border-radius:6px;padding:7px 12px;margin:8px 0;flex-wrap:wrap}
+.fname{font-size:12px;font-weight:600;color:#9ae6b4}
+.fpath{font-size:11px;color:#718096;font-family:monospace;margin-left:auto}
+.fact{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px}
+.fnew{background:#1a365d;color:#90cdf4}
+.fmod{background:#744210;color:#fbd38d}
+.fall{background:#322659;color:#d6bcfa}
+
+/* CODE */
+pre{background:#0d1117;border:1px solid #2d3748;border-radius:6px;padding:12px 14px;overflow-x:auto;font-size:11px;line-height:1.7;margin:8px 0;position:relative;white-space:pre}
+.cbtn{position:absolute;top:7px;right:7px;background:#2d3748;color:#a0aec0;border:none;border-radius:4px;padding:3px 9px;font-size:10px;cursor:pointer}
+.cbtn:hover{background:#4a5568;color:#e2e8f0}
+code{background:#2d3748;padding:2px 5px;border-radius:4px;font-size:11px;color:#63b3ed;font-family:monospace}
+
+/* SYNTAX */
+.kw{color:#c792ea}.an{color:#ffcb6b}.cm{color:#546e7a;font-style:italic}
+.st{color:#c3e88d}.cl{color:#82aaff}.add{background:#0d2818;display:block;padding-left:8px;border-left:3px solid #48bb78}
+
+/* ALERTS */
+.warn{background:#2d1f00;border:1px solid #d69e2e;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#fbd38d}
+.info{background:#1a2744;border:1px solid #4299e1;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#90cdf4}
+.success{background:#1c3829;border:1px solid #48bb78;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#9ae6b4}
+.danger{background:#2d1515;border:1px solid #742a2a;border-radius:8px;padding:10px 14px;margin:8px 0;font-size:12px;color:#feb2b2}
+
+/* TABLES */
+table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}
+th{background:#2d3748;color:#e2e8f0;padding:7px 11px;text-align:left;font-size:11px}
+td{padding:7px 11px;border-bottom:1px solid #2d3748;color:#a0aec0;vertical-align:top}
+tr:last-child td{border-bottom:none}
+
+/* SERVICE CARDS */
+.svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin:10px 0}
+.svc-card{border-radius:8px;padding:12px 14px;border:1px solid #2d3748;background:#1a1f2e}
+
+/* FLOW */
+.flow-item{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.fn{background:#2b6cb0;color:#fff;border-radius:50%;width:22px;height:22px;min-width:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-top:2px}
+.ft{font-size:12px;color:#a0aec0;line-height:1.7}
+.farr{color:#4299e1;padding-left:10px;font-size:14px;margin-bottom:6px}
+
+/* CARD COLORS */
+.card{background:#1a1f2e;border:1px solid #2d3748;border-radius:10px;padding:14px 16px;margin-bottom:12px}
+.c-blue{border-left:4px solid #4299e1}.c-green{border-left:4px solid #48bb78}
+.c-orange{border-left:4px solid #ed8936}.c-purple{border-left:4px solid #9f7aea}
+.c-red{border-left:4px solid #fc8181}.c-yellow{border-left:4px solid #f6e05e}
+.c-teal{border-left:4px solid #38b2ac}.c-pink{border-left:4px solid #ed64a6}
+
+/* BIG PICTURE */
+.bp-svc{border-radius:8px;padding:8px 12px;font-size:11px;text-align:center;margin:4px}
+.bp-row{display:flex;flex-wrap:wrap;justify-content:center;margin:6px 0}
+.bp-arr{text-align:center;color:#4299e1;font-size:18px;padding:2px 0}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>🏰 OTT Platform — Complete Master Guide</h1>
+<p style="color:#718096;margin-bottom:8px">user-service · payment-service · campaign-service · espn-ui · API Gateway .properties · Services Map · Flow Diagram</p>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('bigpicture')">🗺 Big Picture</button>
+  <button class="tab" onclick="show('services-map')">📋 Services Map</button>
+  <button class="tab" onclick="show('gateway-props')">⚙️ Gateway .properties</button>
+  <button class="tab" onclick="show('user-service')">👤 user-service</button>
+  <button class="tab" onclick="show('payment-service')">💳 payment-service</button>
+  <button class="tab" onclick="show('campaign-service')">🎯 campaign-service</button>
+  <button class="tab" onclick="show('espn-manual')">🖥 ESPN UI Manual</button>
+  <button class="tab" onclick="show('startup-order')">🚀 Startup Order</button>
+</div>
+
+<!-- ═══════════════ BIG PICTURE ═══════════════ -->
+<div id="bigpicture" class="section active">
+  <h2>Complete System — All Components with User Interaction Flow</h2>
+  <div class="info">Numbers show the order of participation when a user subscribes to a plan — the most complex flow covering all services.</div>
+
+  <pre id="bp" style="font-size:11px;line-height:1.9">
+USER ACTION: Opens ESPN website → browses plans → subscribes → gets notification
+═══════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│  ① ESPN WEB UI  (espn-ui.html · Browser)                                   │
+│  • Browse plans · Login · Subscribe · View My Subscriptions · Apply Promo  │
+└──────────────────────────────┬──────────────────────────────────────────────┘
+                               │ HTTPS requests
+                               │
+┌──────────────────────────────▼──────────────────────────────────────────────┐
+│  ② AWS ALB  (Application Load Balancer)  [Production only]                 │
+│  • Distributes traffic across multiple Gateway instances                   │
+│  • Health checks · SSL termination                                          │
+└──────────────────────────────┬──────────────────────────────────────────────┘
+                               │
+┌──────────────────────────────▼──────────────────────────────────────────────┐
+│  ③ API GATEWAY  (Spring Cloud Gateway · Port 8080)                         │
+│  • Every request enters here FIRST                                          │
+│  • JwtAuthFilter → validates JWT on every non-public request               │
+│  • RateLimiter   → max 10 req/sec per user via Redis                       │
+│  • Routes request to correct downstream service                             │
+│  • LoggingFilter → logs every request/response                              │
+└──┬──────────┬──────────┬─────────────┬──────────────┬───────────┬───────────┘
+   │          │          │             │              │           │
+   ▼          ▼          ▼             ▼              ▼           ▼
+④ USER     ⑤ CATALOG  ⑥ SUBSCRIPTION ⑦ PAYMENT   ⑧ CAMPAIGN  ⑨ NOTIFICATION
+SERVICE    SERVICE    SERVICE        SERVICE      SERVICE     SERVICE
+:8083      :8081      :8082          :8084        :8085       :8086
+│          │          │              │            │           │
+│          │          │              │            │           │
+▼          ▼          ▼              ▼            ▼           ▼
+user_db  catalog_db  subscript_db  payment_db  campaign_db  (no DB)
+                                                             (Kafka consumer)
+
+SUPPORTING INFRASTRUCTURE:
+┌─────────────┐  ┌─────────────┐  ┌────────────────┐  ┌──────────────────┐
+│ ⑩ REDIS    │  │ ⑪ MYSQL    │  │ ⑫ KAFKA        │  │ ⑬ EUREKA        │
+│ :6379       │  │ :3306       │  │ :9092          │  │ :8761            │
+│ Rate Limiter│  │ All DBs     │  │ Event Bus      │  │ Service Registry │
+└─────────────┘  └─────────────┘  └────────────────┘  └──────────────────┘
+┌─────────────┐  ┌─────────────┐  ┌────────────────┐
+│ ⑭ PROMETHEUS│  │ ⑮ GRAFANA  │  │ ⑯ CONFIG SERVER│
+│ :9090       │  │ :3000       │  │ :8888          │
+│ Metrics DB  │  │ Dashboards  │  │ Central Config │
+└─────────────┘  └─────────────┘  └────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════
+SUBSCRIBE FLOW — numbered in sequence:
+
+ ①  User clicks "Subscribe" in ESPN UI
+ ②  POST /subscriptions sent to Gateway:8080 with JWT token
+ ③  Gateway validates JWT → rate limit check → routes to subscription-service
+ ④  subscription-service validates user exists in subscription_db
+ ⑤  Feign call → catalog-service:8081 → validates plan, gets price
+ ⑥  Feign call → campaign-service:8085 → checks for active promo code
+ ⑦  Feign call → payment-service:8084 → processes the payment
+ ⑧  payment-service saves payment to payment_db
+ ⑨  payment-service publishes to Kafka: "payment.success" or "payment.failed"
+ ⑩  subscription-service consumes Kafka "payment.success" → activates subscription
+ ⑪  notification-service consumes Kafka "payment.success" → sends email to user
+ ⑫  subscription-service returns 201 Created response to ESPN UI
+ ⑬  ESPN UI shows "Subscribed!" success message
+  </pre>
+  <button class="cbtn" onclick="copyById('bp')">Copy</button>
+</div>
+
+<!-- ═══════════════ SERVICES MAP ═══════════════ -->
+<div id="services-map" class="section">
+  <h2>Every Service — Port, Status, What You Need to Run</h2>
+
+  <div class="danger">⚠️ For ESPN UI to work fully, ALL these services must be running. For basic testing, you only need services marked "Minimum".</div>
+
+  <table>
+    <tr><th>Service</th><th>Port</th><th>Status</th><th>Required for ESPN UI</th><th>DB</th></tr>
+    <tr style="background:rgba(34,197,94,0.05)">
+      <td><strong style="color:#9ae6b4">catalog-service</strong></td>
+      <td><code>8081</code></td>
+      <td>✅ Built</td>
+      <td><strong style="color:#9ae6b4">MINIMUM — Plans page needs this</strong></td>
+      <td>catalog_db</td>
+    </tr>
+    <tr style="background:rgba(34,197,94,0.05)">
+      <td><strong style="color:#9ae6b4">subscription-service</strong></td>
+      <td><code>8082</code></td>
+      <td>✅ Built</td>
+      <td><strong style="color:#9ae6b4">MINIMUM — Subscribe + My Subscriptions</strong></td>
+      <td>subscription_db</td>
+    </tr>
+    <tr style="background:rgba(34,197,94,0.05)">
+      <td><strong style="color:#9ae6b4">api-gateway</strong></td>
+      <td><code>8080</code></td>
+      <td>✅ Built</td>
+      <td><strong style="color:#9ae6b4">MINIMUM — ALL traffic goes through here</strong></td>
+      <td>—</td>
+    </tr>
+    <tr style="background:rgba(34,197,94,0.05)">
+      <td><strong style="color:#9ae6b4">Redis</strong></td>
+      <td><code>6379</code></td>
+      <td>✅ Installed</td>
+      <td><strong style="color:#9ae6b4">MINIMUM — Rate limiter needs Redis</strong></td>
+      <td>—</td>
+    </tr>
+    <tr style="background:rgba(59,130,246,0.05)">
+      <td><strong style="color:#90cdf4">user-service</strong></td>
+      <td><code>8083</code></td>
+      <td>🔥 Build now</td>
+      <td>Login / Register pages need this</td>
+      <td>user_db</td>
+    </tr>
+    <tr style="background:rgba(59,130,246,0.05)">
+      <td><strong style="color:#90cdf4">payment-service</strong></td>
+      <td><code>8084</code></td>
+      <td>🔥 Build now</td>
+      <td>Subscribe flow needs this</td>
+      <td>payment_db</td>
+    </tr>
+    <tr style="background:rgba(59,130,246,0.05)">
+      <td><strong style="color:#90cdf4">campaign-service</strong></td>
+      <td><code>8085</code></td>
+      <td>🔥 Build now</td>
+      <td>Offers page + promo codes need this</td>
+      <td>campaign_db</td>
+    </tr>
+    <tr style="background:rgba(59,130,246,0.05)">
+      <td><strong style="color:#90cdf4">notification-service</strong></td>
+      <td><code>8086</code></td>
+      <td>🔥 Build now</td>
+      <td>Kafka event consumer — emails</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>MySQL</td><td><code>3306</code></td><td>✅ Installed</td><td>All services need MySQL</td><td>—</td>
+    </tr>
+    <tr>
+      <td>Kafka</td><td><code>9092</code></td><td>Later</td><td>Payment events, notifications</td><td>—</td>
+    </tr>
+    <tr>
+      <td>Eureka</td><td><code>8761</code></td><td>Later</td><td>Service discovery</td><td>—</td>
+    </tr>
+    <tr>
+      <td>Prometheus</td><td><code>9090</code></td><td>Optional</td><td>Monitoring only</td><td>—</td>
+    </tr>
+    <tr>
+      <td>Grafana</td><td><code>3000</code></td><td>Optional</td><td>Dashboard only</td><td>—</td>
+    </tr>
+  </table>
+
+  <div class="info">
+    <strong>Current ESPN UI errors explained:</strong><br>
+    "API Gateway not running" = espn-ui.html tries to call localhost:8080 but Gateway is not started.<br>
+    Fix: Start Redis → Start catalog-service → Start subscription-service → Start api-gateway → Then open espn-ui.html.<br><br>
+    Login/Register will show 404 until user-service is built and running on port 8083.<br>
+    Offers page will show mock data until campaign-service is built and running on port 8085.
+  </div>
+
+  <h2>Add these 4 routes to api-gateway application.properties</h2>
+  <p>When you build user-service, payment-service, campaign-service — add these routes to your existing Gateway properties file:</p>
+  <pre id="newRoutes"># Route 5: User Service (Auth)
+spring.cloud.gateway.server.webflux.routes[4].id=user-service
+spring.cloud.gateway.server.webflux.routes[4].uri=http://localhost:8083
+spring.cloud.gateway.server.webflux.routes[4].predicates[0]=Path=/auth/**,/api/users/**
+
+# Route 6: Payment Service
+spring.cloud.gateway.server.webflux.routes[5].id=payment-service
+spring.cloud.gateway.server.webflux.routes[5].uri=http://localhost:8084
+spring.cloud.gateway.server.webflux.routes[5].predicates[0]=Path=/payments/**
+spring.cloud.gateway.server.webflux.routes[5].filters[0].name=RequestRateLimiter
+spring.cloud.gateway.server.webflux.routes[5].filters[0].args.redis-rate-limiter.replenishRate=5
+spring.cloud.gateway.server.webflux.routes[5].filters[0].args.redis-rate-limiter.burstCapacity=10
+spring.cloud.gateway.server.webflux.routes[5].filters[0].args.redis-rate-limiter.requestedTokens=1
+spring.cloud.gateway.server.webflux.routes[5].filters[0].args.key-resolver=#{@userKeyResolver}
+
+# Route 7: Campaign Service
+spring.cloud.gateway.server.webflux.routes[6].id=campaign-service
+spring.cloud.gateway.server.webflux.routes[6].uri=http://localhost:8085
+spring.cloud.gateway.server.webflux.routes[6].predicates[0]=Path=/campaigns/**
+
+# Route 8: Notification Service (if needed via HTTP — optional)
+spring.cloud.gateway.server.webflux.routes[7].id=notification-service
+spring.cloud.gateway.server.webflux.routes[7].uri=http://localhost:8086
+spring.cloud.gateway.server.webflux.routes[7].predicates[0]=Path=/notifications/**</pre>
+  <button class="cbtn" onclick="copyById('newRoutes')">Copy</button>
+
+  <p style="margin-top:8px">Also add /auth to PUBLIC_PATHS in JwtAuthFilter.java so login/register bypass JWT:</p>
+  <pre id="publicPaths">private static final List&lt;String&gt; PUBLIC_PATHS = List.of(
+    "/auth/token",
+    "/auth/login",      // ADD — user-service login
+    "/auth/register",   // ADD — user-service register
+    "/auth/refresh",
+    "/actuator",
+    "/campaigns/active" // ADD — public campaigns page
+);</pre>
+  <button class="cbtn" onclick="copyById('publicPaths')">Copy</button>
+</div>
+
+<!-- ═══════════════ GATEWAY PROPERTIES ═══════════════ -->
+<div id="gateway-props" class="section">
+  <h2>⚙️ API Gateway — Complete application.properties</h2>
+
+  <div class="success">✅ Your current application.properties is already correct and working. This is the COMPLETE final version including all 8 routes (existing + new services). Replace your file with this when you build new services.</div>
+
+  <div class="fhdr">
+    <span class="fname">application.properties</span>
+    <span class="fact fmod">FINAL COMPLETE VERSION</span>
+    <span class="fpath">api-gateway/src/main/resources/application.properties</span>
+  </div>
+
+  <pre id="gwProps"># =====================================================================
+# API GATEWAY — Complete application.properties
+# NOTE: Using .properties format (NOT .yml) to avoid indentation errors
+# Spring Cloud Gateway 2025.0.0 + Spring Boot 3.5.14
+# =====================================================================
+
+# ── Server ────────────────────────────────────────────────────────────
+server.port=8080
+spring.application.name=api-gateway
+
+# ── Redis (Rate Limiter) ──────────────────────────────────────────────
+# Rate limiter uses Redis to count requests per user per second
+spring.data.redis.host=localhost
+spring.data.redis.port=6379
+
+# ── Trusted Proxies (Spring Cloud 2025.0.0 requirement) ──────────────
+# Required for X-Forwarded headers to work correctly
+# ".*" = trust all proxies — fine for local dev
+# In production: restrict to your load balancer IP
+spring.cloud.gateway.server.webflux.trusted-proxies=.*
+
+# ── Global CORS ───────────────────────────────────────────────────────
+# Allows ESPN UI (browser) to call Gateway without CORS errors
+spring.cloud.gateway.server.webflux.globalcors.cors-configurations.[/**].allowedOrigins=*
+spring.cloud.gateway.server.webflux.globalcors.cors-configurations.[/**].allowedMethods=*
+spring.cloud.gateway.server.webflux.globalcors.cors-configurations.[/**].allowedHeaders=*
+
+# ══════════════════════════════════════════════════════════════════════
+# ROUTING RULES
+# Format: spring.cloud.gateway.server.webflux.routes[N].xxx
+# Each route = one downstream service
+# JwtAuthFilter runs on ALL routes automatically (GlobalFilter)
+# Rate limiter only on routes that have filters[0].name=RequestRateLimiter
+# ══════════════════════════════════════════════════════════════════════
+
+# ── Route 0: Auth Route (user-service) ────────────────────────────────
+# /auth/** → user-service:8083
+# NO rate limiter — login/register needs to be fast
+# JwtAuthFilter skips these because /auth is in PUBLIC_PATHS
+spring.cloud.gateway.server.webflux.routes[0].id=user-service-auth
+spring.cloud.gateway.server.webflux.routes[0].uri=http://localhost:8083
+spring.cloud.gateway.server.webflux.routes[0].predicates[0]=Path=/auth/**
+
+# ── Route 1: Catalog Service ──────────────────────────────────────────
+# /catalog/** → catalog-service:8081
+# JWT required + Rate limited: 10 req/sec per user
+spring.cloud.gateway.server.webflux.routes[1].id=catalog-service
+spring.cloud.gateway.server.webflux.routes[1].uri=http://localhost:8081
+spring.cloud.gateway.server.webflux.routes[1].predicates[0]=Path=/catalog/**
+spring.cloud.gateway.server.webflux.routes[1].filters[0].name=RequestRateLimiter
+spring.cloud.gateway.server.webflux.routes[1].filters[0].args.redis-rate-limiter.replenishRate=10
+spring.cloud.gateway.server.webflux.routes[1].filters[0].args.redis-rate-limiter.burstCapacity=20
+spring.cloud.gateway.server.webflux.routes[1].filters[0].args.redis-rate-limiter.requestedTokens=1
+spring.cloud.gateway.server.webflux.routes[1].filters[0].args.key-resolver=#{@userKeyResolver}
+
+# ── Route 2: Subscription Service (subscriptions) ────────────────────
+spring.cloud.gateway.server.webflux.routes[2].id=subscription-service-subscriptions
+spring.cloud.gateway.server.webflux.routes[2].uri=http://localhost:8082
+spring.cloud.gateway.server.webflux.routes[2].predicates[0]=Path=/subscriptions/**
+spring.cloud.gateway.server.webflux.routes[2].filters[0].name=RequestRateLimiter
+spring.cloud.gateway.server.webflux.routes[2].filters[0].args.redis-rate-limiter.replenishRate=10
+spring.cloud.gateway.server.webflux.routes[2].filters[0].args.redis-rate-limiter.burstCapacity=20
+spring.cloud.gateway.server.webflux.routes[2].filters[0].args.redis-rate-limiter.requestedTokens=1
+spring.cloud.gateway.server.webflux.routes[2].filters[0].args.key-resolver=#{@userKeyResolver}
+
+# ── Route 3: Subscription Service (users) ────────────────────────────
+spring.cloud.gateway.server.webflux.routes[3].id=subscription-service-users
+spring.cloud.gateway.server.webflux.routes[3].uri=http://localhost:8082
+spring.cloud.gateway.server.webflux.routes[3].predicates[0]=Path=/users/**
+spring.cloud.gateway.server.webflux.routes[3].filters[0].name=RequestRateLimiter
+spring.cloud.gateway.server.webflux.routes[3].filters[0].args.redis-rate-limiter.replenishRate=10
+spring.cloud.gateway.server.webflux.routes[3].filters[0].args.redis-rate-limiter.burstCapacity=20
+spring.cloud.gateway.server.webflux.routes[3].filters[0].args.redis-rate-limiter.requestedTokens=1
+spring.cloud.gateway.server.webflux.routes[3].filters[0].args.key-resolver=#{@userKeyResolver}
+
+# ── Route 4: Payment Service ──────────────────────────────────────────
+# Lower rate limit (5 req/sec) — payment is sensitive operation
+spring.cloud.gateway.server.webflux.routes[4].id=payment-service
+spring.cloud.gateway.server.webflux.routes[4].uri=http://localhost:8084
+spring.cloud.gateway.server.webflux.routes[4].predicates[0]=Path=/payments/**
+spring.cloud.gateway.server.webflux.routes[4].filters[0].name=RequestRateLimiter
+spring.cloud.gateway.server.webflux.routes[4].filters[0].args.redis-rate-limiter.replenishRate=5
+spring.cloud.gateway.server.webflux.routes[4].filters[0].args.redis-rate-limiter.burstCapacity=10
+spring.cloud.gateway.server.webflux.routes[4].filters[0].args.redis-rate-limiter.requestedTokens=1
+spring.cloud.gateway.server.webflux.routes[4].filters[0].args.key-resolver=#{@userKeyResolver}
+
+# ── Route 5: Campaign Service ─────────────────────────────────────────
+# /campaigns/active is public — no JWT needed (listed in PUBLIC_PATHS)
+spring.cloud.gateway.server.webflux.routes[5].id=campaign-service
+spring.cloud.gateway.server.webflux.routes[5].uri=http://localhost:8085
+spring.cloud.gateway.server.webflux.routes[5].predicates[0]=Path=/campaigns/**
+
+# ── Route 6: Notification Service ────────────────────────────────────
+spring.cloud.gateway.server.webflux.routes[6].id=notification-service
+spring.cloud.gateway.server.webflux.routes[6].uri=http://localhost:8086
+spring.cloud.gateway.server.webflux.routes[6].predicates[0]=Path=/notifications/**
+
+# ── JWT Configuration ─────────────────────────────────────────────────
+# secret: HMAC-SHA256 signing key — must be same in user-service and gateway
+# expiration: 3600000 ms = 1 hour
+jwt.secret=OTTPlatformSecretKeyForJWTTokenGenerationAndValidation2024
+jwt.expiration=3600000
+
+# ── Logging ───────────────────────────────────────────────────────────
+logging.level.com.ott.gateway=DEBUG
+logging.level.org.springframework.cloud.gateway=INFO
+logging.level.org.springframework.data.redis=INFO
+
+# ── Actuator + Prometheus Monitoring ─────────────────────────────────
+management.endpoints.web.exposure.include=health,info,metrics,prometheus,gateway
+management.endpoint.health.show-details=always
+management.endpoint.gateway.access=unrestricted
+management.metrics.tags.application=api-gateway
+management.info.env.enabled=true
+info.app.name=API Gateway
+info.app.version=1.0.0
+info.app.description=OTT Platform - API Gateway with JWT and Rate Limiting</pre>
+  <button class="cbtn" onclick="copyById('gwProps')">Copy</button>
+</div>
+
+<!-- ═══════════════ USER SERVICE ═══════════════ -->
+<div id="user-service" class="section">
+  <h2>👤 user-service — Complete Code</h2>
+
+  <div class="card c-blue">
+    <h3>Project Motive</h3>
+    <p>user-service is the authentication authority of the entire platform. It is the ONLY service that generates JWT tokens. ESPN UI calls POST /auth/login → user-service validates password → returns JWT → UI sends JWT in every future call → API Gateway validates that JWT.</p>
+    <p style="margin-top:6px"><strong style="color:#e2e8f0">Why separate from Gateway?</strong> Currently our Gateway has a temporary AuthController. In production, auth must be a separate service with its own database, password hashing, role management, and token refresh logic.</p>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">1</span><span class="stitle">Create project in STS</span></div>
+    <div class="step-body">
+      <pre>File → New → Spring Starter Project
+Name:    user-service
+Group:   com.ott
+Package: com.ott.user
+Port:    8083
+
+Dependencies:
+✅ Spring Web
+✅ Spring Data JPA
+✅ MySQL Driver
+✅ Spring Security
+✅ Spring Boot Actuator
+✅ Spring Boot DevTools
+✅ Validation
+Spring Boot: 3.5.14
+Spring Cloud: 2025.0.0 (add BOM to pom.xml after creation)</pre>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">2</span><span class="stitle">SQL — user_db schema</span></div>
+    <div class="step-body">
+      <div class="fhdr"><span class="fname">user_db_schema.sql</span><span class="fact fnew">RUN IN MYSQL WORKBENCH FIRST</span></div>
+      <pre id="userSql">-- Run this in MySQL Workbench before starting user-service
+CREATE DATABASE IF NOT EXISTS user_db;
+USE user_db;
+
+CREATE TABLE IF NOT EXISTS users (
+    user_id       BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    username      VARCHAR(50)  NOT NULL UNIQUE,
+    email         VARCHAR(100) NOT NULL UNIQUE,
+    password      VARCHAR(255) NOT NULL,  -- BCrypt hashed, never plain text
+    full_name     VARCHAR(100) NOT NULL,
+    phone         VARCHAR(15),
+    role          ENUM('USER','ADMIN') NOT NULL DEFAULT 'USER',
+    is_active     BOOLEAN      NOT NULL DEFAULT TRUE,
+    created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+                               ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Seed users (password = "password123" BCrypt hashed)
+INSERT INTO users (username, email, password, full_name, phone, role) VALUES
+('john.doe',   'john.doe@gmail.com',   '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj4J4JqXqBnO', 'John Doe',   '9876543210', 'USER'),
+('jane.smith', 'jane.smith@gmail.com', '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj4J4JqXqBnO', 'Jane Smith', '9876543211', 'USER'),
+('admin',      'admin@espn.com',       '$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj4J4JqXqBnO', 'Admin User', '9999999999', 'ADMIN');</pre>
+      <button class="cbtn" onclick="copyById('userSql')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">3</span><span class="stitle">application.properties</span></div>
+    <div class="step-body">
+      <pre id="userProps">server.port=8083
+spring.application.name=user-service
+
+# MySQL
+spring.datasource.url=jdbc:mysql://localhost:3306/user_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+spring.datasource.username=root
+spring.datasource.password=root
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+
+# JWT — MUST be same secret as api-gateway
+jwt.secret=OTTPlatformSecretKeyForJWTTokenGenerationAndValidation2024
+jwt.expiration=3600000
+
+# Actuator
+management.endpoints.web.exposure.include=health,info,metrics,prometheus
+management.endpoint.health.show-details=always
+management.metrics.tags.application=user-service
+
+logging.level.com.ott.user=DEBUG</pre>
+      <button class="cbtn" onclick="copyById('userProps')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">4</span><span class="stitle">User.java — Entity</span></div>
+    <div class="step-body">
+      <div class="fhdr"><span class="fname">User.java</span><span class="fact fnew">NEW</span><span class="fpath">com.ott.user.model</span></div>
+      <pre id="userEntity"><span class="kw">package</span> com.ott.user.model;
+<span class="kw">import</span> jakarta.persistence.*;
+<span class="kw">import</span> java.time.LocalDateTime;
+
+<span class="cm">/**
+ * PURPOSE: Stores all ESPN+ users with hashed passwords and roles.
+ * CONNECTS TO: AuthService reads this for login validation.
+ *              UserRepository saves new registrations.
+ */</span>
+<span class="an">@Entity</span>
+<span class="an">@Table</span>(name = <span class="st">"users"</span>)
+<span class="kw">public class</span> <span class="cl">User</span> {
+
+    <span class="an">@Id</span> <span class="an">@GeneratedValue</span>(strategy = GenerationType.IDENTITY)
+    <span class="kw">private</span> Long userId;
+
+    <span class="an">@Column</span>(unique = <span class="kw">true</span>, nullable = <span class="kw">false</span>, length = 50)
+    <span class="kw">private</span> String username;
+
+    <span class="an">@Column</span>(unique = <span class="kw">true</span>, nullable = <span class="kw">false</span>, length = 100)
+    <span class="kw">private</span> String email;
+
+    <span class="an">@Column</span>(nullable = <span class="kw">false</span>, length = 255)
+    <span class="kw">private</span> String password; <span class="cm">// BCrypt hashed — NEVER plain text</span>
+
+    <span class="an">@Column</span>(name = <span class="st">"full_name"</span>, nullable = <span class="kw">false</span>)
+    <span class="kw">private</span> String fullName;
+
+    <span class="kw">private</span> String phone;
+
+    <span class="an">@Enumerated</span>(EnumType.STRING)
+    <span class="kw">private</span> Role role = Role.USER;
+
+    <span class="an">@Column</span>(name = <span class="st">"is_active"</span>)
+    <span class="kw">private</span> Boolean isActive = <span class="kw">true</span>;
+
+    <span class="an">@Column</span>(name = <span class="st">"created_at"</span>, updatable = <span class="kw">false</span>)
+    <span class="kw">private</span> LocalDateTime createdAt;
+
+    <span class="an">@Column</span>(name = <span class="st">"updated_at"</span>)
+    <span class="kw">private</span> LocalDateTime updatedAt;
+
+    <span class="kw">public enum</span> Role { USER, ADMIN }
+
+    <span class="an">@PrePersist</span>
+    <span class="kw">protected void</span> onCreate() { createdAt = updatedAt = LocalDateTime.now(); }
+    <span class="an">@PreUpdate</span>
+    <span class="kw">protected void</span> onUpdate() { updatedAt = LocalDateTime.now(); }
+
+    <span class="kw">public</span> User() {}
+    <span class="cm">// Getters and Setters</span>
+    <span class="kw">public</span> Long getUserId() { <span class="kw">return</span> userId; }
+    <span class="kw">public void</span> setUserId(Long v) { userId = v; }
+    <span class="kw">public</span> String getUsername() { <span class="kw">return</span> username; }
+    <span class="kw">public void</span> setUsername(String v) { username = v; }
+    <span class="kw">public</span> String getEmail() { <span class="kw">return</span> email; }
+    <span class="kw">public void</span> setEmail(String v) { email = v; }
+    <span class="kw">public</span> String getPassword() { <span class="kw">return</span> password; }
+    <span class="kw">public void</span> setPassword(String v) { password = v; }
+    <span class="kw">public</span> String getFullName() { <span class="kw">return</span> fullName; }
+    <span class="kw">public void</span> setFullName(String v) { fullName = v; }
+    <span class="kw">public</span> String getPhone() { <span class="kw">return</span> phone; }
+    <span class="kw">public void</span> setPhone(String v) { phone = v; }
+    <span class="kw">public</span> Role getRole() { <span class="kw">return</span> role; }
+    <span class="kw">public void</span> setRole(Role v) { role = v; }
+    <span class="kw">public</span> Boolean getIsActive() { <span class="kw">return</span> isActive; }
+    <span class="kw">public void</span> setIsActive(Boolean v) { isActive = v; }
+    <span class="kw">public</span> LocalDateTime getCreatedAt() { <span class="kw">return</span> createdAt; }
+    <span class="kw">public</span> LocalDateTime getUpdatedAt() { <span class="kw">return</span> updatedAt; }
+}</pre>
+      <button class="cbtn" onclick="copyById('userEntity')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">5</span><span class="stitle">UserRepository.java</span></div>
+    <div class="step-body">
+      <div class="fhdr"><span class="fname">UserRepository.java</span><span class="fact fnew">NEW</span><span class="fpath">com.ott.user.repository</span></div>
+      <pre id="userRepo"><span class="kw">package</span> com.ott.user.repository;
+<span class="kw">import</span> com.ott.user.model.User;
+<span class="kw">import</span> org.springframework.data.jpa.repository.JpaRepository;
+<span class="kw">import</span> java.util.Optional;
+
+<span class="cm">/**
+ * PURPOSE: Database access for User entity.
+ * Spring generates all SQL automatically from method names.
+ */</span>
+<span class="kw">public interface</span> <span class="cl">UserRepository</span> <span class="kw">extends</span> <span class="cl">JpaRepository</span>&lt;User, Long&gt; {
+    Optional&lt;User&gt; findByUsername(String username);
+    Optional&lt;User&gt; findByEmail(String email);
+    <span class="kw">boolean</span> existsByUsername(String username);
+    <span class="kw">boolean</span> existsByEmail(String email);
+}</pre>
+      <button class="cbtn" onclick="copyById('userRepo')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">6</span><span class="stitle">DTOs — LoginRequest, RegisterRequest, AuthResponse</span></div>
+    <div class="step-body">
+      <div class="fhdr"><span class="fname">LoginRequest.java</span><span class="fact fnew">NEW</span><span class="fpath">com.ott.user.dto</span></div>
+      <pre id="loginDto"><span class="kw">package</span> com.ott.user.dto;
+<span class="kw">import</span> jakarta.validation.constraints.NotBlank;
+
+<span class="cm">/** What ESPN UI sends: {"username":"john.doe","password":"password123"} */</span>
+<span class="kw">public class</span> <span class="cl">LoginRequest</span> {
+    <span class="an">@NotBlank</span> <span class="kw">private</span> String username;
+    <span class="an">@NotBlank</span> <span class="kw">private</span> String password;
+    <span class="kw">public</span> String getUsername() { <span class="kw">return</span> username; }
+    <span class="kw">public void</span> setUsername(String v) { username = v; }
+    <span class="kw">public</span> String getPassword() { <span class="kw">return</span> password; }
+    <span class="kw">public void</span> setPassword(String v) { password = v; }
+}</pre>
+      <button class="cbtn" onclick="copyById('loginDto')">Copy</button>
+
+      <div class="fhdr" style="margin-top:10px"><span class="fname">RegisterRequest.java</span><span class="fact fnew">NEW</span><span class="fpath">com.ott.user.dto</span></div>
+      <pre id="regDto"><span class="kw">package</span> com.ott.user.dto;
+<span class="kw">import</span> jakarta.validation.constraints.*;
+
+<span class="cm">/** What ESPN UI sends for new account creation */</span>
+<span class="kw">public class</span> <span class="cl">RegisterRequest</span> {
+    <span class="an">@NotBlank</span> <span class="kw">private</span> String username;
+    <span class="an">@Email @NotBlank</span> <span class="kw">private</span> String email;
+    <span class="an">@NotBlank @Size</span>(min = 6) <span class="kw">private</span> String password;
+    <span class="an">@NotBlank</span> <span class="kw">private</span> String fullName;
+    <span class="kw">private</span> String phone;
+    <span class="kw">public</span> String getUsername() { <span class="kw">return</span> username; }
+    <span class="kw">public void</span> setUsername(String v) { username = v; }
+    <span class="kw">public</span> String getEmail() { <span class="kw">return</span> email; }
+    <span class="kw">public void</span> setEmail(String v) { email = v; }
+    <span class="kw">public</span> String getPassword() { <span class="kw">return</span> password; }
+    <span class="kw">public void</span> setPassword(String v) { password = v; }
+    <span class="kw">public</span> String getFullName() { <span class="kw">return</span> fullName; }
+    <span class="kw">public void</span> setFullName(String v) { fullName = v; }
+    <span class="kw">public</span> String getPhone() { <span class="kw">return</span> phone; }
+    <span class="kw">public void</span> setPhone(String v) { phone = v; }
+}</pre>
+      <button class="cbtn" onclick="copyById('regDto')">Copy</button>
+
+      <div class="fhdr" style="margin-top:10px"><span class="fname">AuthResponse.java</span><span class="fact fnew">NEW</span><span class="fpath">com.ott.user.dto</span></div>
+      <pre id="authResp"><span class="kw">package</span> com.ott.user.dto;
+
+<span class="cm">/** What user-service returns after login/register — contains JWT token */</span>
+<span class="kw">public class</span> <span class="cl">AuthResponse</span> {
+    <span class="kw">private</span> String token;
+    <span class="kw">private</span> Long userId;
+    <span class="kw">private</span> String username;
+    <span class="kw">private</span> String email;
+    <span class="kw">private</span> String role;
+    <span class="kw">private</span> String expiresIn = <span class="st">"1 hour"</span>;
+
+    <span class="kw">public</span> AuthResponse(String token, Long userId, String username, String email, String role) {
+        <span class="kw">this</span>.token = token; <span class="kw">this</span>.userId = userId;
+        <span class="kw">this</span>.username = username; <span class="kw">this</span>.email = email; <span class="kw">this</span>.role = role;
+    }
+    <span class="kw">public</span> String getToken() { <span class="kw">return</span> token; }
+    <span class="kw">public</span> Long getUserId() { <span class="kw">return</span> userId; }
+    <span class="kw">public</span> String getUsername() { <span class="kw">return</span> username; }
+    <span class="kw">public</span> String getEmail() { <span class="kw">return</span> email; }
+    <span class="kw">public</span> String getRole() { <span class="kw">return</span> role; }
+    <span class="kw">public</span> String getExpiresIn() { <span class="kw">return</span> expiresIn; }
+}</pre>
+      <button class="cbtn" onclick="copyById('authResp')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">7</span><span class="stitle">JwtUtil.java — same secret as Gateway</span></div>
+    <div class="step-body">
+      <div class="fhdr"><span class="fname">JwtUtil.java</span><span class="fact fnew">NEW</span><span class="fpath">com.ott.user.util</span></div>
+      <pre id="userJwt"><span class="kw">package</span> com.ott.user.util;
+<span class="kw">import</span> io.jsonwebtoken.*;
+<span class="kw">import</span> io.jsonwebtoken.security.Keys;
+<span class="kw">import</span> org.springframework.beans.factory.annotation.Value;
+<span class="kw">import</span> org.springframework.stereotype.Component;
+<span class="kw">import</span> java.security.Key;
+<span class="kw">import</span> java.util.Date;
+
+<span class="cm">/**
+ * PURPOSE: Generates JWT tokens after successful login.
+ * CRITICAL: jwt.secret MUST be identical to api-gateway's jwt.secret.
+ * If they differ, Gateway will reject all tokens generated here.
+ */</span>
+<span class="an">@Component</span>
+<span class="kw">public class</span> <span class="cl">JwtUtil</span> {
+
+    <span class="an">@Value</span>(<span class="st">"${jwt.secret}"</span>)
+    <span class="kw">private</span> String secret;
+
+    <span class="an">@Value</span>(<span class="st">"${jwt.expiration}"</span>)
+    <span class="kw">private long</span> expiration;
+
+    <span class="kw">private</span> Key getKey() { <span class="kw">return</span> Keys.hmacShaKeyFor(secret.getBytes()); }
+
+    <span class="cm">/** Called after password validation succeeds — creates signed JWT */</span>
+    <span class="kw">public</span> String generateToken(String username, String role) {
+        <span class="kw">return</span> Jwts.builder()
+            .setSubject(username)
+            .claim(<span class="st">"role"</span>, role)
+            .setIssuedAt(<span class="kw">new</span> Date())
+            .setExpiration(<span class="kw">new</span> Date(System.currentTimeMillis() + expiration))
+            .signWith(getKey(), SignatureAlgorithm.HS256)
+            .compact();
+    }
+
+    <span class="kw">public boolean</span> isValid(String token) {
+        <span class="kw">try</span> {
+            Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJws(token);
+            <span class="kw">return true</span>;
+        } <span class="kw">catch</span> (Exception e) { <span class="kw">return false</span>; }
+    }
+
+    <span class="kw">public</span> String extractUsername(String token) {
+        <span class="kw">return</span> Jwts.parserBuilder().setSigningKey(getKey()).build()
+            .parseClaimsJws(token).getBody().getSubject();
+    }
+}</pre>
+      <button class="cbtn" onclick="copyById('userJwt')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">8</span><span class="stitle">SecurityConfig.java — disable default Spring Security</span></div>
+    <div class="step-body">
+      <div class="fhdr"><span class="fname">SecurityConfig.java</span><span class="fact fnew">NEW</span><span class="fpath">com.ott.user.config</span></div>
+      <pre id="secConfig"><span class="kw">package</span> com.ott.user.config;
+<span class="kw">import</span> org.springframework.context.annotation.Bean;
+<span class="kw">import</span> org.springframework.context.annotation.Configuration;
+<span class="kw">import</span> org.springframework.security.config.annotation.web.builders.HttpSecurity;
+<span class="kw">import</span> org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+<span class="kw">import</span> org.springframework.security.config.http.SessionCreationPolicy;
+<span class="kw">import</span> org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+<span class="kw">import</span> org.springframework.security.crypto.password.PasswordEncoder;
+<span class="kw">import</span> org.springframework.security.web.SecurityFilterChain;
+
+<span class="cm">/**
+ * PURPOSE: Configure Spring Security for user-service.
+ * - BCrypt password encoder for secure password hashing
+ * - All /auth/** endpoints are public (no JWT needed to login)
+ * - Stateless sessions — we use JWT, no server-side sessions
+ */</span>
+<span class="an">@Configuration</span>
+<span class="an">@EnableWebSecurity</span>
+<span class="kw">public class</span> <span class="cl">SecurityConfig</span> {
+
+    <span class="an">@Bean</span>
+    <span class="kw">public</span> PasswordEncoder passwordEncoder() {
+        <span class="kw">return new</span> BCryptPasswordEncoder(12); <span class="cm">// strength 12 = secure</span>
+    }
+
+    <span class="an">@Bean</span>
+    <span class="kw">public</span> SecurityFilterChain filterChain(HttpSecurity http) <span class="kw">throws</span> Exception {
+        http
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(<span class="st">"/auth/**"</span>, <span class="st">"/actuator/**"</span>).permitAll()
+                .anyRequest().authenticated()
+            );
+        <span class="kw">return</span> http.build();
+    }
+}</pre>
+      <button class="cbtn" onclick="copyById('secConfig')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">9</span><span class="stitle">AuthService.java — business logic</span></div>
+    <div class="step-body">
+      <div class="fhdr"><span class="fname">AuthService.java</span><span class="fact fnew">NEW</span><span class="fpath">com.ott.user.service</span></div>
+      <pre id="authSvc"><span class="kw">package</span> com.ott.user.service;
+<span class="kw">import</span> com.ott.user.dto.*;
+<span class="kw">import</span> com.ott.user.model.User;
+<span class="kw">import</span> com.ott.user.repository.UserRepository;
+<span class="kw">import</span> com.ott.user.util.JwtUtil;
+<span class="kw">import</span> org.springframework.security.crypto.password.PasswordEncoder;
+<span class="kw">import</span> org.springframework.stereotype.Service;
+<span class="kw">import</span> org.slf4j.*;
+
+<span class="cm">/**
+ * PURPOSE: Core authentication business logic.
+ * LOGIN flow: find user → verify BCrypt password → generate JWT
+ * REGISTER flow: validate unique → hash password → save → generate JWT
+ *
+ * CONNECTS TO:
+ * - AuthController calls this
+ * - UserRepository for DB access
+ * - JwtUtil for token generation
+ * - PasswordEncoder for BCrypt
+ */</span>
+<span class="an">@Service</span>
+<span class="kw">public class</span> <span class="cl">AuthService</span> {
+
+    <span class="kw">private static final</span> Logger log = LoggerFactory.getLogger(AuthService.class);
+
+    <span class="kw">private final</span> UserRepository userRepository;
+    <span class="kw">private final</span> JwtUtil jwtUtil;
+    <span class="kw">private final</span> PasswordEncoder passwordEncoder;
+
+    <span class="kw">public</span> AuthService(UserRepository r, JwtUtil j, PasswordEncoder p) {
+        userRepository = r; jwtUtil = j; passwordEncoder = p;
+    }
+
+    <span class="cm">/** LOGIN: Validates credentials, returns JWT token */</span>
+    <span class="kw">public</span> AuthResponse login(LoginRequest req) {
+        User user = userRepository.findByUsername(req.getUsername())
+            .orElseThrow(() -> <span class="kw">new</span> RuntimeException(<span class="st">"Invalid username or password"</span>));
+
+        <span class="kw">if</span> (!user.getIsActive())
+            <span class="kw">throw new</span> RuntimeException(<span class="st">"Account is deactivated"</span>);
+
+        <span class="cm">// BCrypt check: compares raw password with stored hash</span>
+        <span class="kw">if</span> (!passwordEncoder.matches(req.getPassword(), user.getPassword()))
+            <span class="kw">throw new</span> RuntimeException(<span class="st">"Invalid username or password"</span>);
+
+        String token = jwtUtil.generateToken(user.getUsername(), user.getRole().name());
+        log.info(<span class="st">"Login success for user: {}"</span>, user.getUsername());
+        <span class="kw">return new</span> AuthResponse(token, user.getUserId(), user.getUsername(), user.getEmail(), user.getRole().name());
+    }
+
+    <span class="cm">/** REGISTER: Creates new user account, returns JWT token */</span>
+    <span class="kw">public</span> AuthResponse register(RegisterRequest req) {
+        <span class="kw">if</span> (userRepository.existsByUsername(req.getUsername()))
+            <span class="kw">throw new</span> RuntimeException(<span class="st">"Username already taken"</span>);
+        <span class="kw">if</span> (userRepository.existsByEmail(req.getEmail()))
+            <span class="kw">throw new</span> RuntimeException(<span class="st">"Email already registered"</span>);
+
+        User user = <span class="kw">new</span> User();
+        user.setUsername(req.getUsername());
+        user.setEmail(req.getEmail());
+        user.setFullName(req.getFullName());
+        user.setPhone(req.getPhone());
+        <span class="cm">// BCrypt hash password — never store plain text</span>
+        user.setPassword(passwordEncoder.encode(req.getPassword()));
+        user.setRole(User.Role.USER);
+
+        User saved = userRepository.save(user);
+        String token = jwtUtil.generateToken(saved.getUsername(), saved.getRole().name());
+        log.info(<span class="st">"Registered new user: {}"</span>, saved.getUsername());
+        <span class="kw">return new</span> AuthResponse(token, saved.getUserId(), saved.getUsername(), saved.getEmail(), saved.getRole().name());
+    }
+
+    <span class="kw">public</span> User getUserById(Long id) {
+        <span class="kw">return</span> userRepository.findById(id).orElseThrow(() -> <span class="kw">new</span> RuntimeException(<span class="st">"User not found"</span>));
+    }
+}</pre>
+      <button class="cbtn" onclick="copyById('authSvc')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">10</span><span class="stitle">AuthController.java — REST API endpoints</span></div>
+    <div class="step-body">
+      <div class="fhdr"><span class="fname">AuthController.java</span><span class="fact fnew">NEW</span><span class="fpath">com.ott.user.controller</span></div>
+      <pre id="authCtrl"><span class="kw">package</span> com.ott.user.controller;
+<span class="kw">import</span> com.ott.user.dto.*;
+<span class="kw">import</span> com.ott.user.service.AuthService;
+<span class="kw">import</span> jakarta.validation.Valid;
+<span class="kw">import</span> org.springframework.http.*;
+<span class="kw">import</span> org.springframework.web.bind.annotation.*;
+
+<span class="cm">/**
+ * PURPOSE: Exposes authentication REST APIs.
+ * All endpoints under /auth/** are in PUBLIC_PATHS in JwtAuthFilter
+ * so they bypass JWT validation — users can login without a token.
+ *
+ * Postman: POST http://localhost:8080/auth/login
+ * Body: {"username":"john.doe","password":"password123"}
+ */</span>
+<span class="an">@RestController</span>
+<span class="an">@RequestMapping</span>(<span class="st">"/auth"</span>)
+<span class="kw">public class</span> <span class="cl">AuthController</span> {
+
+    <span class="kw">private final</span> AuthService authService;
+    <span class="kw">public</span> AuthController(AuthService s) { authService = s; }
+
+    <span class="cm">/**
+     * POST /auth/login
+     * ESPN UI sends username+password → returns JWT token
+     * Test: POST http://localhost:8080/auth/login
+     * Body: {"username":"john.doe","password":"password123"}
+     */</span>
+    <span class="an">@PostMapping</span>(<span class="st">"/login"</span>)
+    <span class="kw">public</span> ResponseEntity&lt;AuthResponse&gt; login(<span class="an">@Valid @RequestBody</span> LoginRequest req) {
+        <span class="kw">return</span> ResponseEntity.ok(authService.login(req));
+    }
+
+    <span class="cm">/**
+     * POST /auth/register
+     * ESPN UI sends new user data → creates account → returns JWT
+     * Test: POST http://localhost:8080/auth/register
+     */</span>
+    <span class="an">@PostMapping</span>(<span class="st">"/register"</span>)
+    <span class="kw">public</span> ResponseEntity&lt;AuthResponse&gt; register(<span class="an">@Valid @RequestBody</span> RegisterRequest req) {
+        <span class="kw">return</span> ResponseEntity.status(HttpStatus.CREATED).body(authService.register(req));
+    }
+
+    <span class="cm">/**
+     * GET /auth/me
+     * Returns current user details from userId in JWT
+     * Test: GET http://localhost:8080/auth/me with Bearer token
+     */</span>
+    <span class="an">@GetMapping</span>(<span class="st">"/me/{userId}"</span>)
+    <span class="kw">public</span> ResponseEntity&lt;?&gt; getMe(<span class="an">@PathVariable</span> Long userId) {
+        <span class="kw">return</span> ResponseEntity.ok(authService.getUserById(userId));
+    }
+}</pre>
+      <button class="cbtn" onclick="copyById('authCtrl')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">11</span><span class="stitle">GlobalExceptionHandler.java</span></div>
+    <div class="step-body">
+      <div class="fhdr"><span class="fname">GlobalExceptionHandler.java</span><span class="fact fnew">NEW</span><span class="fpath">com.ott.user.exception</span></div>
+      <pre id="userEx"><span class="kw">package</span> com.ott.user.exception;
+<span class="kw">import</span> jakarta.servlet.http.HttpServletRequest;
+<span class="kw">import</span> org.springframework.http.*;
+<span class="kw">import</span> org.springframework.web.bind.annotation.*;
+<span class="kw">import</span> java.time.LocalDateTime;
+<span class="kw">import</span> java.util.*;
+
+<span class="an">@RestControllerAdvice</span>
+<span class="kw">public class</span> <span class="cl">GlobalExceptionHandler</span> {
+
+    <span class="an">@ExceptionHandler</span>(RuntimeException.class)
+    <span class="kw">public</span> ResponseEntity&lt;Map&lt;String,Object&gt;&gt; handle(RuntimeException ex, HttpServletRequest req) {
+        Map&lt;String,Object&gt; err = <span class="kw">new</span> LinkedHashMap&lt;&gt;();
+        err.put(<span class="st">"status"</span>, 400); err.put(<span class="st">"message"</span>, ex.getMessage());
+        err.put(<span class="st">"path"</span>, req.getRequestURI()); err.put(<span class="st">"timestamp"</span>, LocalDateTime.now());
+        <span class="kw">return</span> ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+}</pre>
+      <button class="cbtn" onclick="copyById('userEx')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">12</span><span class="stitle">pom.xml additions</span></div>
+    <div class="step-body">
+      <pre id="userPom">&lt;!-- Add jjwt for JWT generation --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;io.jsonwebtoken&lt;/groupId&gt;
+    &lt;artifactId&gt;jjwt-api&lt;/artifactId&gt;
+    &lt;version&gt;0.11.5&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;io.jsonwebtoken&lt;/groupId&gt;
+    &lt;artifactId&gt;jjwt-impl&lt;/artifactId&gt;
+    &lt;version&gt;0.11.5&lt;/version&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;io.jsonwebtoken&lt;/groupId&gt;
+    &lt;artifactId&gt;jjwt-jackson&lt;/artifactId&gt;
+    &lt;version&gt;0.11.5&lt;/version&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;</pre>
+      <button class="cbtn" onclick="copyById('userPom')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">13</span><span class="stitle">Test user-service in Postman</span></div>
+    <div class="step-body">
+      <table>
+        <tr><th>Test</th><th>Method + URL</th><th>Body</th><th>Expected</th></tr>
+        <tr><td>Login</td><td>POST http://localhost:8080/auth/login</td><td>{"username":"john.doe","password":"password123"}</td><td>200 OK + JWT token</td></tr>
+        <tr><td>Register</td><td>POST http://localhost:8080/auth/register</td><td>{"username":"skyri","email":"skyri@gmail.com","password":"test123","fullName":"Skyri"}</td><td>201 Created + JWT token</td></tr>
+        <tr><td>Wrong password</td><td>POST http://localhost:8080/auth/login</td><td>{"username":"john.doe","password":"wrongpass"}</td><td>400 "Invalid username or password"</td></tr>
+        <tr><td>Duplicate user</td><td>POST http://localhost:8080/auth/register</td><td>Same username again</td><td>400 "Username already taken"</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ PAYMENT SERVICE ═══════════════ -->
+<div id="payment-service" class="section">
+  <h2>💳 payment-service — Complete Code</h2>
+
+  <div class="card c-orange">
+    <h3>Project Motive</h3>
+    <p>payment-service handles all billing operations. When a user subscribes, subscription-service calls payment-service via Feign. payment-service simulates payment processing (in real systems it would call Stripe/Razorpay) and publishes the result to Kafka. This async approach means subscription-service doesn't wait — it reacts to the Kafka event.</p>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">1</span><span class="stitle">SQL — payment_db schema</span></div>
+    <div class="step-body">
+      <pre id="paySql">CREATE DATABASE IF NOT EXISTS payment_db;
+USE payment_db;
+
+CREATE TABLE IF NOT EXISTS payments (
+    payment_id       BIGINT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id          BIGINT         NOT NULL,
+    plan_id          VARCHAR(10)    NOT NULL,
+    amount           DECIMAL(10,2)  NOT NULL,
+    status           ENUM('PENDING','SUCCESS','FAILED','REFUNDED')
+                                    NOT NULL DEFAULT 'PENDING',
+    payment_method   VARCHAR(50)    DEFAULT 'CARD',
+    transaction_id   VARCHAR(100)   UNIQUE,   -- from payment gateway (Stripe etc)
+    failure_reason   VARCHAR(255),
+    card_last_four   VARCHAR(4),
+    created_at       TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at       TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP
+                                    ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS payment_retries (
+    retry_id        BIGINT    NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    payment_id      BIGINT    NOT NULL,
+    retry_count     INT       NOT NULL DEFAULT 0,
+    last_retry_at   TIMESTAMP,
+    next_retry_at   TIMESTAMP,
+    FOREIGN KEY (payment_id) REFERENCES payments(payment_id)
+);</pre>
+      <button class="cbtn" onclick="copyById('paySql')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">2</span><span class="stitle">application.properties</span></div>
+    <div class="step-body">
+      <pre id="payProps">server.port=8084
+spring.application.name=payment-service
+
+spring.datasource.url=jdbc:mysql://localhost:3306/payment_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+spring.datasource.username=root
+spring.datasource.password=root
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+
+# Kafka (add later — for now payment result is returned synchronously)
+# spring.kafka.bootstrap-servers=localhost:9092
+# spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
+# spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JsonSerializer
+
+management.endpoints.web.exposure.include=health,info,metrics,prometheus
+management.endpoint.health.show-details=always
+management.metrics.tags.application=payment-service
+
+logging.level.com.ott.payment=DEBUG</pre>
+      <button class="cbtn" onclick="copyById('payProps')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">3</span><span class="stitle">Payment.java — Entity</span></div>
+    <div class="step-body">
+      <div class="fhdr"><span class="fname">Payment.java</span><span class="fact fnew">NEW</span><span class="fpath">com.ott.payment.model</span></div>
+      <pre id="payEntity"><span class="kw">package</span> com.ott.payment.model;
+<span class="kw">import</span> jakarta.persistence.*;
+<span class="kw">import</span> java.math.BigDecimal;
+<span class="kw">import</span> java.time.LocalDateTime;
+
+<span class="cm">/**
+ * PURPOSE: Records every payment attempt in payment_db.
+ * Even failed payments are stored — for retry logic and audit trail.
+ */</span>
+<span class="an">@Entity</span> <span class="an">@Table</span>(name = <span class="st">"payments"</span>)
+<span class="kw">public class</span> <span class="cl">Payment</span> {
+
+    <span class="an">@Id @GeneratedValue</span>(strategy = GenerationType.IDENTITY)
+    <span class="kw">private</span> Long paymentId;
+    <span class="an">@Column</span>(nullable = <span class="kw">false</span>) <span class="kw">private</span> Long userId;
+    <span class="an">@Column</span>(nullable = <span class="kw">false</span>) <span class="kw">private</span> String planId;
+    <span class="an">@Column</span>(nullable = <span class="kw">false</span>, precision = 10, scale = 2) <span class="kw">private</span> BigDecimal amount;
+
+    <span class="an">@Enumerated</span>(EnumType.STRING)
+    <span class="an">@Column</span>(nullable = <span class="kw">false</span>)
+    <span class="kw">private</span> PaymentStatus status = PaymentStatus.PENDING;
+
+    <span class="kw">private</span> String paymentMethod = <span class="st">"CARD"</span>;
+    <span class="kw">private</span> String transactionId;
+    <span class="kw">private</span> String failureReason;
+    <span class="kw">private</span> String cardLastFour;
+
+    <span class="an">@Column</span>(name = <span class="st">"created_at"</span>, updatable = <span class="kw">false</span>) <span class="kw">private</span> LocalDateTime createdAt;
+    <span class="an">@Column</span>(name = <span class="st">"updated_at"</span>) <span class="kw">private</span> LocalDateTime updatedAt;
+
+    <span class="kw">public enum</span> PaymentStatus { PENDING, SUCCESS, FAILED, REFUNDED }
+
+    <span class="an">@PrePersist</span> <span class="kw">protected void</span> onCreate() { createdAt = updatedAt = LocalDateTime.now(); }
+    <span class="an">@PreUpdate</span> <span class="kw">protected void</span> onUpdate() { updatedAt = LocalDateTime.now(); }
+
+    <span class="kw">public</span> Payment() {}
+    <span class="kw">public</span> Long getPaymentId() { <span class="kw">return</span> paymentId; }
+    <span class="kw">public void</span> setPaymentId(Long v) { paymentId = v; }
+    <span class="kw">public</span> Long getUserId() { <span class="kw">return</span> userId; }
+    <span class="kw">public void</span> setUserId(Long v) { userId = v; }
+    <span class="kw">public</span> String getPlanId() { <span class="kw">return</span> planId; }
+    <span class="kw">public void</span> setPlanId(String v) { planId = v; }
+    <span class="kw">public</span> BigDecimal getAmount() { <span class="kw">return</span> amount; }
+    <span class="kw">public void</span> setAmount(BigDecimal v) { amount = v; }
+    <span class="kw">public</span> PaymentStatus getStatus() { <span class="kw">return</span> status; }
+    <span class="kw">public void</span> setStatus(PaymentStatus v) { status = v; }
+    <span class="kw">public</span> String getPaymentMethod() { <span class="kw">return</span> paymentMethod; }
+    <span class="kw">public void</span> setPaymentMethod(String v) { paymentMethod = v; }
+    <span class="kw">public</span> String getTransactionId() { <span class="kw">return</span> transactionId; }
+    <span class="kw">public void</span> setTransactionId(String v) { transactionId = v; }
+    <span class="kw">public</span> String getFailureReason() { <span class="kw">return</span> failureReason; }
+    <span class="kw">public void</span> setFailureReason(String v) { failureReason = v; }
+    <span class="kw">public</span> String getCardLastFour() { <span class="kw">return</span> cardLastFour; }
+    <span class="kw">public void</span> setCardLastFour(String v) { cardLastFour = v; }
+    <span class="kw">public</span> LocalDateTime getCreatedAt() { <span class="kw">return</span> createdAt; }
+    <span class="kw">public</span> LocalDateTime getUpdatedAt() { <span class="kw">return</span> updatedAt; }
+}</pre>
+      <button class="cbtn" onclick="copyById('payEntity')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">4</span><span class="stitle">DTOs — PaymentRequestDTO, PaymentResponseDTO</span></div>
+    <div class="step-body">
+      <pre id="payDtos"><span class="cm">// ── PaymentRequestDTO.java ─────────────────────────────</span>
+<span class="kw">package</span> com.ott.payment.dto;
+<span class="kw">import</span> java.math.BigDecimal;
+
+<span class="cm">/** subscription-service sends this to payment-service via Feign */</span>
+<span class="kw">public class</span> <span class="cl">PaymentRequestDTO</span> {
+    <span class="kw">private</span> Long userId;
+    <span class="kw">private</span> String planId;
+    <span class="kw">private</span> BigDecimal amount;
+    <span class="kw">private</span> String cardNumber;   <span class="cm">// last 4 digits stored only</span>
+    <span class="kw">private</span> String cardExpiry;
+    <span class="kw">private</span> String cardCvv;      <span class="cm">// never stored in DB</span>
+
+    <span class="kw">public</span> Long getUserId() { <span class="kw">return</span> userId; }
+    <span class="kw">public void</span> setUserId(Long v) { userId = v; }
+    <span class="kw">public</span> String getPlanId() { <span class="kw">return</span> planId; }
+    <span class="kw">public void</span> setPlanId(String v) { planId = v; }
+    <span class="kw">public</span> BigDecimal getAmount() { <span class="kw">return</span> amount; }
+    <span class="kw">public void</span> setAmount(BigDecimal v) { amount = v; }
+    <span class="kw">public</span> String getCardNumber() { <span class="kw">return</span> cardNumber; }
+    <span class="kw">public void</span> setCardNumber(String v) { cardNumber = v; }
+    <span class="kw">public</span> String getCardExpiry() { <span class="kw">return</span> cardExpiry; }
+    <span class="kw">public void</span> setCardExpiry(String v) { cardExpiry = v; }
+    <span class="kw">public</span> String getCardCvv() { <span class="kw">return</span> cardCvv; }
+    <span class="kw">public void</span> setCardCvv(String v) { cardCvv = v; }
+}
+
+<span class="cm">// ── PaymentResponseDTO.java ────────────────────────────</span>
+<span class="kw">package</span> com.ott.payment.dto;
+<span class="kw">import</span> java.math.BigDecimal;
+<span class="kw">import</span> java.time.LocalDateTime;
+
+<span class="cm">/** Returned to subscription-service after payment attempt */</span>
+<span class="kw">public class</span> <span class="cl">PaymentResponseDTO</span> {
+    <span class="kw">private</span> Long paymentId;
+    <span class="kw">private</span> String status;        <span class="cm">// SUCCESS or FAILED</span>
+    <span class="kw">private</span> String transactionId;
+    <span class="kw">private</span> String failureReason;
+    <span class="kw">private</span> BigDecimal amount;
+    <span class="kw">private</span> LocalDateTime processedAt;
+
+    <span class="kw">public</span> Long getPaymentId() { <span class="kw">return</span> paymentId; }
+    <span class="kw">public void</span> setPaymentId(Long v) { paymentId = v; }
+    <span class="kw">public</span> String getStatus() { <span class="kw">return</span> status; }
+    <span class="kw">public void</span> setStatus(String v) { status = v; }
+    <span class="kw">public</span> String getTransactionId() { <span class="kw">return</span> transactionId; }
+    <span class="kw">public void</span> setTransactionId(String v) { transactionId = v; }
+    <span class="kw">public</span> String getFailureReason() { <span class="kw">return</span> failureReason; }
+    <span class="kw">public void</span> setFailureReason(String v) { failureReason = v; }
+    <span class="kw">public</span> BigDecimal getAmount() { <span class="kw">return</span> amount; }
+    <span class="kw">public void</span> setAmount(BigDecimal v) { amount = v; }
+    <span class="kw">public</span> LocalDateTime getProcessedAt() { <span class="kw">return</span> processedAt; }
+    <span class="kw">public void</span> setProcessedAt(LocalDateTime v) { processedAt = v; }
+}</pre>
+      <button class="cbtn" onclick="copyById('payDtos')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">5</span><span class="stitle">PaymentRepository.java</span></div>
+    <div class="step-body">
+      <pre id="payRepo"><span class="kw">package</span> com.ott.payment.repository;
+<span class="kw">import</span> com.ott.payment.model.Payment;
+<span class="kw">import</span> org.springframework.data.jpa.repository.JpaRepository;
+<span class="kw">import</span> java.util.List;
+
+<span class="kw">public interface</span> <span class="cl">PaymentRepository</span> <span class="kw">extends</span> <span class="cl">JpaRepository</span>&lt;Payment, Long&gt; {
+    List&lt;Payment&gt; findByUserIdOrderByCreatedAtDesc(Long userId);
+    List&lt;Payment&gt; findByUserIdAndStatus(Long userId, Payment.PaymentStatus status);
+}</pre>
+      <button class="cbtn" onclick="copyById('payRepo')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">6</span><span class="stitle">PaymentService.java — business logic</span></div>
+    <div class="step-body">
+      <div class="fhdr"><span class="fname">PaymentService.java</span><span class="fact fnew">NEW</span><span class="fpath">com.ott.payment.service</span></div>
+      <pre id="paySvc"><span class="kw">package</span> com.ott.payment.service;
+<span class="kw">import</span> com.ott.payment.dto.*;
+<span class="kw">import</span> com.ott.payment.model.Payment;
+<span class="kw">import</span> com.ott.payment.repository.PaymentRepository;
+<span class="kw">import</span> org.slf4j.*;
+<span class="kw">import</span> org.springframework.stereotype.Service;
+<span class="kw">import</span> org.springframework.transaction.annotation.Transactional;
+<span class="kw">import</span> java.time.LocalDateTime;
+<span class="kw">import</span> java.util.List;
+<span class="kw">import</span> java.util.UUID;
+
+<span class="cm">/**
+ * PURPOSE: Core payment processing logic.
+ *
+ * SIMULATION MODE (no real payment gateway):
+ * Card 4242 4242 4242 4242 → always SUCCESS
+ * Card 4000 0000 0000 0002 → always FAILED
+ * Any other card → SUCCESS (80% chance in real impl)
+ *
+ * In PRODUCTION: Replace processPaymentGateway() with
+ * Stripe/Razorpay API call.
+ *
+ * KAFKA: When Kafka is added, publishPaymentEvent() will
+ * publish to payment.success or payment.failed topics.
+ * Notification-service and subscription-service consume these.
+ */</span>
+<span class="an">@Service</span>
+<span class="kw">public class</span> <span class="cl">PaymentService</span> {
+
+    <span class="kw">private static final</span> Logger log = LoggerFactory.getLogger(PaymentService.class);
+    <span class="kw">private final</span> PaymentRepository paymentRepository;
+
+    <span class="kw">public</span> PaymentService(PaymentRepository r) { paymentRepository = r; }
+
+    <span class="cm">/**
+     * Process payment for subscription.
+     * Called by subscription-service via Feign.
+     */</span>
+    <span class="an">@Transactional</span>
+    <span class="kw">public</span> PaymentResponseDTO processPayment(PaymentRequestDTO req) {
+        log.info(<span class="st">"Processing payment — userId:{} planId:{} amount:{}"</span>,
+            req.getUserId(), req.getPlanId(), req.getAmount());
+
+        <span class="cm">// Save payment as PENDING first</span>
+        Payment payment = <span class="kw">new</span> Payment();
+        payment.setUserId(req.getUserId());
+        payment.setPlanId(req.getPlanId());
+        payment.setAmount(req.getAmount());
+        payment.setStatus(Payment.PaymentStatus.PENDING);
+        <span class="cm">// Store only last 4 digits — never full card number</span>
+        <span class="kw">if</span> (req.getCardNumber() != <span class="kw">null</span> && req.getCardNumber().length() >= 4) {
+            String clean = req.getCardNumber().replaceAll(<span class="st">"\\s+"</span>, <span class="st">""</span>);
+            payment.setCardLastFour(clean.substring(clean.length() - 4));
+        }
+        paymentRepository.save(payment);
+
+        <span class="cm">// Simulate payment gateway call</span>
+        <span class="kw">boolean</span> success = simulatePaymentGateway(req.getCardNumber());
+
+        <span class="kw">if</span> (success) {
+            payment.setStatus(Payment.PaymentStatus.SUCCESS);
+            payment.setTransactionId(<span class="st">"TXN-"</span> + UUID.randomUUID().toString().substring(0,8).toUpperCase());
+            log.info(<span class="st">"Payment SUCCESS for user:{}"</span>, req.getUserId());
+        } <span class="kw">else</span> {
+            payment.setStatus(Payment.PaymentStatus.FAILED);
+            payment.setFailureReason(<span class="st">"Card declined — insufficient funds"</span>);
+            log.warn(<span class="st">"Payment FAILED for user:{}"</span>, req.getUserId());
+        }
+
+        Payment saved = paymentRepository.save(payment);
+
+        <span class="cm">// TODO: When Kafka is configured, publish event here:
+        // kafkaTemplate.send("payment." + (success?"success":"failed"), event);</span>
+
+        <span class="kw">return</span> buildResponse(saved);
+    }
+
+    <span class="kw">public</span> List&lt;Payment&gt; getUserPayments(Long userId) {
+        <span class="kw">return</span> paymentRepository.findByUserIdOrderByCreatedAtDesc(userId);
+    }
+
+    <span class="cm">// Simulation: card ending 4242 = success, 0002 = fail</span>
+    <span class="kw">private boolean</span> simulatePaymentGateway(String cardNumber) {
+        <span class="kw">if</span> (cardNumber == <span class="kw">null</span>) <span class="kw">return true</span>;
+        String clean = cardNumber.replaceAll(<span class="st">"\\s+"</span>, <span class="st">""</span>);
+        <span class="kw">if</span> (clean.endsWith(<span class="st">"0002"</span>)) <span class="kw">return false</span>; <span class="cm">// test fail card</span>
+        <span class="kw">return true</span>; <span class="cm">// all other cards succeed</span>
+    }
+
+    <span class="kw">private</span> PaymentResponseDTO buildResponse(Payment p) {
+        PaymentResponseDTO r = <span class="kw">new</span> PaymentResponseDTO();
+        r.setPaymentId(p.getPaymentId());
+        r.setStatus(p.getStatus().name());
+        r.setTransactionId(p.getTransactionId());
+        r.setFailureReason(p.getFailureReason());
+        r.setAmount(p.getAmount());
+        r.setProcessedAt(p.getUpdatedAt());
+        <span class="kw">return</span> r;
+    }
+}</pre>
+      <button class="cbtn" onclick="copyById('paySvc')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">7</span><span class="stitle">PaymentController.java</span></div>
+    <div class="step-body">
+      <div class="fhdr"><span class="fname">PaymentController.java</span><span class="fact fnew">NEW</span><span class="fpath">com.ott.payment.controller</span></div>
+      <pre id="payCtrl"><span class="kw">package</span> com.ott.payment.controller;
+<span class="kw">import</span> com.ott.payment.dto.*;
+<span class="kw">import</span> com.ott.payment.service.PaymentService;
+<span class="kw">import</span> org.springframework.http.*;
+<span class="kw">import</span> org.springframework.web.bind.annotation.*;
+
+<span class="cm">/**
+ * REST endpoints for payment-service.
+ * Called by subscription-service via Feign (internal, not from ESPN UI directly).
+ *
+ * Postman test: POST http://localhost:8080/payments/process (with Bearer token)
+ */</span>
+<span class="an">@RestController</span>
+<span class="an">@RequestMapping</span>(<span class="st">"/payments"</span>)
+<span class="kw">public class</span> <span class="cl">PaymentController</span> {
+
+    <span class="kw">private final</span> PaymentService paymentService;
+    <span class="kw">public</span> PaymentController(PaymentService s) { paymentService = s; }
+
+    <span class="cm">/**
+     * POST /payments/process
+     * Called by subscription-service Feign Client.
+     * Body: {"userId":1,"planId":"PLAN001","amount":199.0,"cardNumber":"4242424242424242"}
+     * Test card SUCCESS: 4242 4242 4242 4242
+     * Test card FAIL:    4000 0000 0000 0002
+     */</span>
+    <span class="an">@PostMapping</span>(<span class="st">"/process"</span>)
+    <span class="kw">public</span> ResponseEntity&lt;PaymentResponseDTO&gt; process(<span class="an">@RequestBody</span> PaymentRequestDTO req) {
+        <span class="kw">return</span> ResponseEntity.status(HttpStatus.CREATED).body(paymentService.processPayment(req));
+    }
+
+    <span class="cm">/**
+     * GET /payments/user/{userId}
+     * Returns all payment history for a user.
+     */</span>
+    <span class="an">@GetMapping</span>(<span class="st">"/user/{userId}"</span>)
+    <span class="kw">public</span> ResponseEntity&lt;?&gt; getUserPayments(<span class="an">@PathVariable</span> Long userId) {
+        <span class="kw">return</span> ResponseEntity.ok(paymentService.getUserPayments(userId));
+    }
+}</pre>
+      <button class="cbtn" onclick="copyById('payCtrl')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">8</span><span class="stitle">Add PaymentServiceClient Feign to subscription-service</span></div>
+    <div class="step-body">
+      <div class="fhdr"><span class="fname">PaymentServiceClient.java</span><span class="fact fnew">NEW</span><span class="fpath">com.ott.subscription.client</span></div>
+      <pre id="payFeign"><span class="kw">package</span> com.ott.subscription.client;
+<span class="kw">import</span> org.springframework.cloud.openfeign.FeignClient;
+<span class="kw">import</span> org.springframework.web.bind.annotation.*;
+<span class="kw">import</span> java.util.Map;
+
+<span class="cm">/**
+ * PURPOSE: Feign Client in subscription-service to call payment-service.
+ * subscription-service calls this during the subscribe flow.
+ * Payment result determines if subscription is activated.
+ */</span>
+<span class="an">@FeignClient</span>(name = <span class="st">"payment-service"</span>, url = <span class="st">"${payment.service.url}"</span>)
+<span class="kw">public interface</span> <span class="cl">PaymentServiceClient</span> {
+
+    <span class="an">@PostMapping</span>(<span class="st">"/payments/process"</span>)
+    Map&lt;String, Object&gt; processPayment(<span class="an">@RequestBody</span> Map&lt;String, Object&gt; request);
+}</pre>
+      <button class="cbtn" onclick="copyById('payFeign')">Copy</button>
+      <p style="margin-top:8px">Add to subscription-service application.properties:</p>
+      <pre id="payUrl">payment.service.url=http://localhost:8084</pre>
+      <button class="cbtn" onclick="copyById('payUrl')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">9</span><span class="stitle">Test payment-service in Postman</span></div>
+    <div class="step-body">
+      <table>
+        <tr><th>Test</th><th>URL</th><th>Body</th><th>Expected</th></tr>
+        <tr><td>Successful payment</td><td>POST http://localhost:8080/payments/process</td><td>{"userId":1,"planId":"PLAN001","amount":199.0,"cardNumber":"4242424242424242"}</td><td>201 Created status=SUCCESS</td></tr>
+        <tr><td>Failed payment</td><td>POST http://localhost:8080/payments/process</td><td>{"userId":1,"planId":"PLAN001","amount":199.0,"cardNumber":"4000000000000002"}</td><td>201 Created status=FAILED</td></tr>
+        <tr><td>Payment history</td><td>GET http://localhost:8080/payments/user/1</td><td>—</td><td>200 OK list of payments</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ CAMPAIGN SERVICE ═══════════════ -->
+<div id="campaign-service" class="section">
+  <h2>🎯 campaign-service — Complete Code</h2>
+
+  <div class="card c-yellow">
+    <h3>Project Motive — your Disney experience!</h3>
+    <p>This is the service you worked on at Tavant/Disney! It manages promotional campaigns — free trials, discount codes, bundle offers, renewal promotions. During subscription checkout, subscription-service calls campaign-service via Feign to check if any campaign applies. The ESPN Offers page shows all active campaigns to users.</p>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">1</span><span class="stitle">SQL — campaign_db schema (complete with seed data)</span></div>
+    <div class="step-body">
+      <pre id="campSql">-- Run in MySQL Workbench BEFORE starting campaign-service
+CREATE DATABASE IF NOT EXISTS campaign_db;
+USE campaign_db;
+
+-- campaigns table
+-- Stores all promotional campaigns
+CREATE TABLE IF NOT EXISTS campaigns (
+    campaign_id      BIGINT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name             VARCHAR(100)   NOT NULL,
+    description      VARCHAR(500),
+    discount_percent DECIMAL(5,2)   NOT NULL DEFAULT 0.00,
+    free_trial_days  INT            DEFAULT 0,
+    promo_code       VARCHAR(20)    UNIQUE,
+    start_date       DATE           NOT NULL,
+    end_date         DATE           NOT NULL,
+    eligible_plans   VARCHAR(500)   DEFAULT 'ALL',
+    max_uses         INT            DEFAULT NULL,
+    current_uses     INT            NOT NULL DEFAULT 0,
+    campaign_type    ENUM('FREE_TRIAL','DISCOUNT','BUNDLE','RENEWAL')
+                                    NOT NULL DEFAULT 'DISCOUNT',
+    is_active        BOOLEAN        NOT NULL DEFAULT TRUE,
+    created_at       TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at       TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP
+                                    ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- campaign_applications table
+-- Tracks which user applied which campaign (prevents reuse)
+CREATE TABLE IF NOT EXISTS campaign_applications (
+    application_id   BIGINT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    campaign_id      BIGINT         NOT NULL,
+    user_id          BIGINT         NOT NULL,
+    plan_id          VARCHAR(10)    NOT NULL,
+    discount_applied DECIMAL(10,2)  NOT NULL DEFAULT 0.00,
+    applied_at       TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_user_campaign (user_id, campaign_id),
+    FOREIGN KEY (campaign_id) REFERENCES campaigns(campaign_id)
+);
+
+-- Seed data
+INSERT INTO campaigns (name,description,discount_percent,free_trial_days,promo_code,
+    start_date,end_date,eligible_plans,max_uses,campaign_type,is_active) VALUES
+('Welcome Free Trial','Disney+ free for first 90 days — new users only',
+ 100.00, 90, 'WELCOME90', CURDATE(), DATE_ADD(CURDATE(),INTERVAL 6 MONTH),
+ 'PLAN001', 1000, 'FREE_TRIAL', TRUE),
+('Sports Bundle Deal','Get 30% off Disney+ESPN+ bundle',
+ 30.00, 0, 'BUNDLE30', CURDATE(), DATE_ADD(CURDATE(),INTERVAL 3 MONTH),
+ 'PLAN005', 500, 'BUNDLE', TRUE),
+('Renewal Reward','Renew yearly plan and save 20%',
+ 20.00, 0, 'RENEW20', CURDATE(), DATE_ADD(CURDATE(),INTERVAL 12 MONTH),
+ 'PLAN004', NULL, 'RENEWAL', TRUE),
+('Flash Sale','50% off Disney+ Premium — limited time',
+ 50.00, 0, 'FLASH50', CURDATE(), DATE_ADD(CURDATE(),INTERVAL 7 DAY),
+ 'PLAN002', 200, 'DISCOUNT', TRUE);</pre>
+      <button class="cbtn" onclick="copyById('campSql')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">2</span><span class="stitle">application.properties</span></div>
+    <div class="step-body">
+      <pre id="campProps">server.port=8085
+spring.application.name=campaign-service
+
+spring.datasource.url=jdbc:mysql://localhost:3306/campaign_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+spring.datasource.username=root
+spring.datasource.password=root
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+
+management.endpoints.web.exposure.include=health,info,metrics,prometheus
+management.endpoint.health.show-details=always
+management.metrics.tags.application=campaign-service
+
+logging.level.com.ott.campaign=DEBUG</pre>
+      <button class="cbtn" onclick="copyById('campProps')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">3</span><span class="stitle">Campaign.java — Entity</span></div>
+    <div class="step-body">
+      <div class="fhdr"><span class="fname">Campaign.java</span><span class="fact fnew">NEW</span><span class="fpath">com.ott.campaign.model</span></div>
+      <pre id="campEntity"><span class="kw">package</span> com.ott.campaign.model;
+<span class="kw">import</span> jakarta.persistence.*;
+<span class="kw">import</span> java.math.BigDecimal;
+<span class="kw">import</span> java.time.*;
+
+<span class="cm">/**
+ * PURPOSE: Represents a promotional campaign.
+ * Your Disney experience: campaigns drive ESPN+ free trials,
+ * bundle discounts, and renewal offers.
+ */</span>
+<span class="an">@Entity @Table</span>(name = <span class="st">"campaigns"</span>)
+<span class="kw">public class</span> <span class="cl">Campaign</span> {
+    <span class="an">@Id @GeneratedValue</span>(strategy = GenerationType.IDENTITY)
+    <span class="kw">private</span> Long campaignId;
+
+    <span class="an">@Column</span>(nullable = <span class="kw">false</span>) <span class="kw">private</span> String name;
+    <span class="kw">private</span> String description;
+
+    <span class="an">@Column</span>(name = <span class="st">"discount_percent"</span>, nullable = <span class="kw">false</span>, precision = 5, scale = 2)
+    <span class="kw">private</span> BigDecimal discountPercent = BigDecimal.ZERO;
+
+    <span class="an">@Column</span>(name = <span class="st">"free_trial_days"</span>)
+    <span class="kw">private</span> Integer freeTrialDays = 0;
+
+    <span class="an">@Column</span>(name = <span class="st">"promo_code"</span>, unique = <span class="kw">true</span>) <span class="kw">private</span> String promoCode;
+
+    <span class="an">@Column</span>(name = <span class="st">"start_date"</span>, nullable = <span class="kw">false</span>) <span class="kw">private</span> LocalDate startDate;
+    <span class="an">@Column</span>(name = <span class="st">"end_date"</span>,   nullable = <span class="kw">false</span>) <span class="kw">private</span> LocalDate endDate;
+    <span class="an">@Column</span>(name = <span class="st">"eligible_plans"</span>)               <span class="kw">private</span> String eligiblePlans = <span class="st">"ALL"</span>;
+    <span class="an">@Column</span>(name = <span class="st">"max_uses"</span>)                       <span class="kw">private</span> Integer maxUses;
+    <span class="an">@Column</span>(name = <span class="st">"current_uses"</span>, nullable = <span class="kw">false</span>) <span class="kw">private</span> Integer currentUses = 0;
+
+    <span class="an">@Enumerated</span>(EnumType.STRING)
+    <span class="an">@Column</span>(name = <span class="st">"campaign_type"</span>, nullable = <span class="kw">false</span>)
+    <span class="kw">private</span> CampaignType campaignType = CampaignType.DISCOUNT;
+
+    <span class="an">@Column</span>(name = <span class="st">"is_active"</span>, nullable = <span class="kw">false</span>) <span class="kw">private</span> Boolean isActive = <span class="kw">true</span>;
+
+    <span class="an">@Column</span>(name = <span class="st">"created_at"</span>, updatable = <span class="kw">false</span>) <span class="kw">private</span> LocalDateTime createdAt;
+    <span class="an">@Column</span>(name = <span class="st">"updated_at"</span>) <span class="kw">private</span> LocalDateTime updatedAt;
+
+    <span class="kw">public enum</span> CampaignType { FREE_TRIAL, DISCOUNT, BUNDLE, RENEWAL }
+
+    <span class="an">@PrePersist</span> <span class="kw">protected void</span> onCreate() { createdAt = updatedAt = LocalDateTime.now(); }
+    <span class="an">@PreUpdate</span>  <span class="kw">protected void</span> onUpdate() { updatedAt = LocalDateTime.now(); }
+
+    <span class="kw">public</span> Campaign() {}
+    <span class="kw">public</span> Long getCampaignId() { <span class="kw">return</span> campaignId; }
+    <span class="kw">public void</span> setCampaignId(Long v) { campaignId = v; }
+    <span class="kw">public</span> String getName() { <span class="kw">return</span> name; }
+    <span class="kw">public void</span> setName(String v) { name = v; }
+    <span class="kw">public</span> String getDescription() { <span class="kw">return</span> description; }
+    <span class="kw">public void</span> setDescription(String v) { description = v; }
+    <span class="kw">public</span> BigDecimal getDiscountPercent() { <span class="kw">return</span> discountPercent; }
+    <span class="kw">public void</span> setDiscountPercent(BigDecimal v) { discountPercent = v; }
+    <span class="kw">public</span> Integer getFreeTrialDays() { <span class="kw">return</span> freeTrialDays; }
+    <span class="kw">public void</span> setFreeTrialDays(Integer v) { freeTrialDays = v; }
+    <span class="kw">public</span> String getPromoCode() { <span class="kw">return</span> promoCode; }
+    <span class="kw">public void</span> setPromoCode(String v) { promoCode = v; }
+    <span class="kw">public</span> LocalDate getStartDate() { <span class="kw">return</span> startDate; }
+    <span class="kw">public void</span> setStartDate(LocalDate v) { startDate = v; }
+    <span class="kw">public</span> LocalDate getEndDate() { <span class="kw">return</span> endDate; }
+    <span class="kw">public void</span> setEndDate(LocalDate v) { endDate = v; }
+    <span class="kw">public</span> String getEligiblePlans() { <span class="kw">return</span> eligiblePlans; }
+    <span class="kw">public void</span> setEligiblePlans(String v) { eligiblePlans = v; }
+    <span class="kw">public</span> Integer getMaxUses() { <span class="kw">return</span> maxUses; }
+    <span class="kw">public void</span> setMaxUses(Integer v) { maxUses = v; }
+    <span class="kw">public</span> Integer getCurrentUses() { <span class="kw">return</span> currentUses; }
+    <span class="kw">public void</span> setCurrentUses(Integer v) { currentUses = v; }
+    <span class="kw">public</span> CampaignType getCampaignType() { <span class="kw">return</span> campaignType; }
+    <span class="kw">public void</span> setCampaignType(CampaignType v) { campaignType = v; }
+    <span class="kw">public</span> Boolean getIsActive() { <span class="kw">return</span> isActive; }
+    <span class="kw">public void</span> setIsActive(Boolean v) { isActive = v; }
+    <span class="kw">public</span> LocalDateTime getCreatedAt() { <span class="kw">return</span> createdAt; }
+    <span class="kw">public</span> LocalDateTime getUpdatedAt() { <span class="kw">return</span> updatedAt; }
+}</pre>
+      <button class="cbtn" onclick="copyById('campEntity')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">4</span><span class="stitle">CampaignRepository.java</span></div>
+    <div class="step-body">
+      <pre id="campRepo"><span class="kw">package</span> com.ott.campaign.repository;
+<span class="kw">import</span> com.ott.campaign.model.Campaign;
+<span class="kw">import</span> org.springframework.data.jpa.repository.JpaRepository;
+<span class="kw">import</span> org.springframework.data.jpa.repository.Query;
+<span class="kw">import</span> org.springframework.data.repository.query.Param;
+<span class="kw">import</span> java.util.*;
+
+<span class="kw">public interface</span> <span class="cl">CampaignRepository</span> <span class="kw">extends</span> <span class="cl">JpaRepository</span>&lt;Campaign, Long&gt; {
+
+    <span class="cm">// Find all currently active and within date range campaigns</span>
+    <span class="an">@Query</span>(<span class="st">"SELECT c FROM Campaign c WHERE c.isActive = true AND c.startDate &lt;= CURRENT_DATE AND c.endDate &gt;= CURRENT_DATE"</span>)
+    List&lt;Campaign&gt; findAllActiveCampaigns();
+
+    Optional&lt;Campaign&gt; findByPromoCode(String promoCode);
+
+    <span class="cm">// Find campaigns applicable to a specific plan</span>
+    <span class="an">@Query</span>(<span class="st">"SELECT c FROM Campaign c WHERE c.isActive = true AND c.startDate &lt;= CURRENT_DATE AND c.endDate &gt;= CURRENT_DATE AND (c.eligiblePlans = 'ALL' OR c.eligiblePlans LIKE %:planId%)"</span>)
+    List&lt;Campaign&gt; findCampaignsForPlan(<span class="an">@Param</span>(<span class="st">"planId"</span>) String planId);
+}</pre>
+      <button class="cbtn" onclick="copyById('campRepo')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">5</span><span class="stitle">CampaignApplicationRepository.java</span></div>
+    <div class="step-body">
+      <pre id="campAppRepo"><span class="kw">package</span> com.ott.campaign.repository;
+<span class="kw">import</span> com.ott.campaign.model.CampaignApplication;
+<span class="kw">import</span> org.springframework.data.jpa.repository.JpaRepository;
+
+<span class="kw">public interface</span> <span class="cl">CampaignApplicationRepository</span> <span class="kw">extends</span> <span class="cl">JpaRepository</span>&lt;CampaignApplication, Long&gt; {
+    <span class="kw">boolean</span> existsByCampaignIdAndUserId(Long campaignId, Long userId);
+}</pre>
+      <button class="cbtn" onclick="copyById('campAppRepo')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">6</span><span class="stitle">CampaignApplication.java — Entity</span></div>
+    <div class="step-body">
+      <pre id="campApp"><span class="kw">package</span> com.ott.campaign.model;
+<span class="kw">import</span> jakarta.persistence.*;
+<span class="kw">import</span> java.math.BigDecimal;
+<span class="kw">import</span> java.time.LocalDateTime;
+
+<span class="cm">/** Tracks which user applied which campaign — prevents reuse */</span>
+<span class="an">@Entity @Table</span>(name = <span class="st">"campaign_applications"</span>,
+    uniqueConstraints = <span class="an">@UniqueConstraint</span>(columnNames = {<span class="st">"user_id"</span>, <span class="st">"campaign_id"</span>}))
+<span class="kw">public class</span> <span class="cl">CampaignApplication</span> {
+    <span class="an">@Id @GeneratedValue</span>(strategy = GenerationType.IDENTITY)
+    <span class="kw">private</span> Long applicationId;
+    <span class="an">@Column</span>(name = <span class="st">"campaign_id"</span>, nullable = <span class="kw">false</span>) <span class="kw">private</span> Long campaignId;
+    <span class="an">@Column</span>(name = <span class="st">"user_id"</span>,     nullable = <span class="kw">false</span>) <span class="kw">private</span> Long userId;
+    <span class="an">@Column</span>(name = <span class="st">"plan_id"</span>,     nullable = <span class="kw">false</span>) <span class="kw">private</span> String planId;
+    <span class="an">@Column</span>(name = <span class="st">"discount_applied"</span>, precision = 10, scale = 2) <span class="kw">private</span> BigDecimal discountApplied;
+    <span class="an">@Column</span>(name = <span class="st">"applied_at"</span>, updatable = <span class="kw">false</span>) <span class="kw">private</span> LocalDateTime appliedAt;
+    <span class="an">@PrePersist</span> <span class="kw">protected void</span> onCreate() { appliedAt = LocalDateTime.now(); }
+    <span class="kw">public</span> CampaignApplication() {}
+    <span class="kw">public</span> Long getApplicationId() { <span class="kw">return</span> applicationId; }
+    <span class="kw">public void</span> setApplicationId(Long v) { applicationId = v; }
+    <span class="kw">public</span> Long getCampaignId() { <span class="kw">return</span> campaignId; }
+    <span class="kw">public void</span> setCampaignId(Long v) { campaignId = v; }
+    <span class="kw">public</span> Long getUserId() { <span class="kw">return</span> userId; }
+    <span class="kw">public void</span> setUserId(Long v) { userId = v; }
+    <span class="kw">public</span> String getPlanId() { <span class="kw">return</span> planId; }
+    <span class="kw">public void</span> setPlanId(String v) { planId = v; }
+    <span class="kw">public</span> BigDecimal getDiscountApplied() { <span class="kw">return</span> discountApplied; }
+    <span class="kw">public void</span> setDiscountApplied(BigDecimal v) { discountApplied = v; }
+    <span class="kw">public</span> LocalDateTime getAppliedAt() { <span class="kw">return</span> appliedAt; }
+}</pre>
+      <button class="cbtn" onclick="copyById('campApp')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">7</span><span class="stitle">CampaignService.java — business logic</span></div>
+    <div class="step-body">
+      <div class="fhdr"><span class="fname">CampaignService.java</span><span class="fact fnew">NEW</span><span class="fpath">com.ott.campaign.service</span></div>
+      <pre id="campSvc"><span class="kw">package</span> com.ott.campaign.service;
+<span class="kw">import</span> com.ott.campaign.model.*;
+<span class="kw">import</span> com.ott.campaign.repository.*;
+<span class="kw">import</span> org.slf4j.*;
+<span class="kw">import</span> org.springframework.stereotype.Service;
+<span class="kw">import</span> org.springframework.transaction.annotation.Transactional;
+<span class="kw">import</span> java.math.BigDecimal;
+<span class="kw">import java.util.*;
+
+<span class="cm">/**
+ * PURPOSE: Campaign business logic.
+ *
+ * Key methods:
+ * getActiveCampaigns() → ESPN Offers page
+ * applyPromoCode()     → User applies promo during checkout
+ * checkEligibleCampaign() → subscription-service calls this via Feign
+ *
+ * Disney use case: When user subscribes to PLAN001 with promo "WELCOME90",
+ * campaign-service validates the code, checks eligibility, records application.
+ */</span>
+<span class="an">@Service</span>
+<span class="kw">public class</span> <span class="cl">CampaignService</span> {
+
+    <span class="kw">private static final</span> Logger log = LoggerFactory.getLogger(CampaignService.class);
+    <span class="kw">private final</span> CampaignRepository campaignRepo;
+    <span class="kw">private final</span> CampaignApplicationRepository applicationRepo;
+
+    <span class="kw">public</span> CampaignService(CampaignRepository cr, CampaignApplicationRepository ar) {
+        campaignRepo = cr; applicationRepo = ar;
+    }
+
+    <span class="cm">/** Returns all active campaigns — for ESPN Offers page (public) */</span>
+    <span class="kw">public</span> List&lt;Campaign&gt; getActiveCampaigns() {
+        <span class="kw">return</span> campaignRepo.findAllActiveCampaigns();
+    }
+
+    <span class="cm">/** Returns campaigns applicable to a specific plan (used by subscription-service) */</span>
+    <span class="kw">public</span> List&lt;Campaign&gt; getCampaignsForPlan(String planId) {
+        <span class="kw">return</span> campaignRepo.findCampaignsForPlan(planId);
+    }
+
+    <span class="cm">/**
+     * Apply promo code during subscription checkout.
+     * Validates: code exists, not expired, not over limit, user hasn't used it.
+     * Returns the discount amount to apply.
+     */</span>
+    <span class="an">@Transactional</span>
+    <span class="kw">public</span> Map&lt;String, Object&gt; applyPromoCode(String promoCode, Long userId, String planId, BigDecimal originalPrice) {
+        Map&lt;String, Object&gt; result = <span class="kw">new</span> LinkedHashMap&lt;&gt;();
+
+        Campaign campaign = campaignRepo.findByPromoCode(promoCode.toUpperCase())
+            .orElseThrow(() -> <span class="kw">new</span> RuntimeException(<span class="st">"Invalid promo code: "</span> + promoCode));
+
+        <span class="cm">// Validate campaign is still active</span>
+        <span class="kw">if</span> (!campaign.getIsActive())
+            <span class="kw">throw new</span> RuntimeException(<span class="st">"Promo code is no longer active"</span>);
+
+        <span class="cm">// Check if user already used this campaign</span>
+        <span class="kw">if</span> (applicationRepo.existsByCampaignIdAndUserId(campaign.getCampaignId(), userId))
+            <span class="kw">throw new</span> RuntimeException(<span class="st">"You have already used this promo code"</span>);
+
+        <span class="cm">// Check usage limit</span>
+        <span class="kw">if</span> (campaign.getMaxUses() != <span class="kw">null</span> && campaign.getCurrentUses() >= campaign.getMaxUses())
+            <span class="kw">throw new</span> RuntimeException(<span class="st">"Promo code has reached maximum usage limit"</span>);
+
+        <span class="cm">// Check plan eligibility</span>
+        <span class="kw">if</span> (!<span class="st">"ALL"</span>.equals(campaign.getEligiblePlans()) &&
+            !campaign.getEligiblePlans().contains(planId))
+            <span class="kw">throw new</span> RuntimeException(<span class="st">"Promo code not applicable for this plan"</span>);
+
+        <span class="cm">// Calculate discount</span>
+        BigDecimal discountAmount = originalPrice
+            .multiply(campaign.getDiscountPercent())
+            .divide(BigDecimal.valueOf(100));
+        BigDecimal finalPrice = originalPrice.subtract(discountAmount);
+
+        <span class="cm">// Record application</span>
+        CampaignApplication application = <span class="kw">new</span> CampaignApplication();
+        application.setCampaignId(campaign.getCampaignId());
+        application.setUserId(userId);
+        application.setPlanId(planId);
+        application.setDiscountApplied(discountAmount);
+        applicationRepo.save(application);
+
+        <span class="cm">// Increment usage count</span>
+        campaign.setCurrentUses(campaign.getCurrentUses() + 1);
+        campaignRepo.save(campaign);
+
+        log.info(<span class="st">"Promo {} applied for user {} — discount: {}"</span>, promoCode, userId, discountAmount);
+
+        result.put(<span class="st">"campaignId"</span>, campaign.getCampaignId());
+        result.put(<span class="st">"campaignName"</span>, campaign.getName());
+        result.put(<span class="st">"originalPrice"</span>, originalPrice);
+        result.put(<span class="st">"discountAmount"</span>, discountAmount);
+        result.put(<span class="st">"finalPrice"</span>, finalPrice);
+        result.put(<span class="st">"freeTrialDays"</span>, campaign.getFreeTrialDays());
+        result.put(<span class="st">"message"</span>, <span class="st">"Promo applied! You save ₹"</span> + discountAmount);
+        <span class="kw">return</span> result;
+    }
+
+    <span class="cm">/** Create a new campaign (admin only) */</span>
+    <span class="kw">public</span> Campaign createCampaign(Campaign campaign) {
+        <span class="kw">return</span> campaignRepo.save(campaign);
+    }
+
+    <span class="cm">/** Deactivate a campaign (soft delete) */</span>
+    <span class="an">@Transactional</span>
+    <span class="kw">public</span> Campaign deactivateCampaign(Long id) {
+        Campaign c = campaignRepo.findById(id)
+            .orElseThrow(() -> <span class="kw">new</span> RuntimeException(<span class="st">"Campaign not found"</span>));
+        c.setIsActive(<span class="kw">false</span>);
+        <span class="kw">return</span> campaignRepo.save(c);
+    }
+}</pre>
+      <button class="cbtn" onclick="copyById('campSvc')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">8</span><span class="stitle">CampaignController.java — all REST endpoints</span></div>
+    <div class="step-body">
+      <div class="fhdr"><span class="fname">CampaignController.java</span><span class="fact fnew">NEW</span><span class="fpath">com.ott.campaign.controller</span></div>
+      <pre id="campCtrl"><span class="kw">package</span> com.ott.campaign.controller;
+<span class="kw">import</span> com.ott.campaign.model.Campaign;
+<span class="kw">import</span> com.ott.campaign.service.CampaignService;
+<span class="kw">import</span> org.springframework.http.*;
+<span class="kw">import</span> org.springframework.web.bind.annotation.*;
+<span class="kw">import</span> java.math.BigDecimal;
+<span class="kw">import</span> java.util.Map;
+
+<span class="cm">/**
+ * REST endpoints for campaign-service.
+ *
+ * PUBLIC endpoints (no JWT needed):
+ *   GET /campaigns/active → ESPN Offers page
+ *
+ * PROTECTED endpoints (JWT required via Gateway):
+ *   POST /campaigns/apply → user applies promo code at checkout
+ *   GET  /campaigns/plan/{planId} → subscription-service calls this
+ *   POST /campaigns → admin creates campaign
+ *   DELETE /campaigns/{id} → admin deactivates
+ *
+ * Postman tests:
+ *   GET  http://localhost:8080/campaigns/active (no token needed)
+ *   POST http://localhost:8080/campaigns/apply (token needed)
+ *        Body: {"promoCode":"WELCOME90","userId":1,"planId":"PLAN001","originalPrice":199.0}
+ */</span>
+<span class="an">@RestController</span>
+<span class="an">@RequestMapping</span>(<span class="st">"/campaigns"</span>)
+<span class="kw">public class</span> <span class="cl">CampaignController</span> {
+
+    <span class="kw">private final</span> CampaignService campaignService;
+    <span class="kw">public</span> CampaignController(CampaignService s) { campaignService = s; }
+
+    <span class="cm">/** GET /campaigns/active — PUBLIC, ESPN Offers page calls this */</span>
+    <span class="an">@GetMapping</span>(<span class="st">"/active"</span>)
+    <span class="kw">public</span> ResponseEntity&lt;?&gt; getActiveCampaigns() {
+        <span class="kw">return</span> ResponseEntity.ok(campaignService.getActiveCampaigns());
+    }
+
+    <span class="cm">/** GET /campaigns/plan/{planId} — subscription-service calls via Feign */</span>
+    <span class="an">@GetMapping</span>(<span class="st">"/plan/{planId}"</span>)
+    <span class="kw">public</span> ResponseEntity&lt;?&gt; getCampaignsForPlan(<span class="an">@PathVariable</span> String planId) {
+        <span class="kw">return</span> ResponseEntity.ok(campaignService.getCampaignsForPlan(planId));
+    }
+
+    <span class="cm">/**
+     * POST /campaigns/apply
+     * User enters promo code at checkout → validates + returns discount
+     * Body: {"promoCode":"WELCOME90","userId":1,"planId":"PLAN001","originalPrice":199.0}
+     */</span>
+    <span class="an">@PostMapping</span>(<span class="st">"/apply"</span>)
+    <span class="kw">public</span> ResponseEntity&lt;Map&lt;String, Object&gt;&gt; applyPromoCode(
+            <span class="an">@RequestBody</span> Map&lt;String, Object&gt; req) {
+        String promoCode = (String) req.get(<span class="st">"promoCode"</span>);
+        Long userId = Long.valueOf(req.get(<span class="st">"userId"</span>).toString());
+        String planId = (String) req.get(<span class="st">"planId"</span>);
+        BigDecimal price = <span class="kw">new</span> BigDecimal(req.get(<span class="st">"originalPrice"</span>).toString());
+        <span class="kw">return</span> ResponseEntity.ok(campaignService.applyPromoCode(promoCode, userId, planId, price));
+    }
+
+    <span class="cm">/** POST /campaigns — admin creates a new campaign */</span>
+    <span class="an">@PostMapping</span>
+    <span class="kw">public</span> ResponseEntity&lt;Campaign&gt; createCampaign(<span class="an">@RequestBody</span> Campaign campaign) {
+        <span class="kw">return</span> ResponseEntity.status(HttpStatus.CREATED).body(campaignService.createCampaign(campaign));
+    }
+
+    <span class="cm">/** DELETE /campaigns/{id} — admin deactivates (soft delete) */</span>
+    <span class="an">@DeleteMapping</span>(<span class="st">"/{id}"</span>)
+    <span class="kw">public</span> ResponseEntity&lt;Campaign&gt; deactivate(<span class="an">@PathVariable</span> Long id) {
+        <span class="kw">return</span> ResponseEntity.ok(campaignService.deactivateCampaign(id));
+    }
+}</pre>
+      <button class="cbtn" onclick="copyById('campCtrl')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">9</span><span class="stitle">GlobalExceptionHandler.java for campaign-service</span></div>
+    <div class="step-body">
+      <pre id="campEx"><span class="kw">package</span> com.ott.campaign.exception;
+<span class="kw">import</span> jakarta.servlet.http.HttpServletRequest;
+<span class="kw">import</span> org.springframework.http.*;
+<span class="kw">import</span> org.springframework.web.bind.annotation.*;
+<span class="kw">import</span> java.time.LocalDateTime;
+<span class="kw">import</span> java.util.*;
+
+<span class="an">@RestControllerAdvice</span>
+<span class="kw">public class</span> <span class="cl">GlobalExceptionHandler</span> {
+    <span class="an">@ExceptionHandler</span>(RuntimeException.class)
+    <span class="kw">public</span> ResponseEntity&lt;Map&lt;String,Object&gt;&gt; handle(RuntimeException ex, HttpServletRequest req) {
+        Map&lt;String,Object&gt; err = <span class="kw">new</span> LinkedHashMap&lt;&gt;();
+        err.put(<span class="st">"status"</span>, 400); err.put(<span class="st">"message"</span>, ex.getMessage());
+        err.put(<span class="st">"path"</span>, req.getRequestURI()); err.put(<span class="st">"timestamp"</span>, LocalDateTime.now());
+        <span class="kw">return</span> ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+}</pre>
+      <button class="cbtn" onclick="copyById('campEx')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">10</span><span class="stitle">Test campaign-service in Postman</span></div>
+    <div class="step-body">
+      <table>
+        <tr><th>Test</th><th>URL</th><th>Body/Notes</th><th>Expected</th></tr>
+        <tr><td>Get active campaigns</td><td>GET http://localhost:8080/campaigns/active</td><td>No token needed</td><td>200 OK — list of 4 campaigns</td></tr>
+        <tr><td>Apply valid promo</td><td>POST http://localhost:8080/campaigns/apply (with token)</td><td>{"promoCode":"WELCOME90","userId":1,"planId":"PLAN001","originalPrice":199.0}</td><td>200 OK — discount=199, finalPrice=0</td></tr>
+        <tr><td>Invalid promo code</td><td>POST http://localhost:8080/campaigns/apply (with token)</td><td>{"promoCode":"INVALID","userId":1,"planId":"PLAN001","originalPrice":199.0}</td><td>400 "Invalid promo code"</td></tr>
+        <tr><td>Wrong plan</td><td>POST http://localhost:8080/campaigns/apply (with token)</td><td>{"promoCode":"BUNDLE30","userId":1,"planId":"PLAN001","originalPrice":199.0}</td><td>400 "not applicable for this plan"</td></tr>
+        <tr><td>Reuse promo</td><td>Same apply request twice</td><td>Same body as valid promo</td><td>400 "already used this promo code"</td></tr>
+        <tr><td>Campaigns for plan</td><td>GET http://localhost:8080/campaigns/plan/PLAN001 (with token)</td><td>—</td><td>200 OK — campaigns applicable to PLAN001</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ ESPN MANUAL ═══════════════ -->
+<div id="espn-manual" class="section">
+  <h2>🖥 ESPN UI User Manual — All Features & Workflows</h2>
+
+  <div class="card c-blue">
+    <h3>What espn-ui.html is</h3>
+    <p>A single HTML file that acts as the ESPN+ frontend. It calls your microservices through the API Gateway on port 8080. Open it in Chrome/Edge directly — no web server needed. It uses vanilla JavaScript fetch() API to make REST calls.</p>
+    <p style="margin-top:6px"><strong style="color:#e2e8f0">API Console (bottom right):</strong> Every REST call is logged in real-time so you can see exactly which service is being called and what URL is used.</p>
+  </div>
+
+  <h2>Page by Page Features</h2>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">HOME</span><span class="stitle">Home Page — Browse featured plans and offers</span></div>
+    <div class="step-body">
+      <p><strong style="color:#e2e8f0">Features:</strong> Featured plans grid (3 plans), Active campaigns/offers section</p>
+      <p style="margin-top:6px"><strong style="color:#e2e8f0">Services called automatically on page load:</strong></p>
+      <ul>
+        <li>GET /catalog/plans → catalog-service:8081 → shows Disney+, ESPN+ plans</li>
+        <li>GET /campaigns/active → campaign-service:8085 → shows current offers</li>
+      </ul>
+      <p style="margin-top:6px"><strong style="color:#e2e8f0">What you see if services are down:</strong> Mock/demo data is shown so page doesn't break</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">PLANS</span><span class="stitle">Plans Page — All subscription plans with Subscribe button</span></div>
+    <div class="step-body">
+      <p><strong style="color:#e2e8f0">Services called:</strong> GET /catalog/plans → catalog-service</p>
+      <p style="margin-top:6px"><strong style="color:#e2e8f0">Click Subscribe:</strong></p>
+      <ul>
+        <li>If NOT logged in → redirects to Login page</li>
+        <li>If logged in → opens Subscribe Modal with payment form</li>
+      </ul>
+      <p style="margin-top:6px"><strong style="color:#e2e8f0">Subscribe Modal workflow:</strong></p>
+      <div class="flow-item"><div class="fn">1</div><div class="ft">Enter card details (4242 4242 4242 4242 = success, 4000 0000 0000 0002 = fail)</div></div>
+      <div class="farr">↓</div>
+      <div class="flow-item"><div class="fn">2</div><div class="ft">Click "Confirm & Subscribe" → POST /subscriptions to Gateway</div></div>
+      <div class="farr">↓</div>
+      <div class="flow-item"><div class="fn">3</div><div class="ft">Gateway validates JWT → routes to subscription-service</div></div>
+      <div class="farr">↓</div>
+      <div class="flow-item"><div class="fn">4</div><div class="ft">subscription-service → catalog → payment → Kafka (when ready)</div></div>
+      <div class="farr">↓</div>
+      <div class="flow-item"><div class="fn">5</div><div class="ft">201 Created → "Subscribed!" toast notification → redirect to My Subscriptions</div></div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">OFFERS</span><span class="stitle">Offers Page — Active campaigns and promo codes</span></div>
+    <div class="step-body">
+      <p><strong style="color:#e2e8f0">Services called:</strong> GET /campaigns/active → campaign-service:8085 (public, no token needed)</p>
+      <p style="margin-top:6px"><strong style="color:#e2e8f0">Features:</strong></p>
+      <ul>
+        <li>Shows FREE_TRIAL, DISCOUNT, BUNDLE, RENEWAL campaign cards</li>
+        <li>Click promo code → copies to clipboard automatically</li>
+        <li>Click "Claim Offer" → navigates to Plans page</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">MY SUBSCRIPTIONS</span><span class="stitle">User's active and past subscriptions</span></div>
+    <div class="step-body">
+      <p><strong style="color:#e2e8f0">Services called:</strong> GET /subscriptions/user/{userId} → subscription-service:8082 (JWT required)</p>
+      <p style="margin-top:6px"><strong style="color:#e2e8f0">Features:</strong></p>
+      <ul>
+        <li>Shows user profile card with name and active member status</li>
+        <li>Each subscription card shows: plan name, dates, amount, status badge (ACTIVE/PENDING/CANCELLED)</li>
+        <li>Cancel button → PUT /subscriptions/{id}/cancel → subscription-service</li>
+        <li>If not logged in → shows "Sign in" prompt</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">LOGIN / REGISTER</span><span class="stitle">Authentication pages</span></div>
+    <div class="step-body">
+      <p><strong style="color:#e2e8f0">Services called:</strong></p>
+      <ul>
+        <li>Login: POST /auth/login → user-service:8083 → returns JWT token</li>
+        <li>Register: POST /auth/register → user-service:8083 → creates account + returns JWT</li>
+      </ul>
+      <p style="margin-top:6px"><strong style="color:#e2e8f0">Test accounts (from DB seed):</strong></p>
+      <ul>
+        <li>Username: john.doe / Password: password123</li>
+        <li>Username: jane.smith / Password: password123</li>
+        <li>Username: admin / Password: password123</li>
+      </ul>
+      <p style="margin-top:6px"><strong style="color:#e2e8f0">After login:</strong> JWT token stored in browser localStorage → sent in Authorization header for all future calls → user name shown in navbar</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">API CONSOLE</span><span class="stitle">Bottom-right panel — see all REST calls in real time</span></div>
+    <div class="step-body">
+      <ul>
+        <li>Blue entries = outgoing request (method + URL + body preview)</li>
+        <li>Green entries = successful response (status 200/201)</li>
+        <li>Red entries = error response or network failure</li>
+        <li>Grey entries = informational messages about which service is being called</li>
+        <li>Click "▲ collapse" to hide the panel</li>
+      </ul>
+      <div class="success">The API Console is your learning tool — it shows exactly which microservice gets called for every user action. Watch it while clicking through the UI to understand the flow.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ STARTUP ORDER ═══════════════ -->
+<div id="startup-order" class="section">
+  <h2>🚀 Correct Startup Order — Windows 10</h2>
+
+  <div class="warn">Always start in this order. Services depend on each other. Starting Gateway before catalog-service means Gateway can't verify routes during startup.</div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">1</span><span class="stitle">Start Infrastructure (Redis + MySQL)</span></div>
+    <div class="step-body">
+      <pre id="infraStart">REM Open Command Prompt as Administrator
+
+REM Verify Redis is running
+redis-cli ping
+REM Expected: PONG
+
+REM If Redis not running:
+net start memurai
+REM OR if using old Redis:
+net start redis
+
+REM Verify MySQL is running (should auto-start)
+REM If not: open Services (Windows+R → services.msc) → start MySQL80</pre>
+      <button class="cbtn" onclick="copyById('infraStart')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">2</span><span class="stitle">Run SQL schemas in MySQL Workbench</span></div>
+    <div class="step-body">
+      <p>Run each SQL file in this order (if not already run):</p>
+      <pre>1. database_schema.sql     → creates catalog_db + subscription_db
+2. user_db_schema.sql      → creates user_db (new — from user-service tab)
+3. payment_db_schema.sql   → creates payment_db (new — from payment-service tab)
+4. campaign_db_schema.sql  → creates campaign_db (new — from campaign-service tab)</pre>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">3</span><span class="stitle">Start services in STS — in this order</span></div>
+    <div class="step-body">
+      <table>
+        <tr><th>Order</th><th>Service</th><th>Right-click file</th><th>Wait for</th></tr>
+        <tr><td>1</td><td>catalog-service</td><td>CatalogServiceApplication.java → Run As → Spring Boot App</td><td>"Started on port 8081"</td></tr>
+        <tr><td>2</td><td>user-service</td><td>UserServiceApplication.java → Run As → Spring Boot App</td><td>"Started on port 8083"</td></tr>
+        <tr><td>3</td><td>payment-service</td><td>PaymentServiceApplication.java → Run As → Spring Boot App</td><td>"Started on port 8084"</td></tr>
+        <tr><td>4</td><td>campaign-service</td><td>CampaignServiceApplication.java → Run As → Spring Boot App</td><td>"Started on port 8085"</td></tr>
+        <tr><td>5</td><td>subscription-service</td><td>SubscriptionServiceApplication.java → Run As → Spring Boot App</td><td>"Started on port 8082"</td></tr>
+        <tr><td>6</td><td>api-gateway</td><td>ApiGatewayApplication.java → Run As → Spring Boot App</td><td>"Started on port 8080"</td></tr>
+      </table>
+      <div class="success" style="margin-top:8px">All 6 services running? Open espn-ui.html in Chrome → API Console should show successful calls to localhost:8080</div>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">4</span><span class="stitle">Verify all services are up — browser health checks</span></div>
+    <div class="step-body">
+      <pre id="healthChecks">Open these URLs in browser — each should return {"status":"UP"}:
+
+http://localhost:8081/actuator/health   → catalog-service
+http://localhost:8082/actuator/health   → subscription-service
+http://localhost:8083/actuator/health   → user-service
+http://localhost:8084/actuator/health   → payment-service
+http://localhost:8085/actuator/health   → campaign-service
+http://localhost:8080/actuator/health   → api-gateway (all routes)</pre>
+      <button class="cbtn" onclick="copyById('healthChecks')">Copy</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-hdr"><span class="snum">5</span><span class="stitle">Complete end-to-end test in espn-ui.html</span></div>
+    <div class="step-body">
+      <table>
+        <tr><th>Step</th><th>Action in ESPN UI</th><th>Expected Result</th><th>Service Called</th></tr>
+        <tr><td>1</td><td>Open espn-ui.html in Chrome</td><td>Plans and offers load automatically</td><td>catalog-service, campaign-service</td></tr>
+        <tr><td>2</td><td>Click Login → enter john.doe / password123</td><td>JWT token generated, user name in navbar</td><td>user-service</td></tr>
+        <tr><td>3</td><td>Click Plans → click Subscribe on Disney+ Basic</td><td>Subscribe modal opens</td><td>—</td></tr>
+        <tr><td>4</td><td>Card: 4242 4242 4242 4242 → Confirm</td><td>"Subscribed!" toast, redirect to My Subscriptions</td><td>subscription → catalog → payment</td></tr>
+        <tr><td>5</td><td>View My Subscriptions</td><td>Disney+ Basic shows ACTIVE</td><td>subscription-service</td></tr>
+        <tr><td>6</td><td>Click Offers page</td><td>WELCOME90, BUNDLE30 etc shown</td><td>campaign-service</td></tr>
+        <tr><td>7</td><td>Click Cancel on subscription</td><td>Status changes to CANCELLED</td><td>subscription-service</td></tr>
+        <tr><td>8</td><td>Try with fail card: 4000 0000 0000 0002</td><td>"Payment could not be processed" error</td><td>payment-service</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center;padding:20px;color:#4a5568;font-size:12px;margin-top:10px">
+  OTT Platform Complete Master Guide — user-service · payment-service · campaign-service · ESPN UI
+</div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo(0,0);
+}
+function copyById(id){
+  navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>{
+    const b=event.target;const o=b.textContent;
+    b.textContent='✅ Copied!';b.style.background='#276749';
+    setTimeout(()=>{b.textContent=o;b.style.background=''},1500);
+  });
+}
+</script>
+</body>
+</html>
