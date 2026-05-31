@@ -39,6 +39,7 @@ select * from ott_plans;
 -- SUBSCRIPTION SERVICE DATABASE
 -- =====================================================
 USE subscription_db;
+select * from users;
 SELECT * FROM subscription_db.subscriptions;
 -- Users Table
 CREATE TABLE IF NOT EXISTS users (
