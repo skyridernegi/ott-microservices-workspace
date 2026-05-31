@@ -10,9 +10,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ott</groupId>
-	<artifactId>payment-service</artifactId>
+	<artifactId>campaign-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>payment-service</name>
+	<name>campaign-service</name>
 	<description />
 	<url />
 	<licenses>
@@ -44,6 +44,7 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -69,24 +70,6 @@
 			<artifactId>mysql-connector-j</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		<!-- Spring Boot Actuator
-     PURPOSE: Exposes /actuator/health, /actuator/metrics, /actuator/prometheus
-     CONNECTS TO: Prometheus scrapes /actuator/prometheus endpoint -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
-
-		<!-- Micrometer Prometheus Registry
-     PURPOSE: Converts Spring Boot metrics to Prometheus format
-     WITHOUT THIS: /actuator/prometheus endpoint returns 404
-     WITH THIS: Returns metrics like:
-       http_server_requests_seconds_count{uri="/catalog/plans"} 42
-       jvm_memory_used_bytes{area="heap"} 123456789-->
-		<dependency>
-			<groupId>io.micrometer</groupId>
-			<artifactId>micrometer-registry-prometheus</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -98,8 +81,13 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-openfeign</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
 
