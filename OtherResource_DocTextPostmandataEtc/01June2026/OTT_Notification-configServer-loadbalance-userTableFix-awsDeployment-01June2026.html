@@ -1,0 +1,1788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OTT Platform — Complete Remaining Guide</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#0f1117;color:#e2e8f0;line-height:1.6;font-size:13px}
+.container{max-width:1060px;margin:0 auto;padding:16px}
+h1{font-size:21px;color:#63b3ed;margin-bottom:4px}
+h2{font-size:14px;color:#90cdf4;margin:18px 0 8px;padding-bottom:5px;border-bottom:1px solid #2d3748}
+h3{font-size:13px;color:#e2e8f0;margin:10px 0 5px;font-weight:600}
+p,li{font-size:12px;color:#a0aec0;line-height:1.8}
+ul,ol{padding-left:18px;margin:5px 0}
+
+.tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:16px;border-bottom:2px solid #2d3748;padding-bottom:8px;position:sticky;top:0;background:#0f1117;z-index:50;padding-top:6px}
+.tab{background:#1a1f2e;border:1px solid #2d3748;border-radius:5px;padding:5px 10px;font-size:11px;color:#a0aec0;cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.tab:hover{border-color:#4299e1;color:#63b3ed}
+.tab.active{background:#2b6cb0;border-color:#4299e1;color:#fff}
+.section{display:none}.section.active{display:block}
+
+.step{background:#1a1f2e;border:1px solid #2d3748;border-radius:8px;margin-bottom:10px;overflow:hidden}
+.sh{background:#2d3748;padding:8px 13px;display:flex;align-items:center;gap:9px}
+.sn{background:#2b6cb0;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.st{font-size:13px;font-weight:600;color:#e2e8f0;flex:1}
+.sb{padding:11px 13px}
+
+.fh{display:flex;align-items:center;gap:7px;background:#1c3829;border:1px solid #276749;border-radius:5px;padding:6px 11px;margin:7px 0;flex-wrap:wrap}
+.fn{font-size:12px;font-weight:600;color:#9ae6b4}
+.fp{font-size:11px;color:#718096;font-family:monospace;margin-left:auto}
+.fa{font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px}
+.fnew{background:#1a365d;color:#90cdf4}.fmod{background:#744210;color:#fbd38d}.fdel{background:#742a2a;color:#feb2b2}
+
+pre{background:#0d1117;border:1px solid #2d3748;border-radius:5px;padding:10px 12px;overflow-x:auto;font-size:11px;line-height:1.7;margin:7px 0;position:relative;white-space:pre}
+.cb{position:absolute;top:6px;right:6px;background:#2d3748;color:#a0aec0;border:none;border-radius:3px;padding:3px 8px;font-size:10px;cursor:pointer}
+.cb:hover{background:#4a5568;color:#e2e8f0}
+code{background:#2d3748;padding:2px 5px;border-radius:3px;font-size:11px;color:#63b3ed;font-family:monospace}
+
+.kw{color:#c792ea}.an{color:#ffcb6b}.cm{color:#546e7a;font-style:italic}.st{color:#c3e88d}.cl{color:#82aaff}
+.add{background:#0d2818;display:block;padding-left:8px;border-left:3px solid #48bb78}
+.del{background:#2d1515;display:block;padding-left:8px;border-left:3px solid #742a2a;text-decoration:line-through;opacity:0.6}
+
+.warn{background:#2d1f00;border:1px solid #d69e2e;border-radius:7px;padding:9px 13px;margin:7px 0;font-size:12px;color:#fbd38d}
+.info{background:#1a2744;border:1px solid #4299e1;border-radius:7px;padding:9px 13px;margin:7px 0;font-size:12px;color:#90cdf4}
+.success{background:#1c3829;border:1px solid #48bb78;border-radius:7px;padding:9px 13px;margin:7px 0;font-size:12px;color:#9ae6b4}
+
+table{width:100%;border-collapse:collapse;font-size:12px;margin:7px 0}
+th{background:#2d3748;color:#e2e8f0;padding:6px 10px;text-align:left;font-size:11px}
+td{padding:6px 10px;border-bottom:1px solid #2d3748;color:#a0aec0;vertical-align:top}
+tr:last-child td{border-bottom:none}
+
+.card{background:#1a1f2e;border:1px solid #2d3748;border-radius:8px;padding:12px 14px;margin-bottom:10px}
+.cbl{border-left:4px solid #4299e1}.cgr{border-left:4px solid #48bb78}
+.cor{border-left:4px solid #ed8936}.crd{border-left:4px solid #fc8181}
+.cyl{border-left:4px solid #f6e05e}.cpr{border-left:4px solid #9f7aea}
+.cte{border-left:4px solid #38b2ac}.cpk{border-left:4px solid #ed64a6}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>🏰 OTT Platform — Complete Remaining Implementation Guide</h1>
+<p style="color:#718096;margin-bottom:10px">notification-service · config-server · eureka · load-balancing · AWS · Jenkins · existing-service-changes · user-table-fix · report-service</p>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('notification')">1. Notification Service</button>
+  <button class="tab" onclick="show('config')">2. Config Server</button>
+  <button class="tab" onclick="show('eureka')">3. Service Discovery</button>
+  <button class="tab" onclick="show('loadbalance')">4. Load Balancing</button>
+  <button class="tab" onclick="show('aws')">5. AWS Deployment</button>
+  <button class="tab" onclick="show('jenkins')">6. Jenkins + GitHub</button>
+  <button class="tab" onclick="show('existing')">7. Existing Service Changes</button>
+  <button class="tab" onclick="show('userfix')">8. User Table Fix</button>
+  <button class="tab" onclick="show('reports')">9. Report Service</button>
+  <button class="tab" onclick="show('alltests')">10. All Endpoint Tests</button>
+</div>
+
+<!-- ══════════════ 1. NOTIFICATION SERVICE ══════════════ -->
+<div id="notification" class="section active">
+  <div class="card cgr">
+    <h3>What notification-service does</h3>
+    <p>Pure Kafka consumer — no REST endpoints (except health check). Listens to Kafka topics: payment.failed, payment.success, subscription.expired. When an event arrives, it sends email/SMS to the user. Stateless — no database needed. This is the correct microservices pattern: notification logic is completely decoupled from business logic.</p>
+    <p style="margin-top:6px"><strong style="color:#e2e8f0">Without Kafka (current state):</strong> We simulate by exposing a POST /notifications/send endpoint that subscription-service can call directly. Kafka is added later.</p>
+  </div>
+
+  <div class="step"><div class="sh"><span class="sn">1</span><span class="st">Create project in STS</span></div>
+  <div class="sb">
+<pre>File → New → Spring Starter Project
+Name:    notification-service
+Group:   com.ott
+Package: com.ott.notification
+Port:    8086
+
+Dependencies to select:
+✅ Spring Web          (for health endpoint + REST fallback)
+✅ Spring Boot Actuator
+✅ Spring Boot DevTools
+✅ Validation
+
+Spring Boot: 3.5.14
+
+After creation — add Spring Cloud + Kafka to pom.xml (Step 2)</pre>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">2</span><span class="st">pom.xml — complete with Kafka dependency</span></div>
+  <div class="sb">
+  <div class="fh"><span class="fn">pom.xml</span><span class="fa fmod">REPLACE ENTIRE FILE</span><span class="fp">notification-service/pom.xml</span></div>
+  <pre id="notifPom">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+
+    &lt;parent&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+        &lt;version&gt;3.5.14&lt;/version&gt;
+        &lt;relativePath/&gt;
+    &lt;/parent&gt;
+
+    &lt;groupId&gt;com.ott&lt;/groupId&gt;
+    &lt;artifactId&gt;notification-service&lt;/artifactId&gt;
+    &lt;version&gt;1.0.0&lt;/version&gt;
+    &lt;name&gt;notification-service&lt;/name&gt;
+
+    &lt;properties&gt;
+        &lt;java.version&gt;21&lt;/java.version&gt;
+        &lt;spring-cloud.version&gt;2025.0.0&lt;/spring-cloud.version&gt;
+    &lt;/properties&gt;
+
+    &lt;dependencyManagement&gt;
+        &lt;dependencies&gt;
+            &lt;dependency&gt;
+                &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+                &lt;artifactId&gt;spring-cloud-dependencies&lt;/artifactId&gt;
+                &lt;version&gt;${spring-cloud.version}&lt;/version&gt;
+                &lt;type&gt;pom&lt;/type&gt;
+                &lt;scope&gt;import&lt;/scope&gt;
+            &lt;/dependency&gt;
+        &lt;/dependencies&gt;
+    &lt;/dependencyManagement&gt;
+
+    &lt;dependencies&gt;
+        &lt;!-- Spring Web - for health + fallback REST endpoint --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+
+        &lt;!-- Spring Kafka - to consume payment.failed, payment.success topics --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.kafka&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-kafka&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+
+        &lt;!-- Spring Mail - to send actual emails (optional - simulated in code) --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-mail&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+
+        &lt;!-- Actuator - for health check endpoint --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+
+        &lt;!-- Micrometer Prometheus --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;io.micrometer&lt;/groupId&gt;
+            &lt;artifactId&gt;micrometer-registry-prometheus&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+
+        &lt;!-- Eureka client - for service registration --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;
+            &lt;scope&gt;runtime&lt;/scope&gt;
+            &lt;optional&gt;true&lt;/optional&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.kafka&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-kafka-test&lt;/artifactId&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+
+    &lt;build&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+                &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/build&gt;
+&lt;/project&gt;</pre>
+  <button class="cb" onclick="cb('notifPom')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">3</span><span class="st">application.properties</span></div>
+  <div class="sb">
+  <pre id="notifProps">server.port=8086
+spring.application.name=notification-service
+
+# ── Kafka Configuration ────────────────────────────────────────────────
+# When Kafka is running locally (docker or installed), uncomment these:
+# spring.kafka.bootstrap-servers=localhost:9092
+# spring.kafka.consumer.group-id=notification-group
+# spring.kafka.consumer.auto-offset-reset=earliest
+# spring.kafka.consumer.key-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+# spring.kafka.consumer.value-deserializer=org.springframework.kafka.support.serializer.JsonDeserializer
+# spring.kafka.consumer.properties.spring.json.trusted.packages=*
+
+# ── Email Configuration (Gmail SMTP) ──────────────────────────────────
+# To send real emails: uncomment and add your Gmail credentials
+# IMPORTANT: Use App Password, not your actual Gmail password
+# Get App Password: Google Account → Security → 2FA → App Passwords
+# spring.mail.host=smtp.gmail.com
+# spring.mail.port=587
+# spring.mail.username=your.email@gmail.com
+# spring.mail.password=your-app-password-here
+# spring.mail.properties.mail.smtp.auth=true
+# spring.mail.properties.mail.smtp.starttls.enable=true
+
+# ── Eureka ─────────────────────────────────────────────────────────────
+eureka.client.service-url.defaultZone=http://localhost:8761/eureka/
+eureka.instance.prefer-ip-address=true
+
+# ── Actuator ───────────────────────────────────────────────────────────
+management.endpoints.web.exposure.include=health,info,metrics,prometheus
+management.endpoint.health.show-details=always
+management.metrics.tags.application=notification-service
+
+logging.level.com.ott.notification=DEBUG</pre>
+  <button class="cb" onclick="cb('notifProps')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">4</span><span class="st">NotificationServiceApplication.java</span></div>
+  <div class="sb">
+  <pre id="notifMain"><span class="kw">package</span> com.ott.notification;
+<span class="kw">import</span> org.springframework.boot.SpringApplication;
+<span class="kw">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;
+
+<span class="cm">/**
+ * Notification Service — Main Entry Point
+ * NO @EnableFeignClients needed — this service only CONSUMES events
+ * NO database — stateless service
+ * Only dependency: Kafka (to receive events) + Mail (to send emails)
+ */</span>
+<span class="an">@SpringBootApplication</span>
+<span class="kw">public class</span> <span class="cl">NotificationServiceApplication</span> {
+    <span class="kw">public static void</span> main(String[] args) {
+        SpringApplication.run(NotificationServiceApplication.class, args);
+    }
+}</pre>
+  <button class="cb" onclick="cb('notifMain')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">5</span><span class="st">NotificationEvent.java — shared event model</span></div>
+  <div class="sb">
+  <div class="fh"><span class="fn">NotificationEvent.java</span><span class="fa fnew">NEW</span><span class="fp">com.ott.notification.event</span></div>
+  <pre id="notifEvent"><span class="kw">package</span> com.ott.notification.event;
+<span class="kw">import</span> java.math.BigDecimal;
+<span class="kw">import</span> java.time.LocalDateTime;
+
+<span class="cm">/**
+ * Common event model. Kafka messages are deserialized into this class.
+ * payment-service and subscription-service serialize their events
+ * using the same structure.
+ *
+ * eventType values:
+ *   PAYMENT_SUCCESS      → "Your payment was successful"
+ *   PAYMENT_FAILED       → "Your payment failed, please retry"
+ *   SUBSCRIPTION_EXPIRED → "Your subscription has expired"
+ *   SUBSCRIPTION_EXPIRING→ "Your subscription expires in 3 days"
+ *   SUBSCRIPTION_CREATED → "Welcome! Your subscription is active"
+ */</span>
+<span class="kw">public class</span> <span class="cl">NotificationEvent</span> {
+    <span class="kw">private</span> String eventType;
+    <span class="kw">private</span> Long userId;
+    <span class="kw">private</span> String username;
+    <span class="kw">private</span> String email;
+    <span class="kw">private</span> String planId;
+    <span class="kw">private</span> String planName;
+    <span class="kw">private</span> BigDecimal amount;
+    <span class="kw">private</span> String failureReason;
+    <span class="kw">private</span> LocalDateTime eventTime;
+
+    <span class="kw">public</span> NotificationEvent() {}
+
+    <span class="kw">public</span> String getEventType() { <span class="kw">return</span> eventType; }
+    <span class="kw">public void</span> setEventType(String v) { eventType = v; }
+    <span class="kw">public</span> Long getUserId() { <span class="kw">return</span> userId; }
+    <span class="kw">public void</span> setUserId(Long v) { userId = v; }
+    <span class="kw">public</span> String getUsername() { <span class="kw">return</span> username; }
+    <span class="kw">public void</span> setUsername(String v) { username = v; }
+    <span class="kw">public</span> String getEmail() { <span class="kw">return</span> email; }
+    <span class="kw">public void</span> setEmail(String v) { email = v; }
+    <span class="kw">public</span> String getPlanId() { <span class="kw">return</span> planId; }
+    <span class="kw">public void</span> setPlanId(String v) { planId = v; }
+    <span class="kw">public</span> String getPlanName() { <span class="kw">return</span> planName; }
+    <span class="kw">public void</span> setPlanName(String v) { planName = v; }
+    <span class="kw">public</span> BigDecimal getAmount() { <span class="kw">return</span> amount; }
+    <span class="kw">public void</span> setAmount(BigDecimal v) { amount = v; }
+    <span class="kw">public</span> String getFailureReason() { <span class="kw">return</span> failureReason; }
+    <span class="kw">public void</span> setFailureReason(String v) { failureReason = v; }
+    <span class="kw">public</span> LocalDateTime getEventTime() { <span class="kw">return</span> eventTime; }
+    <span class="kw">public void</span> setEventTime(LocalDateTime v) { eventTime = v; }
+}</pre>
+  <button class="cb" onclick="cb('notifEvent')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">6</span><span class="st">EmailNotificationService.java — send emails</span></div>
+  <div class="sb">
+  <div class="fh"><span class="fn">EmailNotificationService.java</span><span class="fa fnew">NEW</span><span class="fp">com.ott.notification.service</span></div>
+  <pre id="emailSvc"><span class="kw">package</span> com.ott.notification.service;
+<span class="kw">import</span> com.ott.notification.event.NotificationEvent;
+<span class="kw">import</span> org.slf4j.*;
+<span class="kw">import</span> org.springframework.stereotype.Service;
+<span class="cm">// Uncomment when spring.mail.* is configured:
+// import org.springframework.mail.SimpleMailMessage;
+// import org.springframework.mail.javamail.JavaMailSender;</span>
+
+<span class="cm">/**
+ * PURPOSE: Sends emails/SMS based on notification events.
+ *
+ * CURRENT STATE: Simulates email sending (logs to console).
+ * TO ENABLE REAL EMAILS:
+ *   1. Uncomment JavaMailSender injection
+ *   2. Add Gmail App Password to application.properties
+ *   3. Replace log.info() calls with mailSender.send()
+ *
+ * PRODUCTION: Use AWS SES (Simple Email Service) instead of Gmail
+ * — more reliable, better delivery rates, used by Disney/Netflix.
+ */</span>
+<span class="an">@Service</span>
+<span class="kw">public class</span> <span class="cl">EmailNotificationService</span> {
+
+    <span class="kw">private static final</span> Logger log = LoggerFactory.getLogger(EmailNotificationService.class);
+    <span class="cm">// @Autowired private JavaMailSender mailSender; // Uncomment for real emails</span>
+
+    <span class="kw">public void</span> sendPaymentSuccessEmail(NotificationEvent event) {
+        String subject = <span class="st">"Welcome to "</span> + event.getPlanName() + <span class="st">"! Your subscription is active"</span>;
+        String body = String.format(
+            <span class="st">"Hi %s,\n\nYour payment of ₹%.2f for %s was successful!\n"</span> +
+            <span class="st">"Your subscription is now ACTIVE.\n\nEnjoy streaming!\nESPN+ Team"</span>,
+            event.getUsername(), event.getAmount(), event.getPlanName()
+        );
+        sendEmail(event.getEmail(), subject, body);
+    }
+
+    <span class="kw">public void</span> sendPaymentFailedEmail(NotificationEvent event) {
+        String subject = <span class="st">"Payment Failed — Action Required"</span>;
+        String body = String.format(
+            <span class="st">"Hi %s,\n\nYour payment for %s failed.\nReason: %s\n\n"</span> +
+            <span class="st">"Please update your payment method and try again.\nESPN+ Team"</span>,
+            event.getUsername(), event.getPlanName(), event.getFailureReason()
+        );
+        sendEmail(event.getEmail(), subject, body);
+    }
+
+    <span class="kw">public void</span> sendSubscriptionExpiringEmail(NotificationEvent event) {
+        String subject = <span class="st">"Your ESPN+ subscription expires in 3 days"</span>;
+        String body = String.format(
+            <span class="st">"Hi %s,\n\nYour %s subscription is expiring soon.\n"</span> +
+            <span class="st">"Renew now to continue uninterrupted streaming!\nESPN+ Team"</span>,
+            event.getUsername(), event.getPlanName()
+        );
+        sendEmail(event.getEmail(), subject, body);
+    }
+
+    <span class="kw">public void</span> sendSubscriptionExpiredEmail(NotificationEvent event) {
+        String subject = <span class="st">"Your ESPN+ subscription has expired"</span>;
+        String body = String.format(
+            <span class="st">"Hi %s,\n\nYour %s subscription has expired.\n"</span> +
+            <span class="st">"Subscribe again to continue watching your favourite sports.\nESPN+ Team"</span>,
+            event.getUsername(), event.getPlanName()
+        );
+        sendEmail(event.getEmail(), subject, body);
+    }
+
+    <span class="kw">private void</span> sendEmail(String to, String subject, String body) {
+        <span class="cm">// SIMULATION — logs to console instead of sending real email</span>
+        log.info(<span class="st">"========== EMAIL NOTIFICATION =========="</span>);
+        log.info(<span class="st">"TO:      {}"</span>, to);
+        log.info(<span class="st">"SUBJECT: {}"</span>, subject);
+        log.info(<span class="st">"BODY:\n{}"</span>, body);
+        log.info(<span class="st">"========================================"</span>);
+
+        <span class="cm">/* Uncomment for real email:
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(body);
+        message.setFrom("noreply@espn.com");
+        mailSender.send(message);
+        */</span>
+    }
+}</pre>
+  <button class="cb" onclick="cb('emailSvc')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">7</span><span class="st">KafkaConsumerService.java — listens to all topics</span></div>
+  <div class="sb">
+  <div class="fh"><span class="fn">KafkaConsumerService.java</span><span class="fa fnew">NEW</span><span class="fp">com.ott.notification.kafka</span></div>
+  <pre id="kafkaConsumer"><span class="kw">package</span> com.ott.notification.kafka;
+<span class="kw">import</span> com.ott.notification.event.NotificationEvent;
+<span class="kw">import</span> com.ott.notification.service.EmailNotificationService;
+<span class="kw">import</span> org.slf4j.*;
+<span class="kw">import</span> org.springframework.kafka.annotation.KafkaListener;
+<span class="kw">import</span> org.springframework.stereotype.Service;
+
+<span class="cm">/**
+ * PURPOSE: Listens to Kafka topics and triggers email notifications.
+ *
+ * WHY @KafkaListener:
+ * Each method with @KafkaListener is automatically called by Spring
+ * whenever a message arrives on the specified topic.
+ * No manual polling needed — Spring handles it.
+ *
+ * groupId = "notification-group":
+ * All notification-service instances share one group.
+ * Kafka ensures only ONE instance processes each message —
+ * prevents duplicate emails if you scale to 2 instances.
+ *
+ * NOTE: These listeners are INACTIVE until:
+ *   1. Kafka is running (localhost:9092)
+ *   2. spring.kafka.bootstrap-servers is uncommented in application.properties
+ *   3. Topics are created (auto-created on first publish if configured)
+ *
+ * For NOW without Kafka: use NotificationController POST endpoint to test.
+ */</span>
+<span class="an">@Service</span>
+<span class="kw">public class</span> <span class="cl">KafkaConsumerService</span> {
+
+    <span class="kw">private static final</span> Logger log = LoggerFactory.getLogger(KafkaConsumerService.class);
+    <span class="kw">private final</span> EmailNotificationService emailService;
+
+    <span class="kw">public</span> KafkaConsumerService(EmailNotificationService e) { emailService = e; }
+
+    <span class="cm">/** Triggered when payment.success is published by payment-service */</span>
+    <span class="an">@KafkaListener</span>(topics = <span class="st">"payment.success"</span>, groupId = <span class="st">"notification-group"</span>)
+    <span class="kw">public void</span> handlePaymentSuccess(NotificationEvent event) {
+        log.info(<span class="st">"Kafka: payment.success received for user: {}"</span>, event.getUserId());
+        emailService.sendPaymentSuccessEmail(event);
+    }
+
+    <span class="cm">/** Triggered when payment.failed is published by payment-service */</span>
+    <span class="an">@KafkaListener</span>(topics = <span class="st">"payment.failed"</span>, groupId = <span class="st">"notification-group"</span>)
+    <span class="kw">public void</span> handlePaymentFailed(NotificationEvent event) {
+        log.info(<span class="st">"Kafka: payment.failed received for user: {}"</span>, event.getUserId());
+        emailService.sendPaymentFailedEmail(event);
+    }
+
+    <span class="cm">/** Triggered when subscription.expiring is published by subscription-service scheduler */</span>
+    <span class="an">@KafkaListener</span>(topics = <span class="st">"subscription.expiring"</span>, groupId = <span class="st">"notification-group"</span>)
+    <span class="kw">public void</span> handleSubscriptionExpiring(NotificationEvent event) {
+        log.info(<span class="st">"Kafka: subscription.expiring for user: {}"</span>, event.getUserId());
+        emailService.sendSubscriptionExpiringEmail(event);
+    }
+
+    <span class="cm">/** Triggered when subscription.expired is published by subscription-service scheduler */</span>
+    <span class="an">@KafkaListener</span>(topics = <span class="st">"subscription.expired"</span>, groupId = <span class="st">"notification-group"</span>)
+    <span class="kw">public void</span> handleSubscriptionExpired(NotificationEvent event) {
+        log.info(<span class="st">"Kafka: subscription.expired for user: {}"</span>, event.getUserId());
+        emailService.sendSubscriptionExpiredEmail(event);
+    }
+}</pre>
+  <button class="cb" onclick="cb('kafkaConsumer')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">8</span><span class="st">NotificationController.java — fallback REST endpoint for testing WITHOUT Kafka</span></div>
+  <div class="sb">
+  <pre id="notifCtrl"><span class="kw">package</span> com.ott.notification.controller;
+<span class="kw">import</span> com.ott.notification.event.NotificationEvent;
+<span class="kw">import</span> com.ott.notification.service.EmailNotificationService;
+<span class="kw">import</span> org.springframework.http.ResponseEntity;
+<span class="kw">import</span> org.springframework.web.bind.annotation.*;
+
+<span class="cm">/**
+ * PURPOSE: Fallback REST endpoint for testing notifications WITHOUT Kafka.
+ * In production: remove this and use only Kafka consumers.
+ * For testing: POST /notifications/send with event body.
+ *
+ * Also used by subscription-service as fallback when Kafka is not available.
+ *
+ * Postman: POST http://localhost:8080/notifications/send (with Bearer token)
+ * Body: {"eventType":"PAYMENT_SUCCESS","userId":1,"username":"john.doe",
+ *        "email":"john@gmail.com","planName":"Disney+ Basic","amount":199.0}
+ */</span>
+<span class="an">@RestController</span>
+<span class="an">@RequestMapping</span>(<span class="st">"/notifications"</span>)
+<span class="kw">public class</span> <span class="cl">NotificationController</span> {
+
+    <span class="kw">private final</span> EmailNotificationService emailService;
+    <span class="kw">public</span> NotificationController(EmailNotificationService e) { emailService = e; }
+
+    <span class="an">@PostMapping</span>(<span class="st">"/send"</span>)
+    <span class="kw">public</span> ResponseEntity&lt;String&gt; sendNotification(<span class="an">@RequestBody</span> NotificationEvent event) {
+        <span class="kw">switch</span> (event.getEventType()) {
+            <span class="kw">case</span> <span class="st">"PAYMENT_SUCCESS"</span>    -> emailService.sendPaymentSuccessEmail(event);
+            <span class="kw">case</span> <span class="st">"PAYMENT_FAILED"</span>     -> emailService.sendPaymentFailedEmail(event);
+            <span class="kw">case</span> <span class="st">"SUBSCRIPTION_EXPIRING"</span> -> emailService.sendSubscriptionExpiringEmail(event);
+            <span class="kw">case</span> <span class="st">"SUBSCRIPTION_EXPIRED"</span>  -> emailService.sendSubscriptionExpiredEmail(event);
+            <span class="kw">default</span> -> <span class="kw">throw new</span> RuntimeException(<span class="st">"Unknown event type: "</span> + event.getEventType());
+        }
+        <span class="kw">return</span> ResponseEntity.ok(<span class="st">"Notification sent for event: "</span> + event.getEventType());
+    }
+
+    <span class="an">@GetMapping</span>(<span class="st">"/health-check"</span>)
+    <span class="kw">public</span> ResponseEntity&lt;String&gt; healthCheck() {
+        <span class="kw">return</span> ResponseEntity.ok(<span class="st">"notification-service is running"</span>);
+    }
+}</pre>
+  <button class="cb" onclick="cb('notifCtrl')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">9</span><span class="st">GlobalExceptionHandler.java</span></div>
+  <div class="sb">
+  <pre id="notifEx"><span class="kw">package</span> com.ott.notification.exception;
+<span class="kw">import</span> jakarta.servlet.http.HttpServletRequest;
+<span class="kw">import</span> org.springframework.http.*;
+<span class="kw">import</span> org.springframework.web.bind.annotation.*;
+<span class="kw">import</span> java.time.LocalDateTime;
+<span class="kw">import</span> java.util.*;
+
+<span class="an">@RestControllerAdvice</span>
+<span class="kw">public class</span> <span class="cl">GlobalExceptionHandler</span> {
+    <span class="an">@ExceptionHandler</span>(RuntimeException.class)
+    <span class="kw">public</span> ResponseEntity&lt;Map&lt;String,Object&gt;&gt; handle(RuntimeException ex, HttpServletRequest req) {
+        Map&lt;String,Object&gt; err = <span class="kw">new</span> LinkedHashMap&lt;&gt;();
+        err.put(<span class="st">"status"</span>, 400); err.put(<span class="st">"message"</span>, ex.getMessage());
+        err.put(<span class="st">"path"</span>, req.getRequestURI()); err.put(<span class="st">"timestamp"</span>, LocalDateTime.now());
+        <span class="kw">return</span> ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+    }
+}</pre>
+  <button class="cb" onclick="cb('notifEx')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">10</span><span class="st">Postman Testing — notification-service endpoints</span></div>
+  <div class="sb">
+  <table>
+    <tr><th>Test</th><th>URL</th><th>Body</th><th>Expected</th></tr>
+    <tr><td>Health check</td><td>GET http://localhost:8086/actuator/health</td><td>None</td><td>{"status":"UP"}</td></tr>
+    <tr><td>Send payment success</td><td>POST http://localhost:8080/notifications/send (token)</td><td>{"eventType":"PAYMENT_SUCCESS","userId":1,"username":"john.doe","email":"john@gmail.com","planName":"Disney+ Basic","amount":199.0}</td><td>200 "Notification sent" + email logged in console</td></tr>
+    <tr><td>Send payment failed</td><td>POST http://localhost:8080/notifications/send (token)</td><td>{"eventType":"PAYMENT_FAILED","userId":1,"username":"john.doe","email":"john@gmail.com","planName":"Disney+ Basic","failureReason":"Card declined"}</td><td>200 OK + failure email logged</td></tr>
+    <tr><td>Subscription expiring</td><td>POST http://localhost:8080/notifications/send (token)</td><td>{"eventType":"SUBSCRIPTION_EXPIRING","userId":1,"username":"john.doe","email":"john@gmail.com","planName":"ESPN+ Monthly"}</td><td>200 OK + reminder email logged</td></tr>
+  </table>
+  </div></div>
+</div>
+
+<!-- ══════════════ 2. CONFIG SERVER ══════════════ -->
+<div id="config" class="section">
+  <div class="card cte">
+    <h3>What Config Server does</h3>
+    <p>Centralizes all application.properties for every service into one GitHub repository. All services read their config from Config Server on startup instead of their local properties file. Change DB password in one place → all services pick it up (some without restart).</p>
+    <p style="margin-top:6px"><strong style="color:#e2e8f0">Disney use case:</strong> When RDS endpoint changes, Config Server is updated once. All 6 services automatically get the new URL. Without Config Server: update 6 files, redeploy 6 services.</p>
+  </div>
+
+  <div class="step"><div class="sh"><span class="sn">1</span><span class="st">Create config-server project in STS</span></div>
+  <div class="sb">
+<pre>File → New → Spring Starter Project
+Name:    config-server
+Group:   com.ott
+Package: com.ott.config
+Port:    8888
+
+Dependencies:
+✅ Config Server (under Spring Cloud Config)
+✅ Spring Boot Actuator
+✅ DevTools
+
+Spring Boot: 3.5.14</pre>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">2</span><span class="st">ConfigServerApplication.java</span></div>
+  <div class="sb">
+  <pre id="configMain"><span class="kw">package</span> com.ott.config;
+<span class="kw">import</span> org.springframework.boot.SpringApplication;
+<span class="kw">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;
+<span class="kw">import</span> org.springframework.cloud.config.server.EnableConfigServer;
+
+<span class="cm">/**
+ * @EnableConfigServer — this single annotation activates Config Server.
+ * All other services will read their properties from this server.
+ */</span>
+<span class="an">@SpringBootApplication</span>
+<span class="an">@EnableConfigServer</span>
+<span class="kw">public class</span> <span class="cl">ConfigServerApplication</span> {
+    <span class="kw">public static void</span> main(String[] args) {
+        SpringApplication.run(ConfigServerApplication.class, args);
+    }
+}</pre>
+  <button class="cb" onclick="cb('configMain')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">3</span><span class="st">application.properties — Config Server local file storage (simpler than GitHub)</span></div>
+  <div class="sb">
+  <div class="info">Using native file system profile first — easier to start without GitHub. Can switch to GitHub later.</div>
+  <pre id="configProps">server.port=8888
+spring.application.name=config-server
+
+# ── Option A: Local file system (START WITH THIS) ─────────────────────
+# Config files stored in C:/ott-config/ folder on your Windows machine
+spring.profiles.active=native
+spring.cloud.config.server.native.search-locations=file:///C:/ott-config/
+
+# ── Option B: GitHub repository (USE LATER) ───────────────────────────
+# Create a private GitHub repo, put all service properties files there
+# spring.profiles.active=git
+# spring.cloud.config.server.git.uri=https://github.com/YOUR_USERNAME/ott-config
+# spring.cloud.config.server.git.default-label=main
+# spring.cloud.config.server.git.clone-on-start=true
+
+management.endpoints.web.exposure.include=health,info
+logging.level.org.springframework.cloud.config=DEBUG</pre>
+  <button class="cb" onclick="cb('configProps')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">4</span><span class="st">Create C:/ott-config/ folder with config files</span></div>
+  <div class="sb">
+  <p>Create folder <code>C:\ott-config\</code> on Windows. Then create these files inside it:</p>
+  <p style="margin-top:8px"><strong>File name = service name</strong> (must match spring.application.name exactly)</p>
+  <pre id="configFiles"># C:\ott-config\catalog-service.properties
+server.port=8081
+spring.datasource.url=jdbc:mysql://localhost:3306/catalog_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+spring.datasource.username=root
+spring.datasource.password=root
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+management.endpoints.web.exposure.include=health,info,metrics,prometheus
+management.metrics.tags.application=catalog-service
+
+---
+# C:\ott-config\subscription-service.properties
+server.port=8082
+spring.datasource.url=jdbc:mysql://localhost:3306/subscription_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+spring.datasource.username=root
+spring.datasource.password=root
+catalog.service.url=http://localhost:8081
+payment.service.url=http://localhost:8084
+campaign.service.url=http://localhost:8085
+notification.service.url=http://localhost:8086
+
+---
+# C:\ott-config\application.properties (shared by ALL services)
+eureka.client.service-url.defaultZone=http://localhost:8761/eureka/
+eureka.instance.prefer-ip-address=true
+management.endpoint.health.show-details=always</pre>
+  <button class="cb" onclick="cb('configFiles')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">5</span><span class="st">Add Config Client to EACH service pom.xml</span></div>
+  <div class="sb">
+  <p>Add to all 6 services (catalog, subscription, gateway, user, payment, campaign, notification):</p>
+  <pre id="configClientDep">&lt;!-- Spring Cloud Config Client - reads properties from config-server --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-config&lt;/artifactId&gt;
+&lt;/dependency&gt;</pre>
+  <button class="cb" onclick="cb('configClientDep')">Copy</button>
+  <p style="margin-top:8px">Add to each service application.properties:</p>
+  <pre id="configClientProp"># Tells service to import config from Config Server
+# optional: means service starts even if Config Server is down
+spring.config.import=optional:configserver:http://localhost:8888</pre>
+  <button class="cb" onclick="cb('configClientProp')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">6</span><span class="st">Startup order with Config Server</span></div>
+  <div class="sb">
+  <pre>Config Server MUST start FIRST (port 8888)
+Then Eureka Server (port 8761)
+Then all microservices (they read config from Config Server on startup)</pre>
+  <p style="margin-top:6px"><strong style="color:#e2e8f0">Test:</strong> Open browser → http://localhost:8888/catalog-service/default → should return catalog-service properties</p>
+  </div></div>
+</div>
+
+<!-- ══════════════ 3. EUREKA ══════════════ -->
+<div id="eureka" class="section">
+  <div class="card cbl">
+    <h3>What Eureka does</h3>
+    <p>Service Registry — every service registers itself with Eureka on startup. Feign clients ask Eureka for service addresses instead of using hardcoded URLs. When you scale catalog-service to 3 instances, all 3 register. Feign automatically load-balances across them.</p>
+  </div>
+
+  <div class="step"><div class="sh"><span class="sn">1</span><span class="st">Create eureka-server project</span></div>
+  <div class="sb">
+<pre>File → New → Spring Starter Project
+Name:    eureka-server
+Group:   com.ott
+Package: com.ott.eureka
+Port:    8761
+
+Dependencies:
+✅ Eureka Server (under Spring Cloud Discovery)
+✅ Spring Boot Actuator
+✅ DevTools</pre>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">2</span><span class="st">EurekaServerApplication.java</span></div>
+  <div class="sb">
+  <pre id="eurekaApp"><span class="kw">package</span> com.ott.eureka;
+<span class="kw">import</span> org.springframework.boot.SpringApplication;
+<span class="kw">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;
+<span class="kw">import</span> org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
+
+<span class="an">@SpringBootApplication</span>
+<span class="an">@EnableEurekaServer</span>
+<span class="kw">public class</span> <span class="cl">EurekaServerApplication</span> {
+    <span class="kw">public static void</span> main(String[] args) {
+        SpringApplication.run(EurekaServerApplication.class, args);
+    }
+}</pre>
+  <button class="cb" onclick="cb('eurekaApp')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">3</span><span class="st">application.properties — eureka-server</span></div>
+  <div class="sb">
+  <pre id="eurekaProps">server.port=8761
+spring.application.name=eureka-server
+
+# Do not register itself as a client
+eureka.client.register-with-eureka=false
+eureka.client.fetch-registry=false
+
+# Dashboard configuration
+eureka.server.wait-time-in-ms-when-sync-empty=0
+
+management.endpoints.web.exposure.include=health,info</pre>
+  <button class="cb" onclick="cb('eurekaProps')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">4</span><span class="st">Add Eureka Client to ALL services — same for every service</span></div>
+  <div class="sb">
+  <p>Add to pom.xml of catalog, subscription, user, payment, campaign, notification, api-gateway:</p>
+  <pre id="eurekaClientDep">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt;
+&lt;/dependency&gt;</pre>
+  <button class="cb" onclick="cb('eurekaClientDep')">Copy</button>
+  <p style="margin-top:8px">Add to each service application.properties:</p>
+  <pre id="eurekaClientProps">eureka.client.service-url.defaultZone=http://localhost:8761/eureka/
+eureka.instance.prefer-ip-address=true</pre>
+  <button class="cb" onclick="cb('eurekaClientProps')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">5</span><span class="st">Update Feign Clients to use service name instead of hardcoded URL</span></div>
+  <div class="sb">
+  <p>Once Eureka is running, update CatalogServiceClient in subscription-service:</p>
+  <pre id="feignEureka"><span class="cm">// BEFORE — hardcoded URL:</span>
+<span class="an">@FeignClient</span>(name = <span class="st">"catalog-service"</span>, url = <span class="st">"${catalog.service.url}"</span>)
+
+<span class="cm">// AFTER — Eureka service discovery (remove the url parameter):</span>
+<span class="an">@FeignClient</span>(name = <span class="st">"catalog-service"</span>)
+<span class="cm">// Feign asks Eureka: "where is catalog-service?" and load-balances automatically</span>
+
+<span class="cm">// Same for PaymentServiceClient:</span>
+<span class="an">@FeignClient</span>(name = <span class="st">"payment-service"</span>)
+
+<span class="cm">// Same for CampaignServiceClient:</span>
+<span class="an">@FeignClient</span>(name = <span class="st">"campaign-service"</span>)</pre>
+  <button class="cb" onclick="cb('feignEureka')">Copy</button>
+  <div class="warn">Remove the hardcoded URL properties (catalog.service.url etc) from application.properties ONLY after Eureka is confirmed working. Test Eureka first with hardcoded URLs, then switch.</div>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">6</span><span class="st">Test Eureka</span></div>
+  <div class="sb">
+  <p>Start eureka-server → start all services → open: <strong>http://localhost:8761</strong></p>
+  <p style="margin-top:6px">You should see all services listed under "Instances currently registered with Eureka":</p>
+  <pre style="color:#9ae6b4">CATALOG-SERVICE          n/a (1)   UP (1) - 192.168.1.x:catalog-service:8081
+SUBSCRIPTION-SERVICE     n/a (1)   UP (1) - 192.168.1.x:subscription-service:8082
+USER-SERVICE             n/a (1)   UP (1) - ...
+PAYMENT-SERVICE          n/a (1)   UP (1) - ...
+CAMPAIGN-SERVICE         n/a (1)   UP (1) - ...
+NOTIFICATION-SERVICE     n/a (1)   UP (1) - ...
+API-GATEWAY              n/a (1)   UP (1) - ...</pre>
+  </div></div>
+</div>
+
+<!-- ══════════════ 4. LOAD BALANCING ══════════════ -->
+<div id="loadbalance" class="section">
+  <div class="card cor">
+    <h3>Two types of load balancing in our system</h3>
+    <p><strong style="color:#e2e8f0">Client-side (Spring Cloud LoadBalancer):</strong> When subscription-service calls catalog-service via Feign and catalog has 3 instances, Spring automatically distributes calls round-robin across all 3.</p>
+    <p style="margin-top:6px"><strong style="color:#e2e8f0">Server-side (AWS ALB):</strong> When ESPN UI hits the API Gateway and there are 2 gateway instances, ALB distributes incoming HTTP traffic between them.</p>
+  </div>
+
+  <div class="step"><div class="sh"><span class="sn">1</span><span class="st">Add Spring Cloud LoadBalancer to subscription-service pom.xml</span></div>
+  <div class="sb">
+  <pre id="lbDep">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-cloud-starter-loadbalancer&lt;/artifactId&gt;
+&lt;/dependency&gt;</pre>
+  <button class="cb" onclick="cb('lbDep')">Copy</button>
+  <p style="margin-top:8px">Add to application.properties:</p>
+  <pre id="lbProps"># Use Spring Cloud LoadBalancer (not old Netflix Ribbon)
+spring.cloud.loadbalancer.ribbon.enabled=false</pre>
+  <button class="cb" onclick="cb('lbProps')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">2</span><span class="st">Test load balancing locally — run 2 catalog instances</span></div>
+  <div class="sb">
+  <p>In STS, run catalog-service normally (port 8081). Then open Command Prompt to run a second instance:</p>
+  <pre id="lb2">REM Build JAR first in STS: right-click catalog-service → Run As → Maven build → clean package -DskipTests
+
+REM Open Command Prompt → navigate to catalog-service\target folder
+cd C:\workspace\catalog-service\target
+
+REM Run second instance on port 8091
+java -jar -Dserver.port=8091 catalog-service-1.0.0.jar</pre>
+  <button class="cb" onclick="cb('lb2')">Copy</button>
+  <div class="info" style="margin-top:8px">Eureka dashboard (http://localhost:8761) will show 2 instances of catalog-service. Feign calls from subscription-service will alternate between them.</div>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">3</span><span class="st">Verify load balancing — add logging to CatalogController</span></div>
+  <div class="sb">
+  <p>Add this log to CatalogController.getAllPlans() in catalog-service:</p>
+  <pre id="lbLog"><span class="cm">// Add to CatalogController.java — getAllPlans() method</span>
+<span class="an">@GetMapping</span>(<span class="st">"/plans"</span>)
+<span class="kw">public</span> ResponseEntity&lt;?&gt; getAllPlans() {
+    log.info(<span class="st">"Request handled by catalog-service instance on port: {}"</span>,
+        environment.getProperty(<span class="st">"local.server.port"</span>)); <span class="cm">// inject Environment</span>
+    <span class="kw">return</span> ResponseEntity.ok(catalogService.getAllActivePlans());
+}</pre>
+  <button class="cb" onclick="cb('lbLog')">Copy</button>
+  <p style="margin-top:8px">Fire 6 requests to GET /catalog/plans → check STS console of both instances → each should handle ~3 requests.</p>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">4</span><span class="st">PowerShell script — test load balancing locally</span></div>
+  <div class="sb">
+  <pre id="lbTest">$token = "YOUR_JWT_TOKEN_HERE"
+$headers = @{"Authorization" = "Bearer $token"}
+
+Write-Host "Firing 10 requests — watch both catalog-service consoles"
+for ($i = 1; $i -le 10; $i++) {
+    $r = Invoke-WebRequest -Uri "http://localhost:8080/catalog/plans" -Headers $headers
+    Write-Host "Request $i → $($r.StatusCode)"
+    Start-Sleep -Milliseconds 200
+}
+Write-Host "Done — check STS console of both catalog instances"</pre>
+  <button class="cb" onclick="cb('lbTest')">Copy</button>
+  </div></div>
+</div>
+
+<!-- ══════════════ 5. AWS DEPLOYMENT ══════════════ -->
+<div id="aws" class="section">
+  <div class="card cgr">
+    <h3>Free tier plan — what you CAN deploy without spending money</h3>
+    <p>t2.micro EC2: 750 hours/month free | RDS t2.micro: 750 hours/month free | ECR: 500MB free | S3: 5GB free</p>
+    <div class="warn" style="margin-top:8px">⚠️ With t2.micro (1 CPU, 1GB RAM), you can run a maximum of 2-3 Spring Boot services. Running all 7 simultaneously will cause OOM errors. Run catalog + subscription + gateway for demo.</div>
+  </div>
+
+  <div class="step"><div class="sh"><span class="sn">1</span><span class="st">Build all JARs — STS Maven build</span></div>
+  <div class="sb">
+  <p>In STS for each service: right-click → Run As → Maven build → Goals: <code>clean package -DskipTests</code></p>
+  <p style="margin-top:6px">Verify in Windows Explorer each service has target/servicename-1.0.0.jar</p>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">2</span><span class="st">Create Dockerfile for each service (Windows)</span></div>
+  <div class="sb">
+  <p>Open Notepad → paste → Save As → navigate to each service folder → filename: Dockerfile (no extension) → Save as type: All Files</p>
+  <pre id="dockerfile"># Same Dockerfile template for ALL services
+# Change COPY and EXPOSE per service
+
+# catalog-service Dockerfile
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+COPY target/catalog-service-1.0.0.jar app.jar
+EXPOSE 8081
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","app.jar"]
+
+# subscription-service Dockerfile
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+COPY target/subscription-service-1.0.0.jar app.jar
+EXPOSE 8082
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","app.jar"]
+
+# api-gateway Dockerfile
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+COPY target/api-gateway-1.0.0.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","app.jar"]</pre>
+  <button class="cb" onclick="cb('dockerfile')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">3</span><span class="st">Push images to AWS ECR — Windows Command Prompt</span></div>
+  <div class="sb">
+  <pre id="ecrCmds">REM Step 1: Get your account ID
+aws sts get-caller-identity --query Account --output text
+
+REM Step 2: Login to ECR (replace YOUR_ACCOUNT_ID)
+aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com
+
+REM Step 3: Create ECR repositories
+aws ecr create-repository --repository-name ott/catalog-service --region ap-south-1
+aws ecr create-repository --repository-name ott/subscription-service --region ap-south-1
+aws ecr create-repository --repository-name ott/api-gateway --region ap-south-1
+
+REM Step 4: Build Docker images (run from ott-platform folder)
+docker build -t ott/catalog-service ./catalog-service
+docker build -t ott/subscription-service ./subscription-service
+docker build -t ott/api-gateway ./api-gateway
+
+REM Step 5: Tag for ECR
+docker tag ott/catalog-service:latest YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ott/catalog-service:latest
+docker tag ott/subscription-service:latest YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ott/subscription-service:latest
+docker tag ott/api-gateway:latest YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ott/api-gateway:latest
+
+REM Step 6: Push to ECR
+docker push YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ott/catalog-service:latest
+docker push YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ott/subscription-service:latest
+docker push YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ott/api-gateway:latest</pre>
+  <button class="cb" onclick="cb('ecrCmds')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">4</span><span class="st">Launch EC2 t2.micro and deploy</span></div>
+  <div class="sb">
+  <pre>AWS Console → EC2 → Launch Instance:
+  Name: ott-platform-server
+  AMI: Amazon Linux 2023 (free tier)
+  Type: t2.micro
+  Key pair: Create new → ott-key → download .pem
+  Security group: SSH:22 + TCP:8080 + TCP:8081 + TCP:8082
+  Storage: 20GB
+
+After launch — connect (Windows Command Prompt):
+  icacls ott-key.pem /inheritance:r
+  icacls ott-key.pem /grant:r "%USERNAME%:R"
+  ssh -i ott-key.pem ec2-user@YOUR_EC2_IP</pre>
+
+  <p style="margin-top:8px">Inside EC2 (Linux commands):</p>
+  <pre id="ec2Deploy"># Install Docker on EC2
+sudo dnf update -y
+sudo dnf install docker -y
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo usermod -a -G docker ec2-user
+
+# Install docker-compose
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+# Logout and reconnect (for group change)
+exit
+ssh -i ott-key.pem ec2-user@YOUR_EC2_IP
+
+# Login to ECR from EC2
+aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com
+
+# Create docker-compose for AWS
+mkdir ott && cd ott
+nano docker-compose.yml
+# (paste the AWS docker-compose content below)</pre>
+  <button class="cb" onclick="cb('ec2Deploy')">Copy</button>
+
+  <pre id="awsCompose">version: '3.8'
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: ott-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: catalog_db
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - ott-network
+    healthcheck:
+      test: ["CMD","mysqladmin","ping","-h","localhost","-uroot","-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: ott-redis
+    networks:
+      - ott-network
+
+  catalog-service:
+    image: YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ott/catalog-service:latest
+    container_name: ott-catalog
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/catalog_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - ott-network
+
+  subscription-service:
+    image: YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ott/subscription-service:latest
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/subscription_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      CATALOG_SERVICE_URL: http://catalog-service:8081
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - ott-network
+
+  api-gateway:
+    image: YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/ott/api-gateway:latest
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATA_REDIS_HOST: redis
+    depends_on:
+      - redis
+      - catalog-service
+    networks:
+      - ott-network
+
+networks:
+  ott-network:
+    driver: bridge
+volumes:
+  mysql_data:</pre>
+  <button class="cb" onclick="cb('awsCompose')">Copy</button>
+  <pre># nano: Ctrl+O to save, Enter, Ctrl+X to exit
+docker-compose up -d
+docker-compose ps
+# Test: curl http://localhost:8080/actuator/health</pre>
+  </div></div>
+</div>
+
+<!-- ══════════════ 6. JENKINS ══════════════ -->
+<div id="jenkins" class="section">
+  <div class="card cpr">
+    <h3>CI/CD Pipeline — GitHub → Jenkins → ECR → EC2</h3>
+    <p>Every time you push code to GitHub, Jenkins automatically builds, tests, packages Docker images, pushes to ECR, and deploys to EC2. This is what Disney/Netflix use for every code change.</p>
+  </div>
+
+  <div class="step"><div class="sh"><span class="sn">1</span><span class="st">Push your code to GitHub</span></div>
+  <div class="sb">
+<pre>1. Create GitHub account at github.com
+2. Create new repository: "ott-platform" (private)
+3. In each service folder — open Command Prompt:
+   cd C:\workspace\catalog-service
+   git init
+   git add .
+   git commit -m "Initial commit - catalog-service"
+   git remote add origin https://github.com/YOUR_USERNAME/ott-platform.git
+   git push -u origin main</pre>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">2</span><span class="st">Install Jenkins on EC2</span></div>
+  <div class="sb">
+  <pre id="jenkinsInstall"># SSH into EC2, then run:
+sudo dnf install java-21-amazon-corretto -y
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+sudo dnf install jenkins -y
+sudo systemctl start jenkins
+sudo systemctl enable jenkins
+
+# Get initial admin password
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword</pre>
+  <button class="cb" onclick="cb('jenkinsInstall')">Copy</button>
+  <p style="margin-top:8px">Open browser: http://YOUR_EC2_IP:8080/jenkins → paste password → install suggested plugins → create admin user</p>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">3</span><span class="st">Jenkinsfile — complete pipeline</span></div>
+  <div class="sb">
+  <div class="fh"><span class="fn">Jenkinsfile</span><span class="fa fnew">NEW FILE</span><span class="fp">ott-platform/ (root of GitHub repo)</span></div>
+  <pre id="jenkinsfile">pipeline {
+    agent any
+
+    environment {
+        AWS_REGION = 'ap-south-1'
+        ECR_REGISTRY = 'YOUR_ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com'
+        EC2_IP = 'YOUR_EC2_IP'
+        IMAGE_TAG = "${BUILD_NUMBER}"
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/YOUR_USERNAME/ott-platform.git'
+                echo "Code checked out - Build ${BUILD_NUMBER}"
+            }
+        }
+
+        stage('Build JARs') {
+            steps {
+                dir('catalog-service') { sh 'mvn clean package -DskipTests' }
+                dir('subscription-service') { sh 'mvn clean package -DskipTests' }
+                dir('api-gateway') { sh 'mvn clean package -DskipTests' }
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                dir('catalog-service') { sh 'mvn test' }
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                sh "docker build -t ${ECR_REGISTRY}/ott/catalog-service:${IMAGE_TAG} ./catalog-service"
+                sh "docker build -t ${ECR_REGISTRY}/ott/subscription-service:${IMAGE_TAG} ./subscription-service"
+                sh "docker build -t ${ECR_REGISTRY}/ott/api-gateway:${IMAGE_TAG} ./api-gateway"
+            }
+        }
+
+        stage('Push to ECR') {
+            steps {
+                sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}"
+                sh "docker push ${ECR_REGISTRY}/ott/catalog-service:${IMAGE_TAG}"
+                sh "docker push ${ECR_REGISTRY}/ott/subscription-service:${IMAGE_TAG}"
+                sh "docker push ${ECR_REGISTRY}/ott/api-gateway:${IMAGE_TAG}"
+            }
+        }
+
+        stage('Deploy to EC2') {
+            steps {
+                sh """
+                    ssh -i ~/.ssh/ott-key.pem -o StrictHostKeyChecking=no ec2-user@${EC2_IP} '
+                        cd ~/ott &&
+                        docker-compose pull &&
+                        docker-compose up -d --no-build
+                    '
+                """
+            }
+        }
+    }
+
+    post {
+        success { echo "Pipeline SUCCESS - Build ${BUILD_NUMBER} deployed!" }
+        failure { echo "Pipeline FAILED - Check logs above" }
+    }
+}</pre>
+  <button class="cb" onclick="cb('jenkinsfile')">Copy</button>
+  </div></div>
+</div>
+
+<!-- ══════════════ 7. EXISTING SERVICE CHANGES ══════════════ -->
+<div id="existing" class="section">
+  <div class="card crd">
+    <h3>Changes needed in existing services after building new services</h3>
+  </div>
+
+  <h2>api-gateway changes</h2>
+
+  <div class="step"><div class="sh"><span class="sn">1</span><span class="st">JwtAuthFilter.java — update PUBLIC_PATHS</span></div>
+  <div class="sb">
+  <div class="fh"><span class="fn">JwtAuthFilter.java</span><span class="fa fmod">MODIFY</span><span class="fp">com.ott.gateway.filter</span></div>
+  <pre id="gwJwtChange"><span class="cm">// FIND this section and REPLACE with:</span>
+<span class="kw">private static final</span> List&lt;String&gt; PUBLIC_PATHS = List.of(
+    <span class="st">"/auth/login"</span>,       <span class="cm">// user-service login — no token to login!</span>
+    <span class="st">"/auth/register"</span>,    <span class="cm">// user-service register — no token to register!</span>
+    <span class="st">"/auth/refresh"</span>,     <span class="cm">// token refresh</span>
+    <span class="st">"/actuator"</span>,         <span class="cm">// health checks — monitoring tools call without token</span>
+    <span class="st">"/campaigns/active"</span> <span class="cm">// public offers page — visitors see before login</span>
+);</pre>
+  <button class="cb" onclick="cb('gwJwtChange')">Copy</button>
+  <div class="warn">REMOVE "/auth/token" from PUBLIC_PATHS — that was the temporary Gateway auth endpoint. Now user-service handles auth, use "/auth/login" instead.</div>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">2</span><span class="st">Delete AuthController.java from api-gateway</span></div>
+  <div class="sb">
+  <p>Right-click <code>com.ott.gateway.controller.AuthController.java</code> → Delete → OK</p>
+  <p style="margin-top:6px">This was temporary. user-service is now the real authentication provider.</p>
+  <div class="success">API Gateway now has NO REST controllers — it's purely a routing/filtering layer. This is the correct architecture.</div>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">3</span><span class="st">application.properties — remove old auth route, update to user-service</span></div>
+  <div class="sb">
+  <pre id="gwPropsChange"><span class="cm"># Route 0 — CHANGE uri from localhost:8080 to user-service port 8083</span>
+<span class="del">spring.cloud.gateway.server.webflux.routes[0].uri=http://localhost:8080</span>
+<span class="add">spring.cloud.gateway.server.webflux.routes[0].uri=http://localhost:8083</span>
+
+<span class="cm"># Route 0 predicates — add notification route</span>
+<span class="add">spring.cloud.gateway.server.webflux.routes[7].id=notification-service
+spring.cloud.gateway.server.webflux.routes[7].uri=http://localhost:8086
+spring.cloud.gateway.server.webflux.routes[7].predicates[0]=Path=/notifications/**</span></pre>
+  <button class="cb" onclick="cb('gwPropsChange')">Copy</button>
+  </div></div>
+
+  <h2>subscription-service changes</h2>
+
+  <div class="step"><div class="sh"><span class="sn">4</span><span class="st">Add PaymentServiceClient and CampaignServiceClient Feign clients</span></div>
+  <div class="sb">
+  <div class="fh"><span class="fn">PaymentServiceClient.java</span><span class="fa fnew">NEW</span><span class="fp">com.ott.subscription.client</span></div>
+  <pre id="subPayFeign"><span class="kw">package</span> com.ott.subscription.client;
+<span class="kw">import</span> org.springframework.cloud.openfeign.FeignClient;
+<span class="kw">import</span> org.springframework.web.bind.annotation.*;
+<span class="kw">import</span> java.util.Map;
+
+<span class="cm">/**
+ * Feign Client to call payment-service.
+ * subscription-service calls this to process payment during subscribe flow.
+ */</span>
+<span class="an">@FeignClient</span>(name = <span class="st">"payment-service"</span>, url = <span class="st">"${payment.service.url}"</span>)
+<span class="kw">public interface</span> <span class="cl">PaymentServiceClient</span> {
+    <span class="an">@PostMapping</span>(<span class="st">"/payments/process"</span>)
+    Map&lt;String, Object&gt; processPayment(<span class="an">@RequestBody</span> Map&lt;String, Object&gt; request);
+}</pre>
+  <button class="cb" onclick="cb('subPayFeign')">Copy</button>
+
+  <div class="fh" style="margin-top:10px"><span class="fn">CampaignServiceClient.java</span><span class="fa fnew">NEW</span><span class="fp">com.ott.subscription.client</span></div>
+  <pre id="subCampFeign"><span class="kw">package</span> com.ott.subscription.client;
+<span class="kw">import</span> org.springframework.cloud.openfeign.FeignClient;
+<span class="kw">import</span> org.springframework.web.bind.annotation.*;
+<span class="kw">import</span> java.util.*;
+
+<span class="an">@FeignClient</span>(name = <span class="st">"campaign-service"</span>, url = <span class="st">"${campaign.service.url}"</span>)
+<span class="kw">public interface</span> <span class="cl">CampaignServiceClient</span> {
+    <span class="an">@GetMapping</span>(<span class="st">"/campaigns/plan/{planId}"</span>)
+    List&lt;Map&lt;String,Object&gt;&gt; getCampaignsForPlan(<span class="an">@PathVariable</span>(<span class="st">"planId"</span>) String planId);
+
+    <span class="an">@PostMapping</span>(<span class="st">"/campaigns/apply"</span>)
+    Map&lt;String, Object&gt; applyPromoCode(<span class="an">@RequestBody</span> Map&lt;String, Object&gt; request);
+}</pre>
+  <button class="cb" onclick="cb('subCampFeign')">Copy</button>
+  <p style="margin-top:8px">Add to subscription-service application.properties:</p>
+  <pre id="subNewProps">payment.service.url=http://localhost:8084
+campaign.service.url=http://localhost:8085
+notification.service.url=http://localhost:8086</pre>
+  <button class="cb" onclick="cb('subNewProps')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">5</span><span class="st">NotificationServiceClient.java — fallback when Kafka not available</span></div>
+  <div class="sb">
+  <pre id="subNotifFeign"><span class="kw">package</span> com.ott.subscription.client;
+<span class="kw">import</span> org.springframework.cloud.openfeign.FeignClient;
+<span class="kw">import</span> org.springframework.web.bind.annotation.*;
+<span class="kw">import</span> java.util.Map;
+
+<span class="cm">/**
+ * Fallback: subscription-service calls notification-service directly via REST
+ * when Kafka is not yet configured.
+ * Once Kafka is configured: delete this and use Kafka producer instead.
+ */</span>
+<span class="an">@FeignClient</span>(name = <span class="st">"notification-service"</span>, url = <span class="st">"${notification.service.url}"</span>)
+<span class="kw">public interface</span> <span class="cl">NotificationServiceClient</span> {
+    <span class="an">@PostMapping</span>(<span class="st">"/notifications/send"</span>)
+    String sendNotification(<span class="an">@RequestBody</span> Map&lt;String, Object&gt; event);
+}</pre>
+  <button class="cb" onclick="cb('subNotifFeign')">Copy</button>
+  </div></div>
+</div>
+
+<!-- ══════════════ 8. USER TABLE FIX ══════════════ -->
+<div id="userfix" class="section">
+  <div class="card cor">
+    <h3>The Problem</h3>
+    <p>subscription-service has a users table in subscription_db. user-service has a users table in user_db. Two tables = data duplication = validation inconsistencies.</p>
+    <p style="margin-top:6px"><strong style="color:#e2e8f0">Root cause:</strong> subscription-service was built first without user-service. It needed user records to create subscriptions, so it created its own users table temporarily.</p>
+  </div>
+
+  <div class="card cgr" style="margin-top:0">
+    <h3>The Solution</h3>
+    <p><strong style="color:#e2e8f0">Database-per-service principle:</strong> user_db is the single source of truth for user data. subscription_db stores only userId (as a plain column, not FK) as a reference. All user validation happens by calling user-service via Feign.</p>
+    <p style="margin-top:6px"><strong style="color:#e2e8f0">What stays:</strong> subscriptions table keeps userId column. Users table in subscription_db can be removed.</p>
+    <p><strong style="color:#e2e8f0">What changes:</strong> SubscriptionService no longer looks up users in subscription_db — it calls user-service via Feign to validate user exists.</p>
+  </div>
+
+  <div class="step"><div class="sh"><span class="sn">1</span><span class="st">Add UserServiceClient Feign to subscription-service</span></div>
+  <div class="sb">
+  <div class="fh"><span class="fn">UserServiceClient.java</span><span class="fa fnew">NEW</span><span class="fp">com.ott.subscription.client</span></div>
+  <pre id="userClient"><span class="kw">package</span> com.ott.subscription.client;
+<span class="kw">import</span> org.springframework.cloud.openfeign.FeignClient;
+<span class="kw">import</span> org.springframework.web.bind.annotation.*;
+<span class="kw">import</span> java.util.Map;
+
+<span class="cm">/**
+ * PURPOSE: Validates user existence by calling user-service.
+ * Replaces local UserRepository in subscription-service.
+ *
+ * When subscription-service receives a subscribe request with userId=5,
+ * instead of querying its own local users table, it calls
+ * user-service to confirm user 5 exists and is active.
+ *
+ * This is the correct microservices approach — user-service owns user data.
+ */</span>
+<span class="an">@FeignClient</span>(name = <span class="st">"user-service"</span>, url = <span class="st">"${user.service.url}"</span>)
+<span class="kw">public interface</span> <span class="cl">UserServiceClient</span> {
+
+    <span class="cm">/** Check if user exists and is active before creating subscription */</span>
+    <span class="an">@GetMapping</span>(<span class="st">"/auth/me/{userId}"</span>)
+    Map&lt;String, Object&gt; getUserById(<span class="an">@PathVariable</span>(<span class="st">"userId"</span>) Long userId);
+}</pre>
+  <button class="cb" onclick="cb('userClient')">Copy</button>
+  <p style="margin-top:8px">Add to subscription-service application.properties:</p>
+  <pre id="userUrl">user.service.url=http://localhost:8083</pre>
+  <button class="cb" onclick="cb('userUrl')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">2</span><span class="st">Update SubscriptionService.java — replace UserRepository with UserServiceClient</span></div>
+  <div class="sb">
+  <p>Find the subscribe() method in SubscriptionService.java and make this change:</p>
+  <pre id="subUserChange"><span class="cm">// BEFORE — queried local user table:</span>
+<span class="del">User user = userRepository.findById(request.getUserId())
+    .orElseThrow(() -> new UserNotFoundException(request.getUserId()));</span>
+
+<span class="cm">// AFTER — calls user-service via Feign:</span>
+<span class="add">Map&lt;String, Object&gt; userInfo;
+try {
+    userInfo = userServiceClient.getUserById(request.getUserId());
+} catch (Exception e) {
+    throw new RuntimeException("User not found with id: " + request.getUserId());
+}
+String username = (String) userInfo.get("username");
+String email = (String) userInfo.get("email");</span>
+
+<span class="cm">// Then use username and email in buildResponse() instead of user.getUsername()</span></pre>
+  <button class="cb" onclick="cb('subUserChange')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">3</span><span class="st">Keep or remove User table in subscription_db?</span></div>
+  <div class="sb">
+  <div class="info">
+    <strong>Recommendation: Keep the users table in subscription_db for now but stop using it for validation.</strong><br><br>
+    Why: You have seed data there (john.doe, jane.smith). Existing subscriptions reference those user IDs. If you drop the table, you'll lose foreign key references and may need to re-run SQL scripts.<br><br>
+    What to do:<br>
+    1. Keep the table in subscription_db<br>
+    2. Stop creating new users in subscription_db (remove registerUser() from SubscriptionService)<br>
+    3. Remove UserController.java from subscription-service (user registration now in user-service)<br>
+    4. For validation: call user-service Feign client instead of local UserRepository
+  </div>
+  <pre id="userTableSQL">-- In subscription_db — add constraint comment for clarity
+-- Table is kept for backward compatibility only
+-- New user creation: use user-service (port 8083)
+-- Validation: call user-service via Feign, not this table
+ALTER TABLE users COMMENT = 'Legacy table - kept for existing data. Use user-service for new users.';</pre>
+  <button class="cb" onclick="cb('userTableSQL')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">4</span><span class="st">Remove UserController.java from subscription-service</span></div>
+  <div class="sb">
+  <p>In STS: right-click <code>com.ott.subscription.controller.UserController.java</code> → Delete → OK</p>
+  <p style="margin-top:6px">User registration and login are now exclusively handled by <strong>user-service:8083</strong>.</p>
+  <p style="margin-top:6px">Update SubscriptionController.java — remove the registerUser() method if it calls SubscriptionService.registerUser().</p>
+  </div></div>
+</div>
+
+<!-- ══════════════ 9. REPORT SERVICE ══════════════ -->
+<div id="reports" class="section">
+  <div class="card cyl">
+    <h3>Background Report Service — Based on your Disney experience</h3>
+    <p>At your previous company, a scheduled job ran at ~5pm IST (before US team started) to generate operational reports: payment dues, subscription renewals, failure summaries. This is a standard pattern in OTT platforms. We'll implement this as a Spring Boot scheduled service.</p>
+  </div>
+
+  <div class="step"><div class="sh"><span class="sn">1</span><span class="st">Create report-service project</span></div>
+  <div class="sb">
+<pre>File → New → Spring Starter Project
+Name:    report-service
+Group:   com.ott
+Package: com.ott.report
+Port:    8087
+
+Dependencies:
+✅ Spring Web
+✅ Spring Data JPA
+✅ MySQL Driver
+✅ Spring Boot Actuator
+✅ Spring Boot Scheduler (no extra dep — built into Spring Boot)
+✅ DevTools</pre>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">2</span><span class="st">application.properties</span></div>
+  <div class="sb">
+  <pre id="reportProps">server.port=8087
+spring.application.name=report-service
+
+# Report service reads from ALL databases (read-only access)
+# subscription_db — for subscription data
+spring.datasource.url=jdbc:mysql://localhost:3306/subscription_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+spring.datasource.username=root
+spring.datasource.password=root
+
+# Scheduler timezone — reports run at 5pm IST (11:30 UTC)
+spring.task.scheduling.timezone=Asia/Kolkata
+
+management.endpoints.web.exposure.include=health,info
+logging.level.com.ott.report=INFO</pre>
+  <button class="cb" onclick="cb('reportProps')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">3</span><span class="st">ReportServiceApplication.java</span></div>
+  <div class="sb">
+  <pre id="reportMain"><span class="kw">package</span> com.ott.report;
+<span class="kw">import</span> org.springframework.boot.SpringApplication;
+<span class="kw">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;
+<span class="kw">import</span> org.springframework.scheduling.annotation.EnableScheduling;
+
+<span class="cm">/**
+ * @EnableScheduling — activates @Scheduled annotations.
+ * Without this, scheduled jobs are never executed.
+ */</span>
+<span class="an">@SpringBootApplication</span>
+<span class="an">@EnableScheduling</span>
+<span class="kw">public class</span> <span class="cl">ReportServiceApplication</span> {
+    <span class="kw">public static void</span> main(String[] args) {
+        SpringApplication.run(ReportServiceApplication.class, args);
+    }
+}</pre>
+  <button class="cb" onclick="cb('reportMain')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">4</span><span class="st">ReportScheduler.java — all scheduled jobs</span></div>
+  <div class="sb">
+  <div class="fh"><span class="fn">ReportScheduler.java</span><span class="fa fnew">NEW</span><span class="fp">com.ott.report.scheduler</span></div>
+  <pre id="reportScheduler"><span class="kw">package</span> com.ott.report.scheduler;
+<span class="kw">import</span> com.ott.report.service.ReportService;
+<span class="kw">import</span> org.slf4j.*;
+<span class="kw">import</span> org.springframework.scheduling.annotation.Scheduled;
+<span class="kw">import</span> org.springframework.stereotype.Component;
+
+<span class="cm">/**
+ * PURPOSE: All scheduled report jobs.
+ *
+ * CRON FORMAT: second minute hour day month weekday
+ *
+ * DISNEY CONTEXT: These jobs were running at Tavant for the Disney/ESPN project:
+ * - 5pm IST = when US East Coast team starts (they're 10.5 hrs behind IST)
+ * - Reports generated before their standup at 9:30am EST
+ *
+ * HOW TO TRIGGER MANUALLY: POST /reports/trigger/{reportType}
+ */</span>
+<span class="an">@Component</span>
+<span class="kw">public class</span> <span class="cl">ReportScheduler</span> {
+
+    <span class="kw">private static final</span> Logger log = LoggerFactory.getLogger(ReportScheduler.class);
+    <span class="kw">private final</span> ReportService reportService;
+
+    <span class="kw">public</span> ReportScheduler(ReportService s) { reportService = s; }
+
+    <span class="cm">/**
+     * Payment Dues Report — every day at 5pm IST
+     * Finds subscriptions with pending payments
+     * Disney use: Track users who failed payment for follow-up
+     */</span>
+    <span class="an">@Scheduled</span>(cron = <span class="st">"0 0 17 * * *"</span>, zone = <span class="st">"Asia/Kolkata"</span>)
+    <span class="kw">public void</span> generatePaymentDuesReport() {
+        log.info(<span class="st">"=== SCHEDULED: Payment Dues Report starting at 5pm IST ==="</span>);
+        reportService.generatePaymentDuesReport();
+    }
+
+    <span class="cm">/**
+     * Subscription Expiry Report — every day at 5pm IST
+     * Finds subscriptions expiring in next 7 days
+     * Disney use: Identify users to target for renewal campaigns
+     */</span>
+    <span class="an">@Scheduled</span>(cron = <span class="st">"0 5 17 * * *"</span>, zone = <span class="st">"Asia/Kolkata"</span>)
+    <span class="kw">public void</span> generateExpiryReport() {
+        log.info(<span class="st">"=== SCHEDULED: Subscription Expiry Report ==="</span>);
+        reportService.generateExpiryReport();
+    }
+
+    <span class="cm">/**
+     * Daily Payment Summary — every day at 5:10pm IST
+     * Total revenue, success rate, failure count
+     * Disney use: Business KPI dashboard
+     */</span>
+    <span class="an">@Scheduled</span>(cron = <span class="st">"0 10 17 * * *"</span>, zone = <span class="st">"Asia/Kolkata"</span>)
+    <span class="kw">public void</span> generateDailySummary() {
+        log.info(<span class="st">"=== SCHEDULED: Daily Payment Summary ==="</span>);
+        reportService.generateDailySummary();
+    }
+
+    <span class="cm">/**
+     * Weekly Subscription Growth Report — every Monday 5pm IST
+     * New subscriptions, cancellations, net growth
+     */</span>
+    <span class="an">@Scheduled</span>(cron = <span class="st">"0 15 17 * * MON"</span>, zone = <span class="st">"Asia/Kolkata"</span>)
+    <span class="kw">public void</span> generateWeeklyGrowthReport() {
+        log.info(<span class="st">"=== SCHEDULED: Weekly Subscription Growth Report ==="</span>);
+        reportService.generateWeeklyGrowthReport();
+    }
+}</pre>
+  <button class="cb" onclick="cb('reportScheduler')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">5</span><span class="st">ReportService.java — all report logic with SQL queries</span></div>
+  <div class="sb">
+  <pre id="reportSvc"><span class="kw">package</span> com.ott.report.service;
+<span class="kw">import</span> org.slf4j.*;
+<span class="kw">import</span> org.springframework.jdbc.core.JdbcTemplate;
+<span class="kw">import</span> org.springframework.stereotype.Service;
+<span class="kw">import</span> java.time.LocalDate;
+<span class="kw">import</span> java.util.List;
+<span class="kw">import</span> java.util.Map;
+
+<span class="cm">/**
+ * PURPOSE: Queries all databases and generates operational reports.
+ * Uses JdbcTemplate for direct SQL (no JPA entities needed for reports).
+ *
+ * DISNEY CONTEXT: These exact reports were generated at Tavant:
+ * 1. Payment dues — outstanding payment failures
+ * 2. Expiry alerts — subscriptions ending soon
+ * 3. Daily revenue summary — total collections
+ * 4. Renewal pipeline — upcoming renewals
+ */</span>
+<span class="an">@Service</span>
+<span class="kw">public class</span> <span class="cl">ReportService</span> {
+
+    <span class="kw">private static final</span> Logger log = LoggerFactory.getLogger(ReportService.class);
+    <span class="kw">private final</span> JdbcTemplate jdbc;
+    <span class="kw">public</span> ReportService(JdbcTemplate j) { jdbc = j; }
+
+    <span class="cm">/** Report 1: Users with failed payments in last 7 days */</span>
+    <span class="kw">public void</span> generatePaymentDuesReport() {
+        String sql = <span class="st">"""
+            SELECT p.user_id, p.plan_id, p.amount, p.failure_reason, p.created_at
+            FROM payment_db.payments p
+            WHERE p.status = 'FAILED'
+            AND p.created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+            ORDER BY p.created_at DESC
+            """</span>;
+        <span class="kw">try</span> {
+            List&lt;Map&lt;String, Object&gt;&gt; results = jdbc.queryForList(sql);
+            log.info(<span class="st">"=== PAYMENT DUES REPORT ==="</span>);
+            log.info(<span class="st">"Failed payments in last 7 days: {}"</span>, results.size());
+            results.forEach(row ->
+                log.info(<span class="st">"  User:{} Plan:{} Amount:{} Reason:{} Date:{}"</span>,
+                    row.get(<span class="st">"user_id"</span>), row.get(<span class="st">"plan_id"</span>),
+                    row.get(<span class="st">"amount"</span>), row.get(<span class="st">"failure_reason"</span>), row.get(<span class="st">"created_at"</span>)));
+            log.info(<span class="st">"==========================="</span>);
+        } <span class="kw">catch</span> (Exception e) {
+            log.error(<span class="st">"Payment dues report failed: {}"</span>, e.getMessage());
+        }
+    }
+
+    <span class="cm">/** Report 2: Subscriptions expiring in next 7 days */</span>
+    <span class="kw">public void</span> generateExpiryReport() {
+        String sql = <span class="st">"""
+            SELECT s.subscription_id, s.user_id, s.plan_id, s.end_date, s.auto_renewal
+            FROM subscription_db.subscriptions s
+            WHERE s.status = 'ACTIVE'
+            AND s.end_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY)
+            ORDER BY s.end_date ASC
+            """</span>;
+        <span class="kw">try</span> {
+            List&lt;Map&lt;String, Object&gt;&gt; results = jdbc.queryForList(sql);
+            log.info(<span class="st">"=== SUBSCRIPTION EXPIRY REPORT (Next 7 Days) ==="</span>);
+            log.info(<span class="st">"Expiring subscriptions: {}"</span>, results.size());
+            results.forEach(row ->
+                log.info(<span class="st">"  SubId:{} User:{} Plan:{} Expires:{} AutoRenew:{}"</span>,
+                    row.get(<span class="st">"subscription_id"</span>), row.get(<span class="st">"user_id"</span>),
+                    row.get(<span class="st">"plan_id"</span>), row.get(<span class="st">"end_date"</span>), row.get(<span class="st">"auto_renewal"</span>)));
+            log.info(<span class="st">"================================================"</span>);
+        } <span class="kw">catch</span> (Exception e) {
+            log.error(<span class="st">"Expiry report failed: {}"</span>, e.getMessage());
+        }
+    }
+
+    <span class="cm">/** Report 3: Today's payment summary */</span>
+    <span class="kw">public void</span> generateDailySummary() {
+        String sql = <span class="st">"""
+            SELECT
+                status,
+                COUNT(*) as count,
+                SUM(amount) as total_amount
+            FROM payment_db.payments
+            WHERE DATE(created_at) = CURDATE()
+            GROUP BY status
+            """</span>;
+        <span class="kw">try</span> {
+            List&lt;Map&lt;String, Object&gt;&gt; results = jdbc.queryForList(sql);
+            log.info(<span class="st">"=== DAILY PAYMENT SUMMARY ({}) ==="</span>, LocalDate.now());
+            results.forEach(row ->
+                log.info(<span class="st">"  Status:{} Count:{} Total:₹{}"</span>,
+                    row.get(<span class="st">"status"</span>), row.get(<span class="st">"count"</span>), row.get(<span class="st">"total_amount"</span>)));
+            log.info(<span class="st">"=================================="</span>);
+        } <span class="kw">catch</span> (Exception e) {
+            log.error(<span class="st">"Daily summary failed: {}"</span>, e.getMessage());
+        }
+    }
+
+    <span class="cm">/** Report 4: Weekly subscription growth */</span>
+    <span class="kw">public void</span> generateWeeklyGrowthReport() {
+        String newSubsSql = <span class="st">"SELECT COUNT(*) FROM subscription_db.subscriptions WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY) AND status='ACTIVE'"</span>;
+        String cancelledSql = <span class="st">"SELECT COUNT(*) FROM subscription_db.subscriptions WHERE updated_at >= DATE_SUB(NOW(), INTERVAL 7 DAY) AND status='CANCELLED'"</span>;
+        <span class="kw">try</span> {
+            Integer newSubs = jdbc.queryForObject(newSubsSql, Integer.class);
+            Integer cancelled = jdbc.queryForObject(cancelledSql, Integer.class);
+            log.info(<span class="st">"=== WEEKLY GROWTH REPORT ==="</span>);
+            log.info(<span class="st">"  New subscriptions: {}"</span>, newSubs);
+            log.info(<span class="st">"  Cancellations:     {}"</span>, cancelled);
+            log.info(<span class="st">"  Net growth:        {}"</span>, (newSubs != null ? newSubs : 0) - (cancelled != null ? cancelled : 0));
+            log.info(<span class="st">"============================="</span>);
+        } <span class="kw">catch</span> (Exception e) {
+            log.error(<span class="st">"Weekly growth report failed: {}"</span>, e.getMessage());
+        }
+    }
+}</pre>
+  <button class="cb" onclick="cb('reportSvc')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">6</span><span class="st">ReportController.java — manual trigger endpoints</span></div>
+  <div class="sb">
+  <pre id="reportCtrl"><span class="kw">package</span> com.ott.report.controller;
+<span class="kw">import</span> com.ott.report.service.ReportService;
+<span class="kw">import</span> org.springframework.http.ResponseEntity;
+<span class="kw">import</span> org.springframework.web.bind.annotation.*;
+
+<span class="cm">/**
+ * Manual trigger endpoints for reports.
+ * Useful for: testing without waiting for scheduled time,
+ * re-running a report, ad-hoc analysis.
+ *
+ * In production: secure these with ADMIN role check.
+ *
+ * Postman: POST http://localhost:8087/reports/trigger/payment-dues
+ */</span>
+<span class="an">@RestController</span>
+<span class="an">@RequestMapping</span>(<span class="st">"/reports"</span>)
+<span class="kw">public class</span> <span class="cl">ReportController</span> {
+
+    <span class="kw">private final</span> ReportService reportService;
+    <span class="kw">public</span> ReportController(ReportService s) { reportService = s; }
+
+    <span class="an">@PostMapping</span>(<span class="st">"/trigger/payment-dues"</span>)
+    <span class="kw">public</span> ResponseEntity&lt;String&gt; triggerPaymentDues() {
+        reportService.generatePaymentDuesReport();
+        <span class="kw">return</span> ResponseEntity.ok(<span class="st">"Payment dues report generated — check service console logs"</span>);
+    }
+
+    <span class="an">@PostMapping</span>(<span class="st">"/trigger/expiry"</span>)
+    <span class="kw">public</span> ResponseEntity&lt;String&gt; triggerExpiry() {
+        reportService.generateExpiryReport();
+        <span class="kw">return</span> ResponseEntity.ok(<span class="st">"Expiry report generated"</span>);
+    }
+
+    <span class="an">@PostMapping</span>(<span class="st">"/trigger/daily-summary"</span>)
+    <span class="kw">public</span> ResponseEntity&lt;String&gt; triggerDailySummary() {
+        reportService.generateDailySummary();
+        <span class="kw">return</span> ResponseEntity.ok(<span class="st">"Daily summary generated"</span>);
+    }
+
+    <span class="an">@PostMapping</span>(<span class="st">"/trigger/weekly-growth"</span>)
+    <span class="kw">public</span> ResponseEntity&lt;String&gt; triggerWeeklyGrowth() {
+        reportService.generateWeeklyGrowthReport();
+        <span class="kw">return</span> ResponseEntity.ok(<span class="st">"Weekly growth report generated"</span>);
+    }
+
+    <span class="an">@PostMapping</span>(<span class="st">"/trigger/all"</span>)
+    <span class="kw">public</span> ResponseEntity&lt;String&gt; triggerAll() {
+        reportService.generatePaymentDuesReport();
+        reportService.generateExpiryReport();
+        reportService.generateDailySummary();
+        reportService.generateWeeklyGrowthReport();
+        <span class="kw">return</span> ResponseEntity.ok(<span class="st">"All reports generated — check console"</span>);
+    }
+}</pre>
+  <button class="cb" onclick="cb('reportCtrl')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">7</span><span class="st">Testing report-service</span></div>
+  <div class="sb">
+  <table>
+    <tr><th>Test</th><th>URL</th><th>Expected</th></tr>
+    <tr><td>Health check</td><td>GET http://localhost:8087/actuator/health</td><td>{"status":"UP"}</td></tr>
+    <tr><td>Manual payment dues</td><td>POST http://localhost:8087/reports/trigger/payment-dues</td><td>200 OK + report in console</td></tr>
+    <tr><td>Manual expiry</td><td>POST http://localhost:8087/reports/trigger/expiry</td><td>200 OK + subscriptions expiring</td></tr>
+    <tr><td>All reports</td><td>POST http://localhost:8087/reports/trigger/all</td><td>All 4 reports in console</td></tr>
+  </table>
+  <div class="info" style="margin-top:8px">Reports appear in STS console of report-service, NOT in Postman response body. Check the STS console tab after triggering.</div>
+  </div></div>
+</div>
+
+<!-- ══════════════ 10. ALL TESTS ══════════════ -->
+<div id="alltests" class="section">
+  <h2>Complete Endpoint Testing — All Services</h2>
+
+  <div class="info">Start services in this order: MySQL → Redis → catalog → user → payment → campaign → subscription → notification → api-gateway → report</div>
+
+  <h2>user-service (port 8083 via Gateway 8080)</h2>
+  <table>
+    <tr><th>Method</th><th>URL</th><th>Body</th><th>Token?</th><th>Expected</th></tr>
+    <tr><td>POST</td><td>/auth/login</td><td>{"username":"john.doe","password":"password123"}</td><td>No</td><td>200 + JWT token</td></tr>
+    <tr><td>POST</td><td>/auth/register</td><td>{"username":"newuser","email":"new@gmail.com","password":"test123","fullName":"New User"}</td><td>No</td><td>201 + JWT token</td></tr>
+    <tr><td>POST</td><td>/auth/login</td><td>{"username":"john.doe","password":"wrongpass"}</td><td>No</td><td>400 "Invalid username or password"</td></tr>
+    <tr><td>GET</td><td>/auth/me/1</td><td>—</td><td>Yes</td><td>200 user details</td></tr>
+  </table>
+
+  <h2>catalog-service (port 8081 via Gateway 8080)</h2>
+  <table>
+    <tr><th>Method</th><th>URL</th><th>Body</th><th>Token?</th><th>Expected</th></tr>
+    <tr><td>GET</td><td>/catalog/plans</td><td>—</td><td>Yes</td><td>200 list of 5 plans</td></tr>
+    <tr><td>GET</td><td>/catalog/plans/PLAN001</td><td>—</td><td>Yes</td><td>200 Disney+ Basic details</td></tr>
+    <tr><td>GET</td><td>/catalog/plans/PLAN999</td><td>—</td><td>Yes</td><td>404 "Plan not found"</td></tr>
+    <tr><td>GET</td><td>/catalog/plans/duration/MONTHLY</td><td>—</td><td>Yes</td><td>200 list of monthly plans</td></tr>
+    <tr><td>POST</td><td>/catalog/plans</td><td>{"planId":"PLAN006","planName":"Test Plan","price":99.0,"duration":"MONTHLY","isActive":true}</td><td>Yes</td><td>201 Created</td></tr>
+    <tr><td>PUT</td><td>/catalog/plans/PLAN001</td><td>{"planName":"Updated Name","price":219.0,"duration":"MONTHLY","isActive":true}</td><td>Yes</td><td>200 Updated</td></tr>
+    <tr><td>DELETE</td><td>/catalog/plans/PLAN006</td><td>—</td><td>Yes</td><td>200 "deactivated"</td></tr>
+  </table>
+
+  <h2>payment-service (port 8084 via Gateway 8080)</h2>
+  <table>
+    <tr><th>Method</th><th>URL</th><th>Body</th><th>Token?</th><th>Expected</th></tr>
+    <tr><td>POST</td><td>/payments/process</td><td>{"userId":1,"planId":"PLAN001","amount":199.0,"cardNumber":"4242424242424242"}</td><td>Yes</td><td>201 status=SUCCESS</td></tr>
+    <tr><td>POST</td><td>/payments/process</td><td>{"userId":1,"planId":"PLAN001","amount":199.0,"cardNumber":"4000000000000002"}</td><td>Yes</td><td>201 status=FAILED</td></tr>
+    <tr><td>GET</td><td>/payments/user/1</td><td>—</td><td>Yes</td><td>200 payment history list</td></tr>
+  </table>
+
+  <h2>campaign-service (port 8085 via Gateway 8080)</h2>
+  <table>
+    <tr><th>Method</th><th>URL</th><th>Body</th><th>Token?</th><th>Expected</th></tr>
+    <tr><td>GET</td><td>/campaigns/active</td><td>—</td><td>No</td><td>200 list of 4 active campaigns</td></tr>
+    <tr><td>GET</td><td>/campaigns/plan/PLAN001</td><td>—</td><td>Yes</td><td>200 campaigns for PLAN001</td></tr>
+    <tr><td>POST</td><td>/campaigns/apply</td><td>{"promoCode":"WELCOME90","userId":1,"planId":"PLAN001","originalPrice":199.0}</td><td>Yes</td><td>200 discount=199, finalPrice=0</td></tr>
+    <tr><td>POST</td><td>/campaigns/apply</td><td>{"promoCode":"INVALID","userId":1,"planId":"PLAN001","originalPrice":199.0}</td><td>Yes</td><td>400 "Invalid promo code"</td></tr>
+  </table>
+
+  <h2>subscription-service (port 8082 via Gateway 8080)</h2>
+  <table>
+    <tr><th>Method</th><th>URL</th><th>Body</th><th>Token?</th><th>Expected</th></tr>
+    <tr><td>POST</td><td>/subscriptions</td><td>{"userId":1,"planId":"PLAN001","autoRenewal":true}</td><td>Yes</td><td>201 ACTIVE subscription</td></tr>
+    <tr><td>POST</td><td>/subscriptions</td><td>{"userId":9999,"planId":"PLAN001","autoRenewal":true}</td><td>Yes</td><td>400 "User not found"</td></tr>
+    <tr><td>GET</td><td>/subscriptions/user/1</td><td>—</td><td>Yes</td><td>200 list of subscriptions</td></tr>
+    <tr><td>GET</td><td>/subscriptions/1</td><td>—</td><td>Yes</td><td>200 single subscription</td></tr>
+    <tr><td>PUT</td><td>/subscriptions/1/cancel</td><td>—</td><td>Yes</td><td>200 status=CANCELLED</td></tr>
+  </table>
+
+  <h2>notification-service (port 8086 via Gateway 8080)</h2>
+  <table>
+    <tr><th>Method</th><th>URL</th><th>Body</th><th>Token?</th><th>Expected</th></tr>
+    <tr><td>GET</td><td>/actuator/health</td><td>—</td><td>No</td><td>{"status":"UP"}</td></tr>
+    <tr><td>POST</td><td>/notifications/send</td><td>{"eventType":"PAYMENT_SUCCESS","userId":1,"username":"john.doe","email":"john@gmail.com","planName":"Disney+ Basic","amount":199.0}</td><td>Yes</td><td>200 OK + email in STS console</td></tr>
+    <tr><td>POST</td><td>/notifications/send</td><td>{"eventType":"PAYMENT_FAILED","userId":1,"username":"john.doe","email":"john@gmail.com","planName":"Disney+ Basic","failureReason":"Card declined"}</td><td>Yes</td><td>200 OK + failure email in console</td></tr>
+  </table>
+
+  <h2>report-service (port 8087 — direct, not via Gateway)</h2>
+  <table>
+    <tr><th>Method</th><th>URL</th><th>Expected</th></tr>
+    <tr><td>GET</td><td>http://localhost:8087/actuator/health</td><td>{"status":"UP"}</td></tr>
+    <tr><td>POST</td><td>http://localhost:8087/reports/trigger/payment-dues</td><td>200 + payment dues in STS console</td></tr>
+    <tr><td>POST</td><td>http://localhost:8087/reports/trigger/expiry</td><td>200 + expiry list in STS console</td></tr>
+    <tr><td>POST</td><td>http://localhost:8087/reports/trigger/all</td><td>200 + all 4 reports in STS console</td></tr>
+  </table>
+
+  <h2>api-gateway tests</h2>
+  <table>
+    <tr><th>Test</th><th>URL</th><th>Expected</th></tr>
+    <tr><td>Health</td><td>GET http://localhost:8080/actuator/health</td><td>{"status":"UP"}</td></tr>
+    <tr><td>No token</td><td>GET http://localhost:8080/catalog/plans (no header)</td><td>401 Unauthorized</td></tr>
+    <tr><td>Invalid token</td><td>GET http://localhost:8080/catalog/plans (Authorization: Bearer FAKE)</td><td>401 Unauthorized</td></tr>
+    <tr><td>Rate limit</td><td>Fire 25 rapid requests (PowerShell script)</td><td>First 10 → 200, rest → 429</td></tr>
+    <tr><td>Gateway routes</td><td>GET http://localhost:8080/actuator/gateway/routes</td><td>200 JSON list of all 8 routes</td></tr>
+  </table>
+</div>
+
+<div style="text-align:center;padding:16px;color:#4a5568;font-size:12px;margin-top:8px">
+  OTT Platform Complete Remaining Guide — All 10 Items Covered
+</div>
+</div>
+<script>
+function show(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo(0,0);
+}
+function cb(id){
+  navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>{
+    const b=event.target;const o=b.textContent;
+    b.textContent='✅';b.style.background='#276749';
+    setTimeout(()=>{b.textContent=o;b.style.background=''},1500);
+  });
+}
+</script>
+</body>
+</html>

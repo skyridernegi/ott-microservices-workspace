@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS campaign_applications (
     UNIQUE KEY uq_user_campaign (user_id, campaign_id),
     FOREIGN KEY (campaign_id) REFERENCES campaigns(campaign_id)
 );
-
+select * from campaigns;
 -- Seed data
 INSERT INTO campaigns (name,description,discount_percent,free_trial_days,promo_code,
     start_date,end_date,eligible_plans,max_uses,campaign_type,is_active) VALUES
