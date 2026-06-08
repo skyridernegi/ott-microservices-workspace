@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kafka Complete Implementation — OTT Platform</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#0f1117;color:#e2e8f0;line-height:1.6;font-size:13px}
+.container{max-width:1060px;margin:0 auto;padding:18px}
+h1{font-size:21px;color:#63b3ed;margin-bottom:4px}
+h2{font-size:14px;color:#90cdf4;margin:18px 0 8px;padding-bottom:5px;border-bottom:1px solid #2d3748}
+h3{font-size:13px;color:#e2e8f0;margin:10px 0 5px;font-weight:600}
+p,li{font-size:12px;color:#a0aec0;line-height:1.8}
+ul,ol{padding-left:18px;margin:5px 0}
+
+.tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:16px;border-bottom:2px solid #2d3748;padding-bottom:8px;position:sticky;top:0;background:#0f1117;z-index:50;padding-top:6px}
+.tab{background:#1a1f2e;border:1px solid #2d3748;border-radius:5px;padding:5px 10px;font-size:11px;color:#a0aec0;cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.tab:hover{border-color:#4299e1;color:#63b3ed}
+.tab.active{background:#2b6cb0;border-color:#4299e1;color:#fff}
+.section{display:none}.section.active{display:block}
+
+.step{background:#1a1f2e;border:1px solid #2d3748;border-radius:8px;margin-bottom:10px;overflow:hidden}
+.sh{background:#2d3748;padding:8px 13px;display:flex;align-items:center;gap:9px}
+.sn{background:#2b6cb0;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.st{font-size:13px;font-weight:600;color:#e2e8f0;flex:1}
+.sb{padding:11px 13px}
+
+.fh{display:flex;align-items:center;gap:7px;background:#1c3829;border:1px solid #276749;border-radius:5px;padding:6px 11px;margin:7px 0;flex-wrap:wrap}
+.fn{font-size:12px;font-weight:600;color:#9ae6b4}
+.fp{font-size:11px;color:#718096;font-family:monospace;margin-left:auto}
+.fa{font-size:10px;font-weight:700;padding:2px 6px;border-radius:4px}
+.fnew{background:#1a365d;color:#90cdf4}
+.fmod{background:#744210;color:#fbd38d}
+
+pre{background:#0d1117;border:1px solid #2d3748;border-radius:5px;padding:10px 12px;overflow-x:auto;font-size:11px;line-height:1.7;margin:7px 0;position:relative;white-space:pre}
+.cb{position:absolute;top:6px;right:6px;background:#2d3748;color:#a0aec0;border:none;border-radius:3px;padding:3px 8px;font-size:10px;cursor:pointer}
+.cb:hover{background:#4a5568;color:#e2e8f0}
+code{background:#2d3748;padding:2px 5px;border-radius:3px;font-size:11px;color:#63b3ed;font-family:monospace}
+
+.kw{color:#c792ea}.an{color:#ffcb6b}.cm{color:#546e7a;font-style:italic}.st2{color:#c3e88d}.cl{color:#82aaff}
+
+.warn{background:#2d1f00;border:1px solid #d69e2e;border-radius:7px;padding:9px 13px;margin:7px 0;font-size:12px;color:#fbd38d}
+.info{background:#1a2744;border:1px solid #4299e1;border-radius:7px;padding:9px 13px;margin:7px 0;font-size:12px;color:#90cdf4}
+.success{background:#1c3829;border:1px solid #48bb78;border-radius:7px;padding:9px 13px;margin:7px 0;font-size:12px;color:#9ae6b4}
+
+table{width:100%;border-collapse:collapse;font-size:12px;margin:7px 0}
+th{background:#2d3748;color:#e2e8f0;padding:6px 10px;text-align:left;font-size:11px}
+td{padding:6px 10px;border-bottom:1px solid #2d3748;color:#a0aec0;vertical-align:top}
+tr:last-child td{border-bottom:none}
+
+.card{background:#1a1f2e;border:1px solid #2d3748;border-radius:8px;padding:12px 14px;margin-bottom:10px}
+.cbl{border-left:4px solid #4299e1}.cgr{border-left:4px solid #48bb78}
+.cor{border-left:4px solid #ed8936}.cyl{border-left:4px solid #f6e05e}
+
+.flow-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:8px 0}
+.fbox{border-radius:6px;padding:6px 12px;font-size:11px;text-align:center;border:1px solid}
+.farr{color:#4299e1;font-size:18px}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>⚡ Kafka — Complete Producer → Consumer Implementation</h1>
+<p style="color:#718096;margin-bottom:8px">Who publishes · Who consumes · All code changes · Step by step</p>
+
+<!-- MASTER FLOW DIAGRAM -->
+<div class="card cbl" style="margin-bottom:14px">
+  <h3>The complete Kafka flow — answer to your question</h3>
+  <div class="flow-row">
+    <div class="fbox" style="background:#1a2744;border-color:#4299e1;color:#63b3ed">ESPN UI<br><small>Subscribe</small></div>
+    <div class="farr">→</div>
+    <div class="fbox" style="background:#1a2744;border-color:#4299e1;color:#63b3ed">subscription-service<br><small>calls payment</small></div>
+    <div class="farr">→</div>
+    <div class="fbox" style="background:#744210;border-color:#ed8936;color:#fbd38d"><strong>payment-service</strong><br><small>PRODUCER 🔴</small></div>
+    <div class="farr">→</div>
+    <div class="fbox" style="background:#2d1f00;border-color:#d69e2e;color:#fbd38d"><strong>Kafka Topics</strong><br><small>payment.success<br>payment.failed</small></div>
+    <div class="farr">→</div>
+    <div class="fbox" style="background:#322659;border-color:#9f7aea;color:#d6bcfa"><strong>notification-service</strong><br><small>CONSUMER 🟢</small></div>
+  </div>
+  <div class="flow-row" style="margin-top:8px">
+    <div class="fbox" style="background:#1c3829;border-color:#48bb78;color:#9ae6b4"><strong>subscription-service</strong><br><small>Scheduler PRODUCER 🔴</small></div>
+    <div class="farr">→</div>
+    <div class="fbox" style="background:#2d1f00;border-color:#d69e2e;color:#fbd38d"><strong>Kafka Topics</strong><br><small>subscription.expiring<br>subscription.expired</small></div>
+    <div class="farr">→</div>
+    <div class="fbox" style="background:#322659;border-color:#9f7aea;color:#d6bcfa"><strong>notification-service</strong><br><small>CONSUMER 🟢</small></div>
+  </div>
+  <p style="margin-top:10px;font-size:12px;color:#a0aec0">
+    <strong style="color:#e2e8f0">Summary of changes needed:</strong><br>
+    1. Start Kafka locally (Docker — 1 command)<br>
+    2. Add Kafka producer code to <strong>payment-service</strong> — publishes after every payment<br>
+    3. Add Kafka producer + scheduler to <strong>subscription-service</strong> — daily job finds expiring subscriptions<br>
+    4. notification-service already has consumers — just needs Kafka config enabled<br>
+    5. Update application.properties in all 3 services
+  </p>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('kafka-setup')">Step 1: Start Kafka</button>
+  <button class="tab" onclick="show('shared-event')">Step 2: Shared Event</button>
+  <button class="tab" onclick="show('payment-producer')">Step 3: payment-service</button>
+  <button class="tab" onclick="show('subscription-producer')">Step 4: subscription-service</button>
+  <button class="tab" onclick="show('notification-consumer')">Step 5: notification-service</button>
+  <button class="tab" onclick="show('test')">Step 6: Test Everything</button>
+</div>
+
+<!-- ══ STEP 1: START KAFKA ══ -->
+<div id="kafka-setup" class="section active">
+  <h2>Start Kafka locally on Windows 10 — using Docker (easiest)</h2>
+
+  <div class="card cgr">
+    <h3>Why Docker for Kafka?</h3>
+    <p>Installing Kafka manually on Windows requires Java configuration, ZooKeeper setup, environment variables — takes 1-2 hours and often breaks. Docker starts the entire Kafka stack in 30 seconds with one command. You already have Docker Desktop running.</p>
+  </div>
+
+  <div class="step"><div class="sh"><span class="sn">1</span><span class="st">Create docker-compose-kafka.yml — Kafka + Zookeeper</span></div>
+  <div class="sb">
+  <p>Create a new file <code>docker-compose-kafka.yml</code> anywhere on your Desktop or project folder. Open Notepad → paste → Save As → All Files → docker-compose-kafka.yml</p>
+  <div class="fh"><span class="fn">docker-compose-kafka.yml</span><span class="fa fnew">NEW FILE</span><span class="fp">C:\Desktop\ or any folder</span></div>
+  <pre id="kafkaDocker">version: '3.8'
+services:
+
+  # ── Zookeeper ────────────────────────────────────────────
+  # Kafka needs Zookeeper to manage cluster metadata
+  # Think of Zookeeper as Kafka's configuration manager
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    container_name: ott-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  # ── Kafka Broker ─────────────────────────────────────────
+  # The actual message broker — stores and distributes messages
+  # KAFKA_ADVERTISED_LISTENERS: localhost:9092 is what your
+  # Spring Boot services connect to from Windows
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    container_name: ott-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_LOG_RETENTION_HOURS: 24
+
+  # ── Kafka UI ──────────────────────────────────────────────
+  # Visual dashboard to see topics, messages, consumers
+  # Open: http://localhost:8090
+  # Here you can SEE messages flowing through Kafka!
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: ott-kafka-ui
+    depends_on:
+      - kafka
+    ports:
+      - "8090:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: ott-local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092</pre>
+  <button class="cb" onclick="cb('kafkaDocker')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">2</span><span class="st">Start Kafka — Windows Command Prompt</span></div>
+  <div class="sb">
+  <p>Open Command Prompt → navigate to folder where docker-compose-kafka.yml is saved:</p>
+  <pre id="kafkaStart">REM Navigate to the folder containing docker-compose-kafka.yml
+cd C:\Users\skyri\Desktop
+
+REM Start Kafka and Zookeeper in background
+docker compose -f docker-compose-kafka.yml up -d
+
+REM Verify all 3 containers are running
+docker compose -f docker-compose-kafka.yml ps</pre>
+  <button class="cb" onclick="cb('kafkaStart')">Copy</button>
+  <div class="success" style="margin-top:8px">
+    Expected output — all 3 should show "running":<br>
+    ott-zookeeper    running<br>
+    ott-kafka        running<br>
+    ott-kafka-ui     running
+  </div>
+  <p style="margin-top:8px">Open Kafka UI in browser: <strong>http://localhost:8090</strong> — you'll see topics appear here as messages flow.</p>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">3</span><span class="st">Create Kafka topics manually (optional — auto-created on first publish)</span></div>
+  <div class="sb">
+  <div class="info">Kafka auto-creates topics on first publish (we enabled KAFKA_AUTO_CREATE_TOPICS_ENABLE). You don't need to create them manually. But if you want to pre-create them for clarity:</div>
+  <pre id="kafkaTopics">REM Enter Kafka container
+docker exec -it ott-kafka bash
+
+REM Create topics inside container
+kafka-topics --create --bootstrap-server localhost:9092 --topic payment.success --partitions 1 --replication-factor 1
+kafka-topics --create --bootstrap-server localhost:9092 --topic payment.failed --partitions 1 --replication-factor 1
+kafka-topics --create --bootstrap-server localhost:9092 --topic subscription.expiring --partitions 1 --replication-factor 1
+kafka-topics --create --bootstrap-server localhost:9092 --topic subscription.expired --partitions 1 --replication-factor 1
+
+REM Verify topics created
+kafka-topics --list --bootstrap-server localhost:9092
+
+REM Exit container
+exit</pre>
+  <button class="cb" onclick="cb('kafkaTopics')">Copy</button>
+  </div></div>
+</div>
+
+<!-- ══ STEP 2: SHARED EVENT MODEL ══ -->
+<div id="shared-event" class="section">
+  <h2>Shared Event Model — used by ALL services</h2>
+
+  <div class="card cor">
+    <h3>The problem — different services need the same event class</h3>
+    <p>payment-service PRODUCES a PaymentEvent. notification-service CONSUMES that PaymentEvent. Both must use the identical class structure — same field names, same types — otherwise JSON deserialization fails.</p>
+    <p style="margin-top:6px"><strong style="color:#e2e8f0">Best practice (Production):</strong> Create a separate shared library JAR that all services import. This ensures they always use the same version.</p>
+    <p><strong style="color:#e2e8f0">Our approach (simpler for learning):</strong> Create the same event class in each service with identical structure. Both payment-service and notification-service have their own copy — they look the same, so JSON mapping works.</p>
+  </div>
+
+  <div class="step"><div class="sh"><span class="sn">1</span><span class="st">NotificationEvent.java — create in EACH of these services</span></div>
+  <div class="sb">
+  <p>This SAME class must exist in:</p>
+  <ul>
+    <li><code>com.ott.payment.event.NotificationEvent</code> (in payment-service)</li>
+    <li><code>com.ott.subscription.event.NotificationEvent</code> (in subscription-service)</li>
+    <li><code>com.ott.notification.event.NotificationEvent</code> (already created in notification-service)</li>
+  </ul>
+  <p style="margin-top:8px">The field names MUST be identical in all 3 — Kafka serializes as JSON and each service deserializes it:</p>
+  <pre id="sharedEvent"><span class="cm">// Create this class in payment-service: com.ott.payment.event.NotificationEvent
+// Create this class in subscription-service: com.ott.subscription.event.NotificationEvent
+// BOTH must have identical fields as notification-service already has</span>
+
+<span class="kw">package</span> com.ott.payment.event; <span class="cm">// change package per service</span>
+
+<span class="kw">import</span> java.math.BigDecimal;
+<span class="kw">import</span> java.time.LocalDateTime;
+
+<span class="cm">/**
+ * Shared event model for Kafka messages.
+ * Must be IDENTICAL in all services that use it.
+ * Field names drive JSON serialization/deserialization.
+ */</span>
+<span class="kw">public class</span> <span class="cl">NotificationEvent</span> {
+
+    <span class="kw">private</span> String eventType;       <span class="cm">// PAYMENT_SUCCESS, PAYMENT_FAILED, SUBSCRIPTION_EXPIRING, SUBSCRIPTION_EXPIRED</span>
+    <span class="kw">private</span> Long userId;
+    <span class="kw">private</span> String username;
+    <span class="kw">private</span> String email;
+    <span class="kw">private</span> String planId;
+    <span class="kw">private</span> String planName;
+    <span class="kw">private</span> BigDecimal amount;
+    <span class="kw">private</span> String failureReason;
+    <span class="kw">private</span> LocalDateTime eventTime;
+
+    <span class="kw">public</span> NotificationEvent() {}
+
+    <span class="cm">// Getters and Setters</span>
+    <span class="kw">public</span> String getEventType() { <span class="kw">return</span> eventType; }
+    <span class="kw">public void</span> setEventType(String v) { eventType = v; }
+    <span class="kw">public</span> Long getUserId() { <span class="kw">return</span> userId; }
+    <span class="kw">public void</span> setUserId(Long v) { userId = v; }
+    <span class="kw">public</span> String getUsername() { <span class="kw">return</span> username; }
+    <span class="kw">public void</span> setUsername(String v) { username = v; }
+    <span class="kw">public</span> String getEmail() { <span class="kw">return</span> email; }
+    <span class="kw">public void</span> setEmail(String v) { email = v; }
+    <span class="kw">public</span> String getPlanId() { <span class="kw">return</span> planId; }
+    <span class="kw">public void</span> setPlanId(String v) { planId = v; }
+    <span class="kw">public</span> String getPlanName() { <span class="kw">return</span> planName; }
+    <span class="kw">public void</span> setPlanName(String v) { planName = v; }
+    <span class="kw">public</span> BigDecimal getAmount() { <span class="kw">return</span> amount; }
+    <span class="kw">public void</span> setAmount(BigDecimal v) { amount = v; }
+    <span class="kw">public</span> String getFailureReason() { <span class="kw">return</span> failureReason; }
+    <span class="kw">public void</span> setFailureReason(String v) { failureReason = v; }
+    <span class="kw">public</span> LocalDateTime getEventTime() { <span class="kw">return</span> eventTime; }
+    <span class="kw">public void</span> setEventTime(LocalDateTime v) { eventTime = v; }
+}</pre>
+  <button class="cb" onclick="cb('sharedEvent')">Copy</button>
+  <div class="warn">Remember to change the package declaration in each service:<br>
+    payment-service → <code>package com.ott.payment.event;</code><br>
+    subscription-service → <code>package com.ott.subscription.event;</code><br>
+    notification-service → <code>package com.ott.notification.event;</code> (already done)</div>
+  </div></div>
+</div>
+
+<!-- ══ STEP 3: PAYMENT SERVICE PRODUCER ══ -->
+<div id="payment-producer" class="section">
+  <h2>payment-service — Kafka Producer changes</h2>
+
+  <div class="card cor">
+    <h3>What changes in payment-service</h3>
+    <p>After processing a payment (success or failure), payment-service must publish an event to Kafka. notification-service and subscription-service will consume it. Currently PaymentService just saves to DB and returns. We add Kafka publish after the save.</p>
+  </div>
+
+  <div class="step"><div class="sh"><span class="sn">1</span><span class="st">pom.xml — add Spring Kafka dependency</span></div>
+  <div class="sb">
+  <div class="fh"><span class="fn">pom.xml</span><span class="fa fmod">MODIFY</span><span class="fp">payment-service/pom.xml — add inside &lt;dependencies&gt;</span></div>
+  <pre id="payKafkaDep">&lt;!-- Spring Kafka — enables @KafkaListener and KafkaTemplate --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.kafka&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-kafka&lt;/artifactId&gt;
+    &lt;!-- No version needed — Spring Boot BOM manages it --&gt;
+&lt;/dependency&gt;</pre>
+  <button class="cb" onclick="cb('payKafkaDep')">Copy</button>
+  <p style="margin-top:8px">After adding: right-click payment-service → <strong>Maven → Update Project → OK</strong></p>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">2</span><span class="st">application.properties — add Kafka producer config</span></div>
+  <div class="sb">
+  <div class="fh"><span class="fn">application.properties</span><span class="fa fmod">MODIFY</span><span class="fp">payment-service/src/main/resources — add these lines</span></div>
+  <pre id="payKafkaProps"># ── Kafka Producer Configuration ────────────────────────────────────
+# bootstrap-servers = address of your Kafka broker (from Docker)
+spring.kafka.bootstrap-servers=localhost:9092
+
+# Serializers: key is String (userId), value is JSON (NotificationEvent)
+spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
+spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JsonSerializer
+
+# Add type info to message so consumer knows which class to deserialize to
+spring.kafka.producer.properties.spring.json.add.type.headers=false</pre>
+  <button class="cb" onclick="cb('payKafkaProps')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">3</span><span class="st">KafkaConfig.java — configure KafkaTemplate bean</span></div>
+  <div class="sb">
+  <div class="fh"><span class="fn">KafkaConfig.java</span><span class="fa fnew">NEW FILE</span><span class="fp">com.ott.payment.config</span></div>
+  <pre id="payKafkaConfig"><span class="kw">package</span> com.ott.payment.config;
+
+<span class="kw">import</span> com.ott.payment.event.NotificationEvent;
+<span class="kw">import</span> org.apache.kafka.clients.producer.ProducerConfig;
+<span class="kw">import</span> org.apache.kafka.common.serialization.StringSerializer;
+<span class="kw">import</span> org.springframework.beans.factory.annotation.Value;
+<span class="kw">import</span> org.springframework.context.annotation.Bean;
+<span class="kw">import</span> org.springframework.context.annotation.Configuration;
+<span class="kw">import</span> org.springframework.kafka.core.*;
+<span class="kw">import</span> org.springframework.kafka.support.serializer.JsonSerializer;
+<span class="kw">import</span> java.util.HashMap;
+<span class="kw">import</span> java.util.Map;
+
+<span class="cm">/**
+ * PURPOSE: Configures Kafka producer for payment-service.
+ * Creates KafkaTemplate bean that PaymentEventPublisher uses
+ * to send messages to Kafka topics.
+ *
+ * WHY this config class?
+ * Spring Boot auto-configuration handles basic Kafka setup,
+ * but we need typed KafkaTemplate&lt;String, NotificationEvent&gt;
+ * for type safety. Without this, you'd use raw Map objects.
+ */</span>
+<span class="an">@Configuration</span>
+<span class="kw">public class</span> <span class="cl">KafkaConfig</span> {
+
+    <span class="an">@Value</span>(<span class="st2">"${spring.kafka.bootstrap-servers}"</span>)
+    <span class="kw">private</span> String bootstrapServers;
+
+    <span class="an">@Bean</span>
+    <span class="kw">public</span> ProducerFactory&lt;String, NotificationEvent&gt; producerFactory() {
+        Map&lt;String, Object&gt; config = <span class="kw">new</span> HashMap&lt;&gt;();
+        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        <span class="cm">// Don't add type headers — simpler for cross-service compatibility</span>
+        config.put(JsonSerializer.ADD_TYPE_INFO_HEADERS, <span class="kw">false</span>);
+        <span class="kw">return new</span> DefaultKafkaProducerFactory&lt;&gt;(config);
+    }
+
+    <span class="an">@Bean</span>
+    <span class="kw">public</span> KafkaTemplate&lt;String, NotificationEvent&gt; kafkaTemplate() {
+        <span class="kw">return new</span> KafkaTemplate&lt;&gt;(producerFactory());
+    }
+}</pre>
+  <button class="cb" onclick="cb('payKafkaConfig')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">4</span><span class="st">PaymentEventPublisher.java — NEW class that publishes to Kafka</span></div>
+  <div class="sb">
+  <div class="fh"><span class="fn">PaymentEventPublisher.java</span><span class="fa fnew">NEW FILE</span><span class="fp">com.ott.payment.kafka</span></div>
+  <pre id="payPublisher"><span class="kw">package</span> com.ott.payment.kafka;
+
+<span class="kw">import</span> com.ott.payment.event.NotificationEvent;
+<span class="kw">import</span> org.slf4j.*;
+<span class="kw">import</span> org.springframework.kafka.core.KafkaTemplate;
+<span class="kw">import</span> org.springframework.kafka.support.SendResult;
+<span class="kw">import</span> org.springframework.stereotype.Component;
+<span class="kw">import</span> java.util.concurrent.CompletableFuture;
+
+<span class="cm">/**
+ * PURPOSE: Publishes payment events to Kafka topics.
+ *
+ * Called by: PaymentService AFTER payment is processed.
+ * Publishes to: "payment.success" or "payment.failed"
+ * Consumed by: notification-service (sends email)
+ *              subscription-service (activates or keeps pending)
+ *
+ * KEY: userId is used as the Kafka message KEY.
+ * WHY: Messages with same key always go to same partition.
+ * This guarantees order — all events for user 5 are processed in order.
+ */</span>
+<span class="an">@Component</span>
+<span class="kw">public class</span> <span class="cl">PaymentEventPublisher</span> {
+
+    <span class="kw">private static final</span> Logger log = LoggerFactory.getLogger(PaymentEventPublisher.class);
+
+    <span class="kw">private static final</span> String TOPIC_SUCCESS = <span class="st2">"payment.success"</span>;
+    <span class="kw">private static final</span> String TOPIC_FAILED  = <span class="st2">"payment.failed"</span>;
+
+    <span class="kw">private final</span> KafkaTemplate&lt;String, NotificationEvent&gt; kafkaTemplate;
+
+    <span class="kw">public</span> PaymentEventPublisher(KafkaTemplate&lt;String, NotificationEvent&gt; kafkaTemplate) {
+        <span class="kw">this</span>.kafkaTemplate = kafkaTemplate;
+    }
+
+    <span class="cm">/**
+     * Publish payment SUCCESS event.
+     * Called after payment-service confirms payment went through.
+     * notification-service will send "Welcome to Disney+!" email.
+     */</span>
+    <span class="kw">public void</span> publishPaymentSuccess(NotificationEvent event) {
+        event.setEventType(<span class="st2">"PAYMENT_SUCCESS"</span>);
+        sendMessage(TOPIC_SUCCESS, event);
+    }
+
+    <span class="cm">/**
+     * Publish payment FAILED event.
+     * Called after payment-service detects card declined / error.
+     * notification-service will send "Payment failed, please retry" email.
+     */</span>
+    <span class="kw">public void</span> publishPaymentFailed(NotificationEvent event) {
+        event.setEventType(<span class="st2">"PAYMENT_FAILED"</span>);
+        sendMessage(TOPIC_FAILED, event);
+    }
+
+    <span class="kw">private void</span> sendMessage(String topic, NotificationEvent event) {
+        <span class="cm">// Key = userId as String — ensures ordering per user</span>
+        String key = event.getUserId() != <span class="kw">null</span> ? event.getUserId().toString() : <span class="st2">"unknown"</span>;
+
+        CompletableFuture&lt;SendResult&lt;String, NotificationEvent&gt;&gt; future =
+            kafkaTemplate.send(topic, key, event);
+
+        future.whenComplete((result, ex) -> {
+            <span class="kw">if</span> (ex == <span class="kw">null</span>) {
+                log.info(<span class="st2">"✅ Published to topic: {} | userId: {} | offset: {}"</span>,
+                    topic, key, result.getRecordMetadata().offset());
+            } <span class="kw">else</span> {
+                log.error(<span class="st2">"❌ Failed to publish to topic: {} | userId: {} | error: {}"</span>,
+                    topic, key, ex.getMessage());
+            }
+        });
+    }
+}</pre>
+  <button class="cb" onclick="cb('payPublisher')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">5</span><span class="st">PaymentService.java — add Kafka publish AFTER payment processing</span></div>
+  <div class="sb">
+  <div class="fh"><span class="fn">PaymentService.java</span><span class="fa fmod">MODIFY</span><span class="fp">com.ott.payment.service — update existing file</span></div>
+  <p>Find your existing PaymentService.java and make these changes:</p>
+  <p style="margin-top:8px"><strong style="color:#fbd38d">CHANGE 1 — Inject PaymentEventPublisher:</strong></p>
+  <pre id="payServiceChange1"><span class="cm">// ADD these fields at the top of PaymentService class:</span>
+<span class="kw">private final</span> PaymentRepository paymentRepository;
+<span class="kw">private final</span> PaymentEventPublisher eventPublisher; <span class="cm">// ADD THIS</span>
+
+<span class="cm">// UPDATE constructor:</span>
+<span class="kw">public</span> PaymentService(PaymentRepository r, PaymentEventPublisher p) {
+    paymentRepository = r;
+    eventPublisher = p; <span class="cm">// ADD THIS</span>
+}</pre>
+  <button class="cb" onclick="cb('payServiceChange1')">Copy</button>
+
+  <p style="margin-top:12px"><strong style="color:#fbd38d">CHANGE 2 — Publish Kafka event after payment result in processPayment():</strong></p>
+  <p>Find the section in processPayment() where you save the result and add Kafka publish:</p>
+  <pre id="payServiceChange2"><span class="cm">// FIND this section in your processPayment() method:</span>
+Payment saved = paymentRepository.save(payment);
+
+<span class="cm">// ADD AFTER the save — build and publish Kafka event:</span>
+NotificationEvent kafkaEvent = buildKafkaEvent(saved, req);
+<span class="kw">if</span> (Payment.PaymentStatus.SUCCESS.equals(saved.getStatus())) {
+    eventPublisher.publishPaymentSuccess(kafkaEvent);
+    log.info(<span class="st2">"Kafka: payment.success published for user: {}"</span>, saved.getUserId());
+} <span class="kw">else</span> {
+    eventPublisher.publishPaymentFailed(kafkaEvent);
+    log.info(<span class="st2">"Kafka: payment.failed published for user: {}"</span>, saved.getUserId());
+}
+
+<span class="kw">return</span> buildResponse(saved); <span class="cm">// this was already there</span></pre>
+  <button class="cb" onclick="cb('payServiceChange2')">Copy</button>
+
+  <p style="margin-top:12px"><strong style="color:#fbd38d">CHANGE 3 — Add buildKafkaEvent() helper method inside PaymentService:</strong></p>
+  <pre id="payServiceChange3"><span class="cm">// ADD this private helper method at the bottom of PaymentService class:</span>
+<span class="kw">import</span> com.ott.payment.event.NotificationEvent;
+<span class="kw">import</span> java.time.LocalDateTime;
+
+<span class="kw">private</span> NotificationEvent buildKafkaEvent(Payment payment, PaymentRequestDTO req) {
+    NotificationEvent event = <span class="kw">new</span> NotificationEvent();
+    event.setUserId(payment.getUserId());
+    event.setPlanId(payment.getPlanId());
+    event.setAmount(payment.getAmount());
+    event.setFailureReason(payment.getFailureReason());
+    event.setEventTime(LocalDateTime.now());
+    <span class="cm">// username and email come from request if available
+    // In production: call user-service Feign to get email</span>
+    event.setUsername(<span class="st2">"user-"</span> + payment.getUserId());
+    event.setEmail(<span class="st2">"user"</span> + payment.getUserId() + <span class="st2">"@espn.com"</span>); <span class="cm">// placeholder</span>
+    <span class="kw">return</span> event;
+}</pre>
+  <button class="cb" onclick="cb('payServiceChange3')">Copy</button>
+  <div class="info" style="margin-top:8px">In the placeholder email — for now we use a generated email. In production, payment-service would call user-service Feign to get the real email address: <code>userServiceClient.getUserById(payment.getUserId())</code></div>
+  </div></div>
+</div>
+
+<!-- ══ STEP 4: SUBSCRIPTION SERVICE PRODUCER ══ -->
+<div id="subscription-producer" class="section">
+  <h2>subscription-service — Kafka Producer + Scheduler changes</h2>
+
+  <div class="card cgr">
+    <h3>What changes in subscription-service</h3>
+    <p>subscription-service has a daily scheduled job that runs at midnight, finds subscriptions expiring in 3 days, and publishes to <code>subscription.expiring</code> topic. Also finds expired subscriptions and publishes to <code>subscription.expired</code> topic. notification-service consumes both.</p>
+  </div>
+
+  <div class="step"><div class="sh"><span class="sn">1</span><span class="st">pom.xml — add Spring Kafka + Scheduling</span></div>
+  <div class="sb">
+  <div class="fh"><span class="fn">pom.xml</span><span class="fa fmod">MODIFY</span><span class="fp">subscription-service/pom.xml — add inside &lt;dependencies&gt;</span></div>
+  <pre id="subKafkaDep">&lt;!-- Spring Kafka — to publish subscription events --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.kafka&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-kafka&lt;/artifactId&gt;
+&lt;/dependency&gt;
+
+&lt;!-- Note: @EnableScheduling comes from spring-boot-starter
+     already in your pom.xml — no extra dependency needed --&gt;</pre>
+  <button class="cb" onclick="cb('subKafkaDep')">Copy</button>
+  <p style="margin-top:8px">After adding: right-click subscription-service → <strong>Maven → Update Project → OK</strong></p>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">2</span><span class="st">application.properties — add Kafka producer config</span></div>
+  <div class="sb">
+  <div class="fh"><span class="fn">application.properties</span><span class="fa fmod">MODIFY</span><span class="fp">subscription-service/src/main/resources — add at bottom</span></div>
+  <pre id="subKafkaProps"># ── Kafka Producer Configuration ────────────────────────────────────
+spring.kafka.bootstrap-servers=localhost:9092
+spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
+spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JsonSerializer
+spring.kafka.producer.properties.spring.json.add.type.headers=false</pre>
+  <button class="cb" onclick="cb('subKafkaProps')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">3</span><span class="st">SubscriptionServiceApplication.java — add @EnableScheduling</span></div>
+  <div class="sb">
+  <div class="fh"><span class="fn">SubscriptionServiceApplication.java</span><span class="fa fmod">MODIFY</span><span class="fp">com.ott.subscription</span></div>
+  <pre id="subMainChange"><span class="kw">package</span> com.ott.subscription;
+<span class="kw">import</span> org.springframework.boot.SpringApplication;
+<span class="kw">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;
+<span class="kw">import</span> org.springframework.cloud.openfeign.EnableFeignClients;
+<span class="kw">import</span> org.springframework.scheduling.annotation.EnableScheduling; <span class="cm">// ADD THIS IMPORT</span>
+
+<span class="an">@SpringBootApplication</span>
+<span class="an">@EnableFeignClients</span>
+<span class="an">@EnableScheduling</span>  <span class="cm">// ADD THIS — enables @Scheduled jobs</span>
+<span class="kw">public class</span> <span class="cl">SubscriptionServiceApplication</span> {
+    <span class="kw">public static void</span> main(String[] args) {
+        SpringApplication.run(SubscriptionServiceApplication.class, args);
+    }
+}</pre>
+  <button class="cb" onclick="cb('subMainChange')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">4</span><span class="st">KafkaConfig.java — same as payment-service but different package</span></div>
+  <div class="sb">
+  <div class="fh"><span class="fn">KafkaConfig.java</span><span class="fa fnew">NEW FILE</span><span class="fp">com.ott.subscription.config</span></div>
+  <pre id="subKafkaConfig"><span class="kw">package</span> com.ott.subscription.config;
+
+<span class="kw">import</span> com.ott.subscription.event.NotificationEvent;
+<span class="kw">import</span> org.apache.kafka.clients.producer.ProducerConfig;
+<span class="kw">import</span> org.apache.kafka.common.serialization.StringSerializer;
+<span class="kw">import</span> org.springframework.beans.factory.annotation.Value;
+<span class="kw">import</span> org.springframework.context.annotation.Bean;
+<span class="kw">import</span> org.springframework.context.annotation.Configuration;
+<span class="kw">import</span> org.springframework.kafka.core.*;
+<span class="kw">import</span> org.springframework.kafka.support.serializer.JsonSerializer;
+<span class="kw">import</span> java.util.HashMap;
+<span class="kw">import</span> java.util.Map;
+
+<span class="an">@Configuration</span>
+<span class="kw">public class</span> <span class="cl">KafkaConfig</span> {
+
+    <span class="an">@Value</span>(<span class="st2">"${spring.kafka.bootstrap-servers}"</span>)
+    <span class="kw">private</span> String bootstrapServers;
+
+    <span class="an">@Bean</span>
+    <span class="kw">public</span> ProducerFactory&lt;String, NotificationEvent&gt; subProducerFactory() {
+        Map&lt;String, Object&gt; config = <span class="kw">new</span> HashMap&lt;&gt;();
+        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        config.put(JsonSerializer.ADD_TYPE_INFO_HEADERS, <span class="kw">false</span>);
+        <span class="kw">return new</span> DefaultKafkaProducerFactory&lt;&gt;(config);
+    }
+
+    <span class="an">@Bean</span>
+    <span class="kw">public</span> KafkaTemplate&lt;String, NotificationEvent&gt; subKafkaTemplate() {
+        <span class="kw">return new</span> KafkaTemplate&lt;&gt;(subProducerFactory());
+    }
+}</pre>
+  <button class="cb" onclick="cb('subKafkaConfig')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">5</span><span class="st">SubscriptionScheduler.java — daily job that publishes to Kafka</span></div>
+  <div class="sb">
+  <div class="fh"><span class="fn">SubscriptionScheduler.java</span><span class="fa fnew">NEW FILE</span><span class="fp">com.ott.subscription.scheduler</span></div>
+  <pre id="subScheduler"><span class="kw">package</span> com.ott.subscription.scheduler;
+
+<span class="kw">import</span> com.ott.subscription.event.NotificationEvent;
+<span class="kw">import</span> com.ott.subscription.model.Subscription;
+<span class="kw">import</span> com.ott.subscription.repository.SubscriptionRepository;
+<span class="kw">import</span> org.slf4j.*;
+<span class="kw">import</span> org.springframework.kafka.core.KafkaTemplate;
+<span class="kw">import</span> org.springframework.scheduling.annotation.Scheduled;
+<span class="kw">import</span> org.springframework.stereotype.Component;
+<span class="kw">import</span> java.time.LocalDate;
+<span class="kw">import</span> java.time.LocalDateTime;
+<span class="kw">import</span> java.util.List;
+
+<span class="cm">/**
+ * PURPOSE: Daily scheduled jobs that check subscription status
+ * and publish Kafka events for notification-service to act on.
+ *
+ * DISNEY CONTEXT: This is the scheduled background process
+ * that checked for expiring/expired subscriptions and triggered
+ * renewal notifications and expiry reports.
+ *
+ * Runs:
+ * - Midnight: find subscriptions expiring in 3 days → publish to Kafka
+ * - Midnight: find expired subscriptions → mark EXPIRED + publish to Kafka
+ */</span>
+<span class="an">@Component</span>
+<span class="kw">public class</span> <span class="cl">SubscriptionScheduler</span> {
+
+    <span class="kw">private static final</span> Logger log = LoggerFactory.getLogger(SubscriptionScheduler.class);
+
+    <span class="kw">private final</span> SubscriptionRepository subscriptionRepository;
+    <span class="kw">private final</span> KafkaTemplate&lt;String, NotificationEvent&gt; kafkaTemplate;
+
+    <span class="kw">public</span> SubscriptionScheduler(
+            SubscriptionRepository subscriptionRepository,
+            KafkaTemplate&lt;String, NotificationEvent&gt; kafkaTemplate) {
+        <span class="kw">this</span>.subscriptionRepository = subscriptionRepository;
+        <span class="kw">this</span>.kafkaTemplate = kafkaTemplate;
+    }
+
+    <span class="cm">/**
+     * Runs every day at midnight.
+     * Finds subscriptions expiring in exactly 3 days.
+     * Publishes to "subscription.expiring" topic.
+     * notification-service sends "renew now" reminder email.
+     *
+     * CRON: "0 0 0 * * *" = second=0, minute=0, hour=0, every day
+     */</span>
+    <span class="an">@Scheduled</span>(cron = <span class="st2">"0 0 0 * * *"</span>)
+    <span class="kw">public void</span> checkExpiringSubscriptions() {
+        LocalDate threeDaysLater = LocalDate.now().plusDays(3);
+        log.info(<span class="st2">"Scheduler: checking subscriptions expiring on {}"</span>, threeDaysLater);
+
+        List&lt;Subscription&gt; expiring = subscriptionRepository
+            .findByEndDateAndStatus(threeDaysLater, Subscription.SubscriptionStatus.ACTIVE);
+
+        log.info(<span class="st2">"Found {} subscriptions expiring in 3 days"</span>, expiring.size());
+
+        expiring.forEach(sub -> {
+            NotificationEvent event = buildEvent(sub, <span class="st2">"SUBSCRIPTION_EXPIRING"</span>);
+            kafkaTemplate.send(<span class="st2">"subscription.expiring"</span>, sub.getUserId().toString(), event);
+            log.info(<span class="st2">"Published subscription.expiring for userId: {}"</span>, sub.getUserId());
+        });
+    }
+
+    <span class="cm">/**
+     * Runs every day at 00:05 (5 minutes after midnight).
+     * Finds subscriptions whose end_date has passed.
+     * Updates their status to EXPIRED in DB.
+     * Publishes to "subscription.expired" topic.
+     * notification-service sends "your subscription expired" email.
+     */</span>
+    <span class="an">@Scheduled</span>(cron = <span class="st2">"0 5 0 * * *"</span>)
+    <span class="kw">public void</span> processExpiredSubscriptions() {
+        LocalDate today = LocalDate.now();
+        log.info(<span class="st2">"Scheduler: processing subscriptions expired before {}"</span>, today);
+
+        List&lt;Subscription&gt; expired = subscriptionRepository
+            .findByEndDateBeforeAndStatus(today, Subscription.SubscriptionStatus.ACTIVE);
+
+        log.info(<span class="st2">"Found {} expired subscriptions to process"</span>, expired.size());
+
+        expired.forEach(sub -> {
+            <span class="cm">// Mark as EXPIRED in DB</span>
+            sub.setStatus(Subscription.SubscriptionStatus.EXPIRED);
+            subscriptionRepository.save(sub);
+
+            <span class="cm">// Publish to Kafka — notification-service sends expiry email</span>
+            NotificationEvent event = buildEvent(sub, <span class="st2">"SUBSCRIPTION_EXPIRED"</span>);
+            kafkaTemplate.send(<span class="st2">"subscription.expired"</span>, sub.getUserId().toString(), event);
+            log.info(<span class="st2">"Marked EXPIRED + published kafka event for userId: {}"</span>, sub.getUserId());
+        });
+    }
+
+    <span class="kw">private</span> NotificationEvent buildEvent(Subscription sub, String eventType) {
+        NotificationEvent event = <span class="kw">new</span> NotificationEvent();
+        event.setEventType(eventType);
+        event.setUserId(sub.getUserId());
+        event.setPlanId(sub.getPlanId());
+        event.setEventTime(LocalDateTime.now());
+        <span class="cm">// In production: call user-service Feign to get username and email</span>
+        event.setUsername(<span class="st2">"user-"</span> + sub.getUserId());
+        event.setEmail(<span class="st2">"user"</span> + sub.getUserId() + <span class="st2">"@espn.com"</span>);
+        <span class="kw">return</span> event;
+    }
+}</pre>
+  <button class="cb" onclick="cb('subScheduler')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">6</span><span class="st">Add findByEndDateBeforeAndStatus to SubscriptionRepository</span></div>
+  <div class="sb">
+  <div class="fh"><span class="fn">SubscriptionRepository.java</span><span class="fa fmod">MODIFY</span><span class="fp">com.ott.subscription.repository — add one method</span></div>
+  <pre id="subRepoChange"><span class="cm">// FIND your existing SubscriptionRepository interface
+// ADD this method (Spring generates the SQL automatically):</span>
+
+<span class="kw">import</span> java.time.LocalDate;
+
+<span class="cm">// ADD inside SubscriptionRepository interface:</span>
+<span class="cm">// Finds ACTIVE subscriptions whose end_date is BEFORE the given date (already expired)</span>
+List&lt;Subscription&gt; findByEndDateBeforeAndStatus(
+    LocalDate date, Subscription.SubscriptionStatus status);</pre>
+  <button class="cb" onclick="cb('subRepoChange')">Copy</button>
+  <div class="info">Your existing SubscriptionRepository already has <code>findByEndDateAndStatus()</code> (exact date match). We added <code>findByEndDateBeforeAndStatus()</code> (any date before the given date). Spring Data JPA generates the correct SQL from the method name automatically.</div>
+  </div></div>
+</div>
+
+<!-- ══ STEP 5: NOTIFICATION CONSUMER ══ -->
+<div id="notification-consumer" class="section">
+  <h2>notification-service — Enable Kafka Consumer config</h2>
+
+  <div class="card cgr">
+    <h3>What changes in notification-service</h3>
+    <p>The KafkaConsumerService with @KafkaListener is already written. We just need to enable the Kafka consumer configuration in application.properties and add a KafkaConsumerConfig bean so it can deserialize the JSON messages back to NotificationEvent objects.</p>
+  </div>
+
+  <div class="step"><div class="sh"><span class="sn">1</span><span class="st">application.properties — enable Kafka consumer config</span></div>
+  <div class="sb">
+  <div class="fh"><span class="fn">application.properties</span><span class="fa fmod">MODIFY</span><span class="fp">notification-service/src/main/resources — uncomment Kafka section</span></div>
+  <pre id="notifKafkaProps">server.port=8086
+spring.application.name=notification-service
+
+# ── Kafka Consumer Configuration ────────────────────────────────────
+# NOW UNCOMMENTED — Kafka is running on localhost:9092
+spring.kafka.bootstrap-servers=localhost:9092
+
+# Consumer group ID — all notification-service instances share this group
+# Kafka ensures each message is processed by ONLY ONE instance
+spring.kafka.consumer.group-id=notification-group
+
+# Start reading from beginning if no offset stored
+spring.kafka.consumer.auto-offset-reset=earliest
+
+# Deserializers — convert bytes back to Java objects
+spring.kafka.consumer.key-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+spring.kafka.consumer.value-deserializer=org.springframework.kafka.support.serializer.JsonDeserializer
+
+# Trust all packages for JSON deserialization
+spring.kafka.consumer.properties.spring.json.trusted.packages=*
+
+# ── Eureka ─────────────────────────────────────────────────────────────
+eureka.client.service-url.defaultZone=http://localhost:8761/eureka/
+eureka.instance.prefer-ip-address=true
+
+# ── Actuator ───────────────────────────────────────────────────────────
+management.endpoints.web.exposure.include=health,info,metrics,prometheus
+management.endpoint.health.show-details=always
+management.metrics.tags.application=notification-service
+
+logging.level.com.ott.notification=DEBUG
+logging.level.org.springframework.kafka=INFO</pre>
+  <button class="cb" onclick="cb('notifKafkaProps')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">2</span><span class="st">KafkaConsumerConfig.java — configures how JSON is deserialized</span></div>
+  <div class="sb">
+  <div class="fh"><span class="fn">KafkaConsumerConfig.java</span><span class="fa fnew">NEW FILE</span><span class="fp">com.ott.notification.config</span></div>
+  <pre id="notifKafkaConfig"><span class="kw">package</span> com.ott.notification.config;
+
+<span class="kw">import</span> com.ott.notification.event.NotificationEvent;
+<span class="kw">import</span> org.apache.kafka.clients.consumer.ConsumerConfig;
+<span class="kw">import</span> org.apache.kafka.common.serialization.StringDeserializer;
+<span class="kw">import</span> org.springframework.beans.factory.annotation.Value;
+<span class="kw">import</span> org.springframework.context.annotation.Bean;
+<span class="kw">import</span> org.springframework.context.annotation.Configuration;
+<span class="kw">import</span> org.springframework.kafka.annotation.EnableKafka;
+<span class="kw">import</span> org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
+<span class="kw">import</span> org.springframework.kafka.core.*;
+<span class="kw">import</span> org.springframework.kafka.support.serializer.JsonDeserializer;
+<span class="kw">import</span> java.util.HashMap;
+<span class="kw">import</span> java.util.Map;
+
+<span class="cm">/**
+ * PURPOSE: Configures Kafka consumer for notification-service.
+ *
+ * @EnableKafka — activates @KafkaListener annotations.
+ * Without this, the @KafkaListener in KafkaConsumerService
+ * does nothing even if Kafka is running.
+ *
+ * ConcurrentKafkaListenerContainerFactory — Spring uses this
+ * to create the listener containers for each @KafkaListener method.
+ */</span>
+<span class="an">@EnableKafka</span>
+<span class="an">@Configuration</span>
+<span class="kw">public class</span> <span class="cl">KafkaConsumerConfig</span> {
+
+    <span class="an">@Value</span>(<span class="st2">"${spring.kafka.bootstrap-servers}"</span>)
+    <span class="kw">private</span> String bootstrapServers;
+
+    <span class="an">@Bean</span>
+    <span class="kw">public</span> ConsumerFactory&lt;String, NotificationEvent&gt; consumerFactory() {
+        Map&lt;String, Object&gt; config = <span class="kw">new</span> HashMap&lt;&gt;();
+        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        config.put(ConsumerConfig.GROUP_ID_CONFIG, <span class="st2">"notification-group"</span>);
+        config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, <span class="st2">"earliest"</span>);
+        config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+
+        <span class="cm">// Tell JsonDeserializer which class to deserialize to</span>
+        JsonDeserializer&lt;NotificationEvent&gt; deserializer =
+            <span class="kw">new</span> JsonDeserializer&lt;&gt;(NotificationEvent.class);
+        deserializer.addTrustedPackages(<span class="st2">"*"</span>);  <span class="cm">// trust all packages</span>
+        deserializer.setUseTypeMapperForKey(<span class="kw">false</span>);
+
+        <span class="kw">return new</span> DefaultKafkaConsumerFactory&lt;&gt;(config,
+            <span class="kw">new</span> StringDeserializer(), deserializer);
+    }
+
+    <span class="an">@Bean</span>
+    <span class="kw">public</span> ConcurrentKafkaListenerContainerFactory&lt;String, NotificationEvent&gt;
+            kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory&lt;String, NotificationEvent&gt; factory =
+            <span class="kw">new</span> ConcurrentKafkaListenerContainerFactory&lt;&gt;();
+        factory.setConsumerFactory(consumerFactory());
+        <span class="kw">return</span> factory;
+    }
+}</pre>
+  <button class="cb" onclick="cb('notifKafkaConfig')">Copy</button>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">3</span><span class="st">KafkaConsumerService.java — already written, verify it's correct</span></div>
+  <div class="sb">
+  <p>Your existing KafkaConsumerService.java should look like this — verify nothing changed:</p>
+  <pre id="notifConsumerVerify"><span class="an">@KafkaListener</span>(topics = <span class="st2">"payment.success"</span>, groupId = <span class="st2">"notification-group"</span>)
+<span class="kw">public void</span> handlePaymentSuccess(NotificationEvent event) {
+    log.info(<span class="st2">"✅ Kafka consumed: payment.success for user: {}"</span>, event.getUserId());
+    emailService.sendPaymentSuccessEmail(event);
+}
+
+<span class="an">@KafkaListener</span>(topics = <span class="st2">"payment.failed"</span>, groupId = <span class="st2">"notification-group"</span>)
+<span class="kw">public void</span> handlePaymentFailed(NotificationEvent event) {
+    log.info(<span class="st2">"❌ Kafka consumed: payment.failed for user: {}"</span>, event.getUserId());
+    emailService.sendPaymentFailedEmail(event);
+}
+
+<span class="an">@KafkaListener</span>(topics = <span class="st2">"subscription.expiring"</span>, groupId = <span class="st2">"notification-group"</span>)
+<span class="kw">public void</span> handleSubscriptionExpiring(NotificationEvent event) {
+    log.info(<span class="st2">"⏰ Kafka consumed: subscription.expiring for user: {}"</span>, event.getUserId());
+    emailService.sendSubscriptionExpiringEmail(event);
+}
+
+<span class="an">@KafkaListener</span>(topics = <span class="st2">"subscription.expired"</span>, groupId = <span class="st2">"notification-group"</span>)
+<span class="kw">public void</span> handleSubscriptionExpired(NotificationEvent event) {
+    log.info(<span class="st2">"🔴 Kafka consumed: subscription.expired for user: {}"</span>, event.getUserId());
+    emailService.sendSubscriptionExpiredEmail(event);
+}</pre>
+  <button class="cb" onclick="cb('notifConsumerVerify')">Copy</button>
+  <div class="success">With Kafka running and all configs in place, these @KafkaListener methods will now automatically trigger whenever a message arrives on those topics.</div>
+  </div></div>
+</div>
+
+<!-- ══ STEP 6: TEST ══ -->
+<div id="test" class="section">
+  <h2>Testing the complete Kafka flow end to end</h2>
+
+  <div class="step"><div class="sh"><span class="sn">1</span><span class="st">Startup order</span></div>
+  <div class="sb">
+  <pre>1. Start Kafka (Docker):
+   docker compose -f docker-compose-kafka.yml up -d
+
+2. Start catalog-service (port 8081)
+3. Start user-service (port 8083)
+4. Start payment-service (port 8084) — now has Kafka producer
+5. Start notification-service (port 8086) — now has Kafka consumer active
+6. Start subscription-service (port 8082)
+7. Start api-gateway (port 8080)</pre>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">2</span><span class="st">Test 1 — Payment success → Kafka → Email notification</span></div>
+  <div class="sb">
+  <p><strong>Step A:</strong> Get JWT token — POST http://localhost:8080/auth/login</p>
+  <pre>{"username":"john.doe","password":"password123"}</pre>
+
+  <p style="margin-top:8px"><strong>Step B:</strong> Process payment with success card — POST http://localhost:8080/payments/process (with token)</p>
+  <pre id="paySuccessTest">{"userId":1,"planId":"PLAN001","amount":199.0,"cardNumber":"4242424242424242"}</pre>
+  <button class="cb" onclick="cb('paySuccessTest')">Copy</button>
+
+  <p style="margin-top:8px"><strong>What you should see in STS consoles:</strong></p>
+  <pre style="color:#9ae6b4">payment-service console:
+  Processing payment — userId:1 planId:PLAN001
+  Payment SUCCESS for user:1
+  ✅ Published to topic: payment.success | userId: 1 | offset: 0
+
+notification-service console:
+  ✅ Kafka consumed: payment.success for user: 1
+  ========== EMAIL NOTIFICATION ==========
+  TO:      user1@espn.com
+  SUBJECT: Welcome to Disney+ Basic! Your subscription is active
+  BODY:    Hi user-1, Your payment of ₹199.00 for Disney+ Basic was successful!...
+  ========================================</pre>
+  <div class="success">This proves the complete flow: payment-service published → Kafka delivered → notification-service consumed → email sent</div>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">3</span><span class="st">Test 2 — Payment failure → Kafka → Failure notification</span></div>
+  <div class="sb">
+  <p>POST http://localhost:8080/payments/process (with token):</p>
+  <pre id="payFailTest">{"userId":1,"planId":"PLAN001","amount":199.0,"cardNumber":"4000000000000002"}</pre>
+  <button class="cb" onclick="cb('payFailTest')">Copy</button>
+  <pre style="color:#9ae6b4">payment-service:
+  Payment FAILED for user:1
+  ❌ Published to topic: payment.failed | userId: 1
+
+notification-service:
+  ❌ Kafka consumed: payment.failed for user: 1
+  EMAIL: Payment Failed — Action Required
+  BODY: Your payment for Disney+ Basic failed. Reason: Card declined...</pre>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">4</span><span class="st">Test 3 — Manually trigger subscription expiry scheduler</span></div>
+  <div class="sb">
+  <p>The scheduler runs at midnight. To test NOW without waiting, add a manual trigger REST endpoint temporarily:</p>
+  <div class="fh"><span class="fn">SubscriptionScheduler.java</span><span class="fa fmod">MODIFY — add test endpoint (temporary)</span></div>
+  <pre id="schedulerTest"><span class="cm">// ADD a RestController in subscription-service to trigger scheduler manually:</span>
+<span class="cm">// com.ott.subscription.controller.SchedulerController.java</span>
+
+<span class="an">@RestController</span>
+<span class="an">@RequestMapping</span>(<span class="st2">"/scheduler"</span>)
+<span class="kw">public class</span> <span class="cl">SchedulerController</span> {
+
+    <span class="kw">private final</span> SubscriptionScheduler scheduler;
+    <span class="kw">public</span> SchedulerController(SubscriptionScheduler s) { scheduler = s; }
+
+    <span class="cm">// POST http://localhost:8082/scheduler/trigger-expiring</span>
+    <span class="an">@PostMapping</span>(<span class="st2">"/trigger-expiring"</span>)
+    <span class="kw">public</span> ResponseEntity&lt;String&gt; triggerExpiring() {
+        scheduler.checkExpiringSubscriptions();
+        <span class="kw">return</span> ResponseEntity.ok(<span class="st2">"Expiry check triggered — check notification-service console"</span>);
+    }
+
+    <span class="cm">// POST http://localhost:8082/scheduler/trigger-expired</span>
+    <span class="an">@PostMapping</span>(<span class="st2">"/trigger-expired"</span>)
+    <span class="kw">public</span> ResponseEntity&lt;String&gt; triggerExpired() {
+        scheduler.processExpiredSubscriptions();
+        <span class="kw">return</span> ResponseEntity.ok(<span class="st2">"Expired processing triggered"</span>);
+    }
+}</pre>
+  <button class="cb" onclick="cb('schedulerTest')">Copy</button>
+  <p style="margin-top:8px">Call via Postman: POST http://localhost:8080/subscriptions/scheduler/trigger-expiring (with token)</p>
+  <p style="margin-top:4px">Watch notification-service console — it should log expiry reminder emails for subscriptions with end_date = today+3 days.</p>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">5</span><span class="st">Verify in Kafka UI — see messages flowing</span></div>
+  <div class="sb">
+  <p>Open browser: <strong>http://localhost:8090</strong></p>
+  <ol>
+    <li style="margin-bottom:5px">Click <strong>Topics</strong> in left menu</li>
+    <li style="margin-bottom:5px">You'll see: payment.success, payment.failed, subscription.expiring, subscription.expired</li>
+    <li style="margin-bottom:5px">Click on <strong>payment.success</strong> → click <strong>Messages</strong> tab</li>
+    <li>You'll see the JSON messages that were published — exactly the NotificationEvent objects</li>
+  </ol>
+  <div class="success" style="margin-top:8px">Kafka UI is the most powerful debugging tool — you can see every message, its key, value, timestamp, and offset. If notification-service is not consuming, you'll see messages piling up in Kafka UI.</div>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">6</span><span class="st">Summary — complete picture of who publishes what</span></div>
+  <div class="sb">
+  <table>
+    <tr><th>Topic</th><th>Published by</th><th>When triggered</th><th>Consumed by</th><th>Action taken</th></tr>
+    <tr><td><code>payment.success</code></td><td>payment-service<br>PaymentEventPublisher</td><td>Payment processed successfully (card 4242...)</td><td>notification-service</td><td>Sends "Welcome!" email to user</td></tr>
+    <tr><td><code>payment.failed</code></td><td>payment-service<br>PaymentEventPublisher</td><td>Card declined or payment error</td><td>notification-service</td><td>Sends "Payment failed" email</td></tr>
+    <tr><td><code>subscription.expiring</code></td><td>subscription-service<br>SubscriptionScheduler</td><td>Daily at midnight — subscriptions ending in 3 days</td><td>notification-service</td><td>Sends "Renew now" reminder email</td></tr>
+    <tr><td><code>subscription.expired</code></td><td>subscription-service<br>SubscriptionScheduler</td><td>Daily at 00:05 — subscriptions already past end_date</td><td>notification-service</td><td>Sends "Expired" email + marks EXPIRED in DB</td></tr>
+  </table>
+  </div></div>
+
+  <div class="step"><div class="sh"><span class="sn">7</span><span class="st">Stop Kafka when not using</span></div>
+  <div class="sb">
+  <pre id="kafkaStop">REM Stop Kafka containers (keeps data)
+docker compose -f docker-compose-kafka.yml stop
+
+REM Stop AND remove containers (clears all messages)
+docker compose -f docker-compose-kafka.yml down</pre>
+  <button class="cb" onclick="cb('kafkaStop')">Copy</button>
+  <div class="warn">If you stop Kafka and then start your Spring Boot services — they will fail to connect to Kafka on startup. Start Kafka BEFORE starting Spring Boot services whenever you want Kafka functionality.</div>
+  </div></div>
+</div>
+
+<div style="text-align:center;padding:14px;color:#4a5568;font-size:12px;margin-top:8px">
+  Kafka Complete Flow — payment-service PRODUCES → Kafka → notification-service CONSUMES
+</div>
+</div>
+<script>
+function show(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo(0,0);
+}
+function cb(id){
+  navigator.clipboard.writeText(document.getElementById(id).innerText).then(()=>{
+    const b=event.target;const o=b.textContent;
+    b.textContent='✅';b.style.background='#276749';
+    setTimeout(()=>{b.textContent=o;b.style.background=''},1500);
+  });
+}
+</script>
+</body>
+</html>
