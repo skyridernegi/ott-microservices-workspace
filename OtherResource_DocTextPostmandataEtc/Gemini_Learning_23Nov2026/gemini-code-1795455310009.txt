@@ -1,0 +1,26 @@
+			[ Web / Mobile Client ]
+                                   │
+                                   ▼
+                        ┌─────────────────────┐
+                        │     api-gateway     │  <-- Single Entry Point (Validates JWT)
+                        └──────────┬──────────┘
+         ┌─────────────────────────┼─────────────────────────┐
+         ▼                         ▼                         ▼
+┌─────────────────┐      ┌──────────────────┐      ┌────────────────────┐
+│  user-service   │      │ catalog-service  │      │subscription-service│
+│    (MySQL)      │      │    (MongoDB)     │      │      (MySQL)       │
+└─────────────────┘      └──────────────────┘      └─────┬────────┬─────┘
+                                                         │        │
+                                       (OpenFeign Sync)  │        │ (OpenFeign Sync)
+                                                         ▼        ▼
+                                               ┌──────────────┐ ┌───────────────┐
+                                               │campaign-svc  │ │payment-service│
+                                               │  (MongoDB)   │ │    (MySQL)    │
+                                               └──────────────┘ └───────┬───────┘
+                                                                        │
+                                                         (Apache Kafka Async Events)
+                                                                        ▼
+                                                             ┌────────────────────┐
+                                                             │notification-service│
+                                                             │   (Email / SMS)    │
+                                                             └────────────────────┘
